@@ -1,0 +1,55 @@
+---
+title: Background Agents
+description: How Odin runs headless agents to complete multi-step tasks.
+sidebar:
+  order: 4
+---
+
+import { Aside } from '@astrojs/starlight/components'
+
+Background agents are Odin's way of handling tasks that take more than a quick answer. When you ask Odin to do something that involves multiple steps — writing code, researching a topic, creating files, building a plan — it can spin up a headless agent to work through the task while you continue with whatever you were doing.
+
+## How to trigger an agent
+
+Just ask naturally. Odin recognizes when a task is agent-worthy and launches one automatically:
+
+> "Research the best Rust web frameworks and save a summary to my desktop."
+
+> "Write a Python script that watches my Downloads folder and moves PDFs to ~/Documents/PDFs."
+
+> "Look up the Claude API pricing and compare it to OpenAI."
+
+When Odin decides to launch an agent, it responds with a short spoken acknowledgement ("on it", "kicking that off", "got it") and the agent appears in the **Agent Dock** — a vertical stack of orbs on the right edge of your screen.
+
+<Aside>
+Odin's spoken response when launching an agent is intentionally brief. The agent's progress is visible in the dock — Odin won't narrate the steps it's taking.
+</Aside>
+
+## The Agent Dock
+
+The Agent Dock is displayed as an overlay on the right edge of your screen. Each running agent shows:
+
+- The task description
+- Live output as the agent works
+- Status (running / complete / failed)
+- Cost
+
+You can open multiple agents simultaneously. They run in parallel.
+
+## What agents can do
+
+Background agents have access to the same tools as Odin's main process:
+
+- **File system** — read, write, and create files
+- **Web search** — look things up
+- **Code execution** — run shell commands, scripts
+- **MCP tools** — any MCP servers you've connected
+- **Memory** — read and write to Odin's memory store
+
+## Stopping an agent
+
+Click the stop button next to a running agent in the dock to cancel it. Partial work may have already been done (e.g., files created).
+
+## Agent history
+
+Completed agents and their outputs are accessible in the conversation history. Agents that produce files will show the file path in their output.

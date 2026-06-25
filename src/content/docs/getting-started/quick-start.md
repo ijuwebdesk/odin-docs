@@ -1,0 +1,58 @@
+---
+title: Quick Start
+description: Get up and running with Odin in under two minutes.
+sidebar:
+  order: 4
+---
+
+import { Steps, Aside } from '@astrojs/starlight/components'
+
+<Steps>
+
+1. **Install Odin** and launch it. The Odin icon appears in your menu bar or system tray.
+
+2. **Grant permissions** when the onboarding screen appears — Microphone and Screen Recording (macOS).
+
+3. **Open the panel** by clicking the Odin icon in your menu bar.
+
+4. **Hold `Ctrl+Space`**, speak your question, then release.
+
+5. **Odin responds** — spoken aloud, with a small blue triangle on screen pointing at anything relevant.
+
+</Steps>
+
+## Try these first
+
+Here are some things to try right away:
+
+**Ask about your screen:**
+> "What does this error mean?"
+
+> "Where's the setting to change the font size?"
+
+> "Explain what this code does."
+
+**Ask general questions:**
+> "What's the difference between a monad and a functor?"
+
+> "Give me a regex that matches email addresses."
+
+**Launch a background agent:**
+> "Research the best Tailwind CSS component libraries and save a summary to my desktop."
+
+> "Write a Python script that renames all the JPEGs in my Downloads folder by date taken."
+
+<Aside type="tip">
+Odin's responses are tuned for listening, not reading — short, direct, no bullet points. If you want more detail, just say "go deeper" or "explain more."
+</Aside>
+
+## Customize your experience
+
+Open the panel and click the gear icon to:
+
+- Enter your OpenRouter API key
+- Change the AI model
+- Select the TTS voice
+- Choose your microphone
+- Enable or disable memory and skills
+- Connect MCP servers

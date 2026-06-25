@@ -1,0 +1,34 @@
+---
+title: Odin Docs
+description: Documentation for Odin AI — your always-on screen companion.
+template: splash
+hero:
+  tagline: Your always-on AI companion. Ask anything, point at anything, do anything.
+  image:
+    file: ../../assets/odin-logo-dark.png
+  actions:
+    - text: Get started
+      link: /getting-started/what-is-odin/
+      icon: right-arrow
+      variant: primary
+    - text: Quick start
+      link: /getting-started/quick-start/
+      icon: rocket
+---
+
+import { CardGrid, Card } from '@astrojs/starlight/components'
+
+<CardGrid stagger>
+  <Card title="Voice companion" icon="microphone">
+    Hold a key, speak, and Odin hears you — no typing needed. It sees your screen and answers with spoken audio.
+  </Card>
+  <Card title="Screen aware" icon="laptop">
+    Odin captures your display and reads the context of whatever you're looking at before responding.
+  </Card>
+  <Card title="Cursor overlay" icon="cursor">
+    A blue triangle on screen points directly at the element Odin is talking about, so you always know exactly where to look.
+  </Card>
+  <Card title="Background agents" icon="rocket">
+    Tell Odin to research, write code, or complete multi-step tasks — it spins up a headless agent and reports back when done.
+  </Card>
+</CardGrid>
