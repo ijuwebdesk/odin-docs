@@ -41,29 +41,26 @@ In Settings, the **Model ID** field controls which model Odin uses. This is a fr
 
 **Default model:** `qwen/qwen3.7-plus` — fast, capable, and cost-effective for everyday use.
 
-### Finding models on OpenRouter
-
-Browse [openrouter.ai/models](https://openrouter.ai/models) to explore the full catalogue. You can filter by:
-
-- **Provider** — Anthropic (Claude), Google (Gemini), Meta (Llama), Mistral, Qwen, etc.
-- **Context length** — how much conversation history the model can hold
-- **Price** — cost per million tokens (input and output separately)
-- **Modality** — text-only or multimodal (image-capable)
-
-Odin sends screenshots with every voice query, so choose a **multimodal** model (one that supports image input) for the best experience.
-
 ### Recommended models
+
+These are the models we've tested with Odin:
 
 | Model ID | Notes |
 |---|---|
-| `qwen/qwen3.7-plus` | Default. Fast, multimodal, very affordable. |
-| `google/gemini-2.5-flash` | Fast, multimodal, generous context window. |
-| `anthropic/claude-sonnet-4-5` | High quality, multimodal, great for complex tasks. |
-| `meta-llama/llama-4-maverick` | Strong open-source option. |
+| `qwen/qwen3.7-plus` | Default. Perfectly balanced — fast, capable, and affordable for everyday use. |
+| `moonshotai/kimi-k2.7-code` | Slightly more expensive but faster and higher quality overall. |
+| `minimax/minimax-m3` | Smart and capable — slightly on the expensive side. |
+| `xiaomi/mimo-v2.5` | Cheapest option with good output quality. |
 
 <Aside>
-Model IDs on OpenRouter follow the format `provider/model-name`. Copy the ID from the model's page on openrouter.ai and paste it directly into the Model ID field in Odin's settings.
+Model IDs follow the format `provider/model-name`. Copy the ID from the table above and paste it directly into the Model ID field in Odin's settings.
 </Aside>
+
+### Finding other compatible models
+
+Not every model on OpenRouter works with Odin. To see only compatible ones, use this filtered link — it shows models that support both **image input** (so Odin can share your screen) and **tool use** (required for agents and Act Mode):
+
+[Browse compatible models on OpenRouter →](https://openrouter.ai/models?input_modalities=text,image&supported_parameters=tools)
 
 ### Changing the model
 
