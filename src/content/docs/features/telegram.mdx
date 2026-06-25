@@ -1,37 +1,44 @@
 ---
 title: Telegram Bridge
-description: How to use Odin through Telegram.
+description: How to connect Odin to Telegram so you can send tasks from your phone.
 sidebar:
   order: 9
 ---
 
-import { Aside } from '@astrojs/starlight/components'
+import { Steps, Aside } from '@astrojs/starlight/components'
 
-The Telegram Bridge lets you interact with Odin through a Telegram bot — useful when you're away from your computer, on your phone, or want to send tasks to Odin asynchronously.
-
-## What you can do via Telegram
-
-- Send text messages and get AI responses
-- Trigger background agents and get results delivered back to the chat
-- Ask Odin to do things on your computer while you're on the go
+The Telegram Bridge lets you send tasks and messages to Odin from your phone via Telegram. Odin receives them, runs them as background agent sessions, and replies in the same chat.
 
 <Aside>
-The Telegram bridge connects to the Odin instance running on your desktop. Your computer needs to be on and Odin needs to be running for the bridge to work.
+The bridge connects to the Odin instance running on your desktop. Your computer needs to be on and Odin needs to be running for the bridge to work.
 </Aside>
 
 ## Setting up the Telegram Bridge
 
+<Steps>
 1. Open the Odin panel and go to **Settings → Telegram**.
-2. Click **Connect Telegram**.
-3. Odin will give you a link to open in Telegram — this starts a chat with your personal Odin bot.
-4. Send `/start` in Telegram to verify the connection.
 
-Once connected, messages you send in the Telegram chat are handled by the same Odin instance running on your desktop.
+2. Click **Connect**. Odin generates a time-limited pairing code and displays it on screen along with the exact command to send.
 
-## Security
+3. Open Telegram on your phone and search for **@UseOdinAI_bot**. Open a chat with it.
 
-The bridge is personal — it only responds to your Telegram account. Messages between your phone and the Odin desktop app are relayed through Telegram's servers (end-to-end encrypted on your device) and then handled locally by Odin.
+4. Send the command Odin shows — it looks like:
+   ```
+   /pair XXXXXX
+   ```
+   where `XXXXXX` is the code shown in Odin.
+
+5. The bot confirms the pairing and Odin's settings panel updates to show **Connected**.
+</Steps>
+
+The pairing code expires after a short time. If it runs out before you send the command, click **Connect** again to generate a new one.
+
+## Sending tasks
+
+Once paired, any message you send to **@UseOdinAI_bot** in Telegram is forwarded to Odin and handled as a background agent task. Odin streams its progress back into the same Telegram chat as it works.
+
+You can also send files and voice messages — Odin transcribes voice and can read attached files as part of a task.
 
 ## Disconnecting
 
-Go to **Settings → Telegram** and click **Disconnect** to remove the integration. Your Telegram bot token is deleted from Odin's configuration.
+Go to **Settings → Telegram** and click **Unpair** to remove the connection. You can re-pair at any time by clicking **Connect** again.
