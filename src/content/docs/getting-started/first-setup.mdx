@@ -1,0 +1,79 @@
+---
+title: First Setup
+description: How to get your OpenRouter API key, choose a model, and configure Odin for the first time.
+sidebar:
+  order: 3
+---
+
+import { Steps, Aside, LinkCard } from '@astrojs/starlight/components'
+
+After installing Odin and granting permissions, the settings panel opens automatically on first launch — Odin needs an API key before it can respond to anything.
+
+## Step 1 — Get an OpenRouter API key
+
+Odin uses [OpenRouter](https://openrouter.ai) to access AI models. OpenRouter is a single API that gives you access to hundreds of models from different providers (Anthropic, Google, Meta, Mistral, and many more) under one key and one bill.
+
+<Steps>
+1. Go to [openrouter.ai](https://openrouter.ai) and create a free account.
+2. Navigate to **Keys** in your account dashboard.
+3. Click **Create key** and give it a name (e.g. "Odin").
+4. Copy the key — it starts with `sk-or-v1-…`.
+</Steps>
+
+<Aside type="tip">
+OpenRouter has a free tier with limited credits so you can try it before adding a payment method. Usage beyond the free tier is pay-as-you-go with no subscription.
+</Aside>
+
+## Step 2 — Enter the key in Odin
+
+<Steps>
+1. Open the Odin panel (click the Odin icon in your menu bar or system tray).
+2. Click the **gear icon** to open Settings.
+3. Paste your key into the **OpenRouter API Key** field.
+4. Click **Save**.
+</Steps>
+
+Odin stores the key locally on your device. It's only ever sent to OpenRouter's servers when making AI requests.
+
+## Step 3 — Choose a model
+
+In Settings, the **Model ID** field controls which model Odin uses. This is a free-text field — type any model ID from OpenRouter's catalogue.
+
+**Default model:** `qwen/qwen3.7-plus` — fast, capable, and cost-effective for everyday use.
+
+### Finding models on OpenRouter
+
+Browse [openrouter.ai/models](https://openrouter.ai/models) to explore the full catalogue. You can filter by:
+
+- **Provider** — Anthropic (Claude), Google (Gemini), Meta (Llama), Mistral, Qwen, etc.
+- **Context length** — how much conversation history the model can hold
+- **Price** — cost per million tokens (input and output separately)
+- **Modality** — text-only or multimodal (image-capable)
+
+Odin sends screenshots with every voice query, so choose a **multimodal** model (one that supports image input) for the best experience.
+
+### Recommended models
+
+| Model ID | Notes |
+|---|---|
+| `qwen/qwen3.7-plus` | Default. Fast, multimodal, very affordable. |
+| `google/gemini-2.5-flash` | Fast, multimodal, generous context window. |
+| `anthropic/claude-sonnet-4-5` | High quality, multimodal, great for complex tasks. |
+| `meta-llama/llama-4-maverick` | Strong open-source option. |
+
+<Aside>
+Model IDs on OpenRouter follow the format `provider/model-name`. Copy the ID from the model's page on openrouter.ai and paste it directly into the Model ID field in Odin's settings.
+</Aside>
+
+### Changing the model
+
+You can switch models any time in Settings — just type a new model ID and click Save. The change takes effect on the next push-to-talk query.
+
+## Step 4 — Try it
+
+Once your key is saved, press `Ctrl+Space`, speak a question, and release. Odin should respond within a few seconds.
+
+If nothing happens, check:
+- The key is saved correctly (the field shows dots, not empty)
+- You have credits on your OpenRouter account
+- Microphone permission is granted (shield icon in the panel)

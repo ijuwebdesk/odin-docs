@@ -20,6 +20,7 @@ export default defineConfig({
             { label: 'What is Odin?', slug: 'getting-started/what-is-odin' },
             { label: 'Installation', slug: 'getting-started/installation' },
             { label: 'Permissions Setup', slug: 'getting-started/permissions' },
+            { label: 'First Setup', slug: 'getting-started/first-setup' },
             { label: 'Quick Start', slug: 'getting-started/quick-start' },
           ],
         },
