@@ -7,6 +7,15 @@ sidebar:
 
 import { Steps, Aside } from '@astrojs/starlight/components'
 
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;margin:1.5rem 0">
+  <iframe
+    src="https://player.vimeo.com/video/1208511944"
+    style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"
+    allow="autoplay; fullscreen; picture-in-picture"
+    allowfullscreen
+  />
+</div>
+
 The Telegram Bridge lets you send tasks and messages to Odin from your phone via Telegram. Odin receives them, runs them as background agent sessions, and replies in the same chat.
 
 <Aside>
@@ -35,9 +44,13 @@ The pairing code expires after a short time. If it runs out before you send the 
 
 ## Sending tasks
 
-Once paired, any message you send to **@UseOdinAI_bot** in Telegram is forwarded to Odin and handled as a background agent task. Odin streams its progress back into the same Telegram chat as it works.
+Once paired, any message you send to **@UseOdinAI_bot** in Telegram is forwarded to Odin and handled as a background agent task. Odin streams its progress back into the same Telegram chat as it works — for example, send "hey" and Odin launches an agent and replies asking what you'd like help with.
 
-You can also send files and voice messages — Odin transcribes voice and can read attached files as part of a task.
+You can also send **voice messages** (Odin transcribes them) and **files / screenshots** as part of a task.
+
+<Aside>
+Sending and receiving text messages works on any paired plan. Having Odin **pull in and work with files from your computer** is included with the **Unlimited plan** — you'll need at least that tier for full file access over the bridge.
+</Aside>
 
 ## Disconnecting
 

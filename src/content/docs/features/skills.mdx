@@ -7,6 +7,15 @@ sidebar:
 
 import { Aside } from '@astrojs/starlight/components'
 
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;margin:1.5rem 0">
+  <iframe
+    src="https://player.vimeo.com/video/1208511945"
+    style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"
+    allow="autoplay; fullscreen; picture-in-picture"
+    allowfullscreen
+  />
+</div>
+
 Skills are saved sets of instructions that Odin applies automatically during agent sessions. When skills are enabled, they are injected silently into every agent task — Odin reads them and applies them when relevant, without you needing to invoke them explicitly.
 
 ## What is a skill?
@@ -24,15 +33,40 @@ Examples of useful skills:
 - A **sql-tutor** skill that emphasizes query optimization and explains trade-offs
 - A **commit-messages** skill that formats git commit messages your preferred way
 
-## Creating and editing skills
+## Built-in skills
+
+Odin ships with a set of default skills (the exact set depends on your plan). For example:
+
+- **screenshot-to-file** — captures the current screen and saves it to the desktop as a time-stamped image. Just ask Odin to "take a screenshot" and it uses this skill.
+- **web-search** — lets Odin research the web as part of a task.
+
+These are a good template to learn from — open one in the Skills editor to see how it's written.
+
+## Creating skills
+
+There are two ways to create a skill.
+
+### The easy way — ask Odin
+
+The simplest approach is to just **ask Odin to make the skill for you**. Make sure the mode selector is on **Auto**, then describe what you want:
+
+> "Create a new skill where, whenever I ask you to do research and save a report, you always save it as a PDF instead of a markdown file."
+
+Odin writes the skill and saves it automatically — you'll see the new skill appear in the Skills editor, fully formatted.
+
+### Manually in the editor
 
 Open the panel and click **Skills** to open the Skills editor window. The left pane lists all your skills. The right pane is a text editor.
-
-To create a new skill:
 
 1. Click **+** in the top-right of the skills list.
 2. Write your skill content in the editor. The name comes from the `name:` field in the frontmatter.
 3. Click **Save**.
+
+<Aside type="tip">
+You can also draft a skill in your favorite AI tool (ChatGPT, Claude, etc.) — paste one of your existing skills as a template and ask it to write a new one in the same shape, then add it with the **+** button.
+</Aside>
+
+Skills are ideal for **repetitive tasks** where Odin isn't getting something quite the way you want. Explain the behavior you'd prefer once, save it as a skill, and Odin applies it automatically next time.
 
 **Skill format:**
 

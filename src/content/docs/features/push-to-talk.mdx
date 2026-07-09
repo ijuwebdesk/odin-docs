@@ -7,16 +7,22 @@ sidebar:
 
 import { Aside } from '@astrojs/starlight/components'
 
-Push-to-talk is the primary way you speak to Odin. Hold your configured key, speak your message, and release — Odin transcribes what you said, captures your screen, and responds.
+{/* VIDEO: covered in "First Use.mov" and "Using odin Efficently.mp4". */}
+
+Push-to-talk is the primary way you speak to Odin. It's a **press-to-toggle** control: press the key once to start listening, speak, then press it again to stop. Odin transcribes what you said, captures your screen, and responds.
 
 ## How it works
 
-1. **Hold** your push-to-talk key.
+1. **Press** your push-to-talk key once to start listening.
 2. **Speak** naturally. There's no time limit.
-3. **Release** the key. Odin stops recording and immediately begins processing.
+3. **Press** the key again to stop. Odin registers your query and immediately begins processing.
 4. **Listen** — a voice response plays through your speakers within a few seconds.
 
-Odin takes a screenshot of your screen at the moment you release the key, so it has context for your question.
+That second press is the step people most often miss — it's how Odin knows you're finished. Odin takes a screenshot of your screen at the moment you stop, so it has context for your question.
+
+<Aside type="caution">
+Push-to-talk is a **toggle, not a hold**. Press once to start and once to stop — don't hold the key down while you speak.
+</Aside>
 
 ## Hotkey
 
@@ -40,9 +46,9 @@ The conversation context is shown in the panel's history view.
 ## When Odin doesn't respond
 
 - Make sure the microphone permission is granted (see [Permissions](/getting-started/permissions/)).
-- Check that your system microphone is working (try another app).
-- Ensure you're holding the key — a short tap without speaking won't trigger a response.
+- Check that your system microphone is working, and that the correct mic is selected in the audio settings (try the test button).
+- Make sure you pressed the key a second time to stop — Odin only processes your query once you toggle recording off.
 
 ## Interrupting a response
 
-If Odin is speaking and you hold the push-to-talk key again, the current response stops and your new recording begins immediately.
+If Odin is speaking and you press the push-to-talk key again, the current response stops and a new recording begins immediately.

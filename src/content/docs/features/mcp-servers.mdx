@@ -7,6 +7,15 @@ sidebar:
 
 import { Aside } from '@astrojs/starlight/components'
 
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;margin:1.5rem 0">
+  <iframe
+    src="https://player.vimeo.com/video/1208512526"
+    style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"
+    allow="autoplay; fullscreen; picture-in-picture"
+    allowfullscreen
+  />
+</div>
+
 Odin supports the [Model Context Protocol (MCP)](https://modelcontextprotocol.io) — an open standard for connecting AI assistants to external tools, databases, APIs, and services. Once connected, Odin can read from and write to those systems as part of any conversation.
 
 ## What MCP enables
@@ -21,12 +30,27 @@ With MCP servers, Odin can:
 
 ## Adding an MCP server
 
-1. Open the Odin panel and go to **Settings → MCP Servers**.
-2. Click **Add Server**.
-3. Enter the server name and the command to start it (or the URL for remote servers).
-4. Click **Connect**.
+1. Open the Odin panel and open the **MCP integrator** (**Settings → MCP Servers → Add Server**).
+2. Enter the server name and the command to start it (or the URL for remote/hosted servers).
+3. Click **Add Server** / **Connect**.
 
 Once connected, Odin sees the server's tools and can use them automatically.
+
+<Aside type="tip">
+Most hosted integrations publish a ready-made setup snippet (often labelled "Cursor", "Claude", or "MCP config") on their docs page. You can usually paste that same command straight into Odin's MCP integrator — no need to hand-write the config.
+</Aside>
+
+### Hosted servers with OAuth
+
+Many hosted servers (Notion is a good example) authenticate over OAuth. After you paste the command and click **Add Server**, Odin opens the provider's sign-in page in your browser. Approve the connection there, return to Odin, and the server shows as connected with its tools available.
+
+### Servers that need an API key or account ID
+
+Some providers (for example GoHighLevel / Lead Connector) need more than a generic command. In those cases you typically use the provider's **per-client endpoint** and supply extra fields such as a **location / account ID** and a **bearer API token** you generate in that provider's settings (often under *Private Integrations*). Paste the endpoint, fill in those fields, and connect.
+
+<Aside type="caution">
+**Don't enable every tool.** If you give the AI too many tools at once it's more likely to hallucinate or pick the wrong one. Enable only the tools you actually want that server to use.
+</Aside>
 
 <Aside type="tip">
 The MCP ecosystem has hundreds of ready-made servers. Search [mcp.run](https://mcp.run) or the [MCP server registry](https://github.com/modelcontextprotocol/servers) for integrations with popular tools.

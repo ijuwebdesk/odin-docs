@@ -7,15 +7,46 @@ sidebar:
 
 import { Aside } from '@astrojs/starlight/components'
 
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;margin:1.5rem 0">
+  <iframe
+    src="https://player.vimeo.com/video/1208512083"
+    style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"
+    allow="autoplay; fullscreen; picture-in-picture"
+    allowfullscreen
+  />
+</div>
+
+## Odin won't accept my OpenRouter API key
+
+This is almost always caused by **extra invisible characters** copied along with the key.
+
+- Always use OpenRouter's **copy button** rather than selecting the text by hand — a manual copy can pick up a leading/trailing space that Odin silently rejects.
+- To check, paste the key into a plain notepad first and look for stray spaces or characters, then copy the clean value.
+- If you **can't paste at all**, click the **detach** button so Odin pops out into its own window, then paste there and click **Save**.
+
+---
+
 ## Odin isn't responding to push-to-talk
 
 **Check permissions first.** Go to the panel and click the shield icon. If Microphone shows a red status, re-grant it in System Settings.
 
-**Check the hotkey.** Make sure you're holding, not tapping. The recording stops when you release the key.
+**Check the hotkey.** Push-to-talk is a **toggle** — press `Ctrl+Space` once to start, speak, then press it again to stop. Odin only processes your query after that second press.
 
-**Check your microphone.** Open another app (e.g., QuickTime → New Audio Recording) to confirm your mic is working at the system level.
+**Select the right microphone.** Open the panel's **audio** settings and make sure the correct mic is selected, then use the **test** button — the input bars should move when you speak. If your reply only ever shows the word "you" (or nothing), Odin can't hear you and the wrong mic is usually why.
+
+**Check your microphone at the system level.** Open another app (e.g., QuickTime → New Audio Recording) to confirm the mic works.
 
 **Restart Odin.** Quit from the tray menu and relaunch.
+
+<Aside type="tip">
+Odin shows a **feedback pop-up** when something isn't working. Send it — it helps the team diagnose and fix the issue for you.
+</Aside>
+
+---
+
+## Make sure you're on the latest version
+
+Several issues are already fixed in newer builds. In the panel, click **Check for updates**. If you're behind, Odin downloads the update and the button changes to **Restart Odin** — click it, then try again.
 
 ---
 

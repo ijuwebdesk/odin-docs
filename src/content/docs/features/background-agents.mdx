@@ -11,7 +11,11 @@ Background agents are Odin's way of handling tasks that take more than a quick a
 
 ## How to trigger an agent
 
-Just ask naturally. Odin recognizes when a task is agent-worthy and launches one automatically:
+There are three ways to launch a background agent:
+
+- **Type** the task into the panel.
+- **Send it over [Telegram](/features/telegram/)** from your phone.
+- **Speak it** — but say *"start a background agent"* (or *"use the background agent"*) in your request.
 
 > "Research the best Rust web frameworks and save a summary to my desktop."
 
@@ -19,7 +23,11 @@ Just ask naturally. Odin recognizes when a task is agent-worthy and launches one
 
 > "Look up the Claude API pricing and compare it to OpenAI."
 
-When Odin decides to launch an agent, it responds with a short spoken acknowledgement ("on it", "kicking that off", "got it") and the agent appears in the **Agent Dock** — a vertical stack of orbs on the right edge of your screen.
+<Aside type="caution">
+When you **speak** a task, include the phrase "start a background agent." If you don't, Odin may run it in **[Act mode](/features/act-mode/)** instead — taking control of your mouse and keyboard so you can't use your computer while it works. Typed tasks always run in the background.
+</Aside>
+
+When Odin launches an agent, it responds with a short spoken acknowledgement ("on it", "kicking that off", "got it") and the agent appears in the **Agent Dock** — a vertical stack of orbs on the right edge of your screen.
 
 <Aside>
 Odin's spoken response when launching an agent is intentionally brief. The agent's progress is visible in the dock — Odin won't narrate the steps it's taking.

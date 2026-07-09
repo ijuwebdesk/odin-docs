@@ -9,6 +9,8 @@ import { Steps, Aside, LinkCard } from '@astrojs/starlight/components'
 
 After installing Odin and granting permissions, the settings panel opens automatically on first launch — Odin needs an API key before it can respond to anything.
 
+{/* VIDEO: "First Use.mov" — full install + first-use walkthrough (Mac & Windows). Consider replacing the embed below with it once uploaded. */}
+
 <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;margin:1.5rem 0">
   <iframe
     src="https://player.vimeo.com/video/1204830040"
@@ -23,14 +25,15 @@ After installing Odin and granting permissions, the settings panel opens automat
 Odin uses [OpenRouter](https://openrouter.ai) to access AI models. OpenRouter is a single API that gives you access to hundreds of models from different providers (Anthropic, Google, Meta, Mistral, and many more) under one key and one bill.
 
 <Steps>
-1. Go to [openrouter.ai](https://openrouter.ai) and create a free account.
-2. Navigate to **Keys** in your account dashboard.
-3. Click **Create key** and give it a name (e.g. "Odin").
-4. Copy the key — it starts with `sk-or-v1-…`.
+1. Go to [openrouter.ai](https://openrouter.ai) and create an account.
+2. Open the **Credits** section and **add credits** (the minimum top-up is around $10). OpenRouter is pay-as-you-go — you're only charged for what Odin actually uses.
+3. Navigate to **Keys** and click **Create key**. Give it a name (e.g. "Odin").
+4. Optionally set a **credit limit** (e.g. cap the key at $10/month) and an **expiration** date. Leave them blank for no limit.
+5. Copy the key — it starts with `sk-or-v1-…`.
 </Steps>
 
 <Aside type="tip">
-OpenRouter has a free tier with limited credits so you can try it before adding a payment method. Usage beyond the free tier is pay-as-you-go with no subscription.
+Setting a monthly credit limit on the key is a good way to stay in control of spend — the key stops working once it hits the cap and resets each month.
 </Aside>
 
 ## Step 2 — Enter the key in Odin
@@ -43,6 +46,10 @@ OpenRouter has a free tier with limited credits so you can try it before adding 
 </Steps>
 
 Odin stores the key locally on your device. It's only ever sent to OpenRouter's servers when making AI requests.
+
+<Aside type="tip">
+**Can't paste the key?** Click the **detach** button to pop Odin out into its own window, then paste. If it still won't accept the key, paste it into a plain notepad first — copying by hand can pick up an invisible extra space or character that Odin rejects. Always use OpenRouter's **copy** button rather than selecting the text manually.
+</Aside>
 
 ## Step 3 — Choose a model
 
@@ -67,6 +74,15 @@ Model IDs follow the format `provider/model-name`. Copy the ID from the table ab
 
 ### Finding other compatible models
 
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;margin:1.5rem 0">
+  <iframe
+    src="https://player.vimeo.com/video/1208511942"
+    style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"
+    allow="autoplay; fullscreen; picture-in-picture"
+    allowfullscreen
+  />
+</div>
+
 Not every model on OpenRouter works with Odin. To see only compatible ones, use this filtered link — it shows models that support both **image input** (so Odin can share your screen) and **tool use** (required for agents and Act Mode):
 
 [Browse compatible models on OpenRouter →](https://openrouter.ai/models?input_modalities=text,image&supported_parameters=tools)
@@ -75,11 +91,26 @@ Not every model on OpenRouter works with Odin. To see only compatible ones, use 
 
 You can switch models any time in Settings — just type a new model ID and click Save. The change takes effect on the next push-to-talk query.
 
-## Step 4 — Try it
+## Step 4 — Review the other settings
 
-Once your key is saved, press `Ctrl+Space`, speak a question, and release. Odin should respond within a few seconds.
+Below the API key, a few more settings are worth a quick look:
+
+- **High-accuracy pointing** — turn this on when you work in precise tools (Photoshop, design apps) so the [cursor overlay](/features/cursor-overlay/) lands exactly on the right element.
+- **Anonymous usage data** — on by default. It's fully anonymous (no screenshots, recordings, or prompts) and only used to improve Odin. Toggle it off any time to opt out.
+- **Audio / microphone** — open the audio section and make sure the correct microphone is selected. Use the **test** button to confirm the input bars move when you speak. If Odin can't hear you (or won't speak back), this is the first thing to check.
+
+Click **Save** and your settings are stored.
+
+## Step 5 — Try it
+
+Odin's push-to-talk is **press-to-toggle**, not hold:
+
+1. Press **`Ctrl+Space`** once to start listening.
+2. Speak your question.
+3. Press **`Ctrl+Space`** again to stop — Odin then processes and responds within a few seconds.
 
 If nothing happens, check:
 - The key is saved correctly (the field shows dots, not empty)
 - You have credits on your OpenRouter account
 - Microphone permission is granted (shield icon in the panel)
+- The correct microphone is selected in the audio settings

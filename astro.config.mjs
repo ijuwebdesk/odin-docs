@@ -22,6 +22,7 @@ export default defineConfig({
             { label: 'Permissions Setup', slug: 'getting-started/permissions' },
             { label: 'First Setup', slug: 'getting-started/first-setup' },
             { label: 'Quick Start', slug: 'getting-started/quick-start' },
+            { label: 'Using Odin Effectively', slug: 'getting-started/using-odin-effectively' },
           ],
         },
         {
@@ -41,6 +42,7 @@ export default defineConfig({
             { label: 'Skills', slug: 'features/skills' },
             { label: 'MCP Servers', slug: 'features/mcp-servers' },
             { label: 'Telegram Bridge', slug: 'features/telegram' },
+            { label: 'Agency Dashboard', slug: 'features/agency' },
           ],
         },
         {

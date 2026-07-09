@@ -11,7 +11,7 @@ These work anywhere on your system, even when Odin's panel isn't focused.
 
 | Action | Shortcut |
 |---|---|
-| Push-to-talk (hold while speaking) | `Ctrl+Space` |
+| Push-to-talk — press once to start listening, press again to stop | `Ctrl+Space` |
 | Stop Act Mode / dismiss overlay | `Escape` |
 | Stop current response | `Ctrl+.` |
 
