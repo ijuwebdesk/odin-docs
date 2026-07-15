@@ -81,6 +81,56 @@ After connecting, you can ask Odin things like "list all TypeScript files in my 
 }
 ```
 
+## Walkthroughs: connecting real integrations
+
+Odin's MCP form supports remote **HTTP streamable** servers, which is how most hosted SaaS integrations connect. The two walkthroughs below show the two common auth styles end to end.
+
+### Asana (OAuth app)
+
+<div style="position:relative;padding-bottom:79.7%;height:0;overflow:hidden;border-radius:8px;margin:1.5rem 0">
+  <iframe
+    src="https://player.vimeo.com/video/1210237546"
+    style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"
+    allow="autoplay; fullscreen; picture-in-picture"
+    allowfullscreen
+  />
+</div>
+
+Asana connects over OAuth, so you register an app on Asana's side and let Odin sign in through it.
+
+1. In Asana's [developer console](https://app.asana.com/0/developer-console), create a new app and choose the **MCP app** type. Agree to the terms and create it — you'll get a **Client ID** and **Client Secret**.
+2. In Odin, open the **MCP integrator**, switch to the **form** view, and choose the **HTTP streamable** transport.
+3. Paste Asana's **MCP server URL** (from Asana's MCP docs) into the URL field, then add the **Client ID** and **Client Secret**.
+4. Copy the **redirect URL** Odin shows and paste it into your Asana OAuth app's settings — it must match **exactly**, or the connection is rejected.
+5. Click **Connect**. Asana asks you to sign in and **allow** access (create/modify tasks, projects, and comments). Approve it.
+6. Odin updates to **connected** — in the video all 35 Asana tools come through. You can now say *"start a background agent and fetch my pending Asana tasks"* and Odin queries the MCP directly.
+
+<Aside type="tip">
+If you get *"redirect URL does not match"*, re-copy Odin's redirect URL into the Asana app and save — a trailing character or query string mismatch is the usual cause.
+</Aside>
+
+### Systeme.io (API key)
+
+<div style="position:relative;padding-bottom:79.7%;height:0;overflow:hidden;border-radius:8px;margin:1.5rem 0">
+  <iframe
+    src="https://player.vimeo.com/video/1210242427"
+    style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"
+    allow="autoplay; fullscreen; picture-in-picture"
+    allowfullscreen
+  />
+</div>
+
+Systeme.io uses a simpler API-key style — you generate a key and pass it with the server URL.
+
+1. In Systeme, go to **Profile → Settings → MCP and API keys** and **generate an MCP key**. Give it a name (e.g. "Odin") and, optionally, an expiry date. Keep the key private.
+2. In Odin, open the **MCP integrator**, switch to the **form** view, and choose the **HTTP streamable** transport. Give the server a **name** (it's required).
+3. Paste Systeme's **remote server URL**, then substitute your generated **MCP key** into the key field. Double-check there are no stray spaces around the key.
+4. Click **Add Server**. Once it shows **connected**, try it: *"start a background agent and look at the last few newsletters I sent in Systeme via the MCP."*
+
+<Aside type="caution">
+Treat the MCP key like a password. If you ever expose it (for example on screen), **revoke and regenerate** it from the same Systeme settings page.
+</Aside>
+
 ## Authentication
 
 Many MCP servers require API keys or tokens. Pass these as environment variables in the server configuration. They are stored locally and never sent to Odin's servers.
