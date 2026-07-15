@@ -46,6 +46,12 @@ export default defineConfig({
           ],
         },
         {
+          label: 'Live Training Replays',
+          items: [
+            { label: 'Live Training Replays', slug: 'training/live-training-replays' },
+          ],
+        },
+        {
           label: 'Reference',
           items: [
             { label: 'Settings', slug: 'reference/settings' },
