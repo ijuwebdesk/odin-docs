@@ -3,7 +3,7 @@ title: Odin Docs
 description: Documentation for Odin AI — your always-on screen companion.
 template: splash
 hero:
-  tagline: Your always-on AI companion. Ask anything, point at anything, do anything.
+  tagline: Your always-on AI companion. Ask anything, point at anything, do anything — by voice, on any screen.
   image:
     file: ../../assets/odin-logo-dark.png
   actions:
@@ -14,11 +14,16 @@ hero:
     - text: Quick start
       link: /getting-started/quick-start/
       icon: rocket
+      variant: secondary
 ---
 
-import { CardGrid, Card } from '@astrojs/starlight/components'
+import { CardGrid, Card, LinkCard } from '@astrojs/starlight/components'
 
-<CardGrid stagger>
+<div class="home-section">
+
+## What Odin does
+
+<CardGrid>
   <Card title="Voice companion" icon="comment">
     Hold a key, speak, and Odin hears you — no typing needed. It sees your screen and answers with spoken audio.
   </Card>
@@ -26,9 +31,50 @@ import { CardGrid, Card } from '@astrojs/starlight/components'
     Odin captures your display and reads the context of whatever you're looking at before responding.
   </Card>
   <Card title="Cursor overlay" icon="right-arrow">
-    A blue triangle on screen points directly at the element Odin is talking about, so you always know exactly where to look.
+    A blue triangle points directly at the element Odin is talking about, so you always know exactly where to look.
   </Card>
   <Card title="Background agents" icon="rocket">
-    Tell Odin to research, write code, or complete multi-step tasks — it spins up a headless agent and reports back when done.
+    Tell Odin to research, write code, or run multi-step tasks — it spins up a headless agent and reports back when done.
   </Card>
 </CardGrid>
+
+</div>
+
+<div class="home-section">
+
+## Get set up in minutes
+
+<CardGrid>
+  <LinkCard title="Install Odin" href="/getting-started/installation/" description="Download and install on Mac or Windows." />
+  <LinkCard title="Grant permissions" href="/getting-started/permissions/" description="Screen recording, microphone, and accessibility access." />
+  <LinkCard title="First setup" href="/getting-started/first-setup/" description="Add your API key, pick a model, and configure Odin." />
+  <LinkCard title="Quick start" href="/getting-started/quick-start/" description="Your first conversation with Odin in 60 seconds." />
+</CardGrid>
+
+</div>
+
+<div class="home-section">
+
+## Go deeper
+
+<CardGrid>
+  <LinkCard title="Act Mode" href="/features/act-mode/" description="Let Odin take actions on your behalf, safely." />
+  <LinkCard title="Memory" href="/features/memory/" description="Odin remembers context across sessions." />
+  <LinkCard title="Skills" href="/features/skills/" description="Extend Odin with packaged, repeatable workflows." />
+  <LinkCard title="MCP Servers" href="/features/mcp-servers/" description="Connect Odin to your tools and data sources." />
+</CardGrid>
+
+</div>
+
+<div class="home-section">
+
+## Learn live &amp; get help
+
+<CardGrid>
+  <LinkCard title="Live Training Replays" href="/training/live-training-replays/" description="Watch the 3-Day Foundations Training on demand." />
+  <LinkCard title="Using Odin Effectively" href="/getting-started/using-odin-effectively/" description="Tips and habits to get the most out of Odin." />
+  <LinkCard title="Keyboard Shortcuts" href="/reference/shortcuts/" description="Every hotkey at a glance." />
+  <LinkCard title="Troubleshooting" href="/reference/troubleshooting/" description="Fixes for common issues and setup snags." />
+</CardGrid>
+
+</div>
