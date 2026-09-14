@@ -1,17 +1,17 @@
 ---
 title: Settings
-description: All configurable settings in Odin AI.
+description: All configurable settings in Silk.
 sidebar:
   order: 1
 ---
 
-Open the Odin panel and click the gear icon to access settings.
+Open the Silk panel and click the gear icon to access settings.
 
 ## General
 
 | Setting | Description |
 |---|---|
-| **Window mode** | `Docked` pins Odin under the menu bar tray icon. `Windowed` opens it as a normal movable window with a Dock icon. |
+| **Window mode** | `Docked` pins Silk under the menu bar tray icon. `Windowed` opens it as a normal movable window with a Dock icon. |
 
 ## AI Model
 
@@ -58,7 +58,7 @@ Open the Odin panel and click the gear icon to access settings.
 
 | Setting | Description |
 |---|---|
-| **License key** | Enter or view your Odin license key. |
+| **License key** | Enter or view your Silk license key. |
 | **Deactivate** | Deactivate the license on this machine so it can be used elsewhere. |
 
 ## Permissions

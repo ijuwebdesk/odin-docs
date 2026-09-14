@@ -1,6 +1,6 @@
 ---
 title: MCP Servers
-description: How to connect Odin to external tools via the Model Context Protocol.
+description: How to connect Silk to external tools via the Model Context Protocol.
 sidebar:
   order: 8
 ---
@@ -16,11 +16,11 @@ import { Aside } from '@astrojs/starlight/components'
   />
 </div>
 
-Odin supports the [Model Context Protocol (MCP)](https://modelcontextprotocol.io) — an open standard for connecting AI assistants to external tools, databases, APIs, and services. Once connected, Odin can read from and write to those systems as part of any conversation.
+Silk supports the [Model Context Protocol (MCP)](https://modelcontextprotocol.io) — an open standard for connecting AI assistants to external tools, databases, APIs, and services. Once connected, Silk can read from and write to those systems as part of any conversation.
 
 ## What MCP enables
 
-With MCP servers, Odin can:
+With MCP servers, Silk can:
 
 - Query your database ("how many active users do we have this month?")
 - Read and write files via a filesystem server
@@ -30,19 +30,19 @@ With MCP servers, Odin can:
 
 ## Adding an MCP server
 
-1. Open the Odin panel and open the **MCP integrator** (**Settings → MCP Servers → Add Server**).
+1. Open the Silk panel and open the **MCP integrator** (**Settings → MCP Servers → Add Server**).
 2. Enter the server name and the command to start it (or the URL for remote/hosted servers).
 3. Click **Add Server** / **Connect**.
 
-Once connected, Odin sees the server's tools and can use them automatically.
+Once connected, Silk sees the server's tools and can use them automatically.
 
 <Aside type="tip">
-Most hosted integrations publish a ready-made setup snippet (often labelled "Cursor", "Claude", or "MCP config") on their docs page. You can usually paste that same command straight into Odin's MCP integrator — no need to hand-write the config.
+Most hosted integrations publish a ready-made setup snippet (often labelled "Cursor", "Claude", or "MCP config") on their docs page. You can usually paste that same command straight into Silk's MCP integrator — no need to hand-write the config.
 </Aside>
 
 ### Hosted servers with OAuth
 
-Many hosted servers (Notion is a good example) authenticate over OAuth. After you paste the command and click **Add Server**, Odin opens the provider's sign-in page in your browser. Approve the connection there, return to Odin, and the server shows as connected with its tools available.
+Many hosted servers (Notion is a good example) authenticate over OAuth. After you paste the command and click **Add Server**, Silk opens the provider's sign-in page in your browser. Approve the connection there, return to Silk, and the server shows as connected with its tools available.
 
 ### Servers that need an API key or account ID
 
@@ -66,7 +66,7 @@ The MCP ecosystem has hundreds of ready-made servers. Search [mcp.run](https://m
 }
 ```
 
-After connecting, you can ask Odin things like "list all TypeScript files in my projects folder" or "read the contents of my .env file".
+After connecting, you can ask Silk things like "list all TypeScript files in my projects folder" or "read the contents of my .env file".
 
 ## Example: connecting a GitHub server
 
@@ -83,7 +83,7 @@ After connecting, you can ask Odin things like "list all TypeScript files in my 
 
 ## Walkthroughs: connecting real integrations
 
-Odin's MCP form supports remote **HTTP streamable** servers, which is how most hosted SaaS integrations connect. The two walkthroughs below show the two common auth styles end to end.
+Silk's MCP form supports remote **HTTP streamable** servers, which is how most hosted SaaS integrations connect. The two walkthroughs below show the two common auth styles end to end.
 
 ### Asana (OAuth app)
 
@@ -96,17 +96,17 @@ Odin's MCP form supports remote **HTTP streamable** servers, which is how most h
   />
 </div>
 
-Asana connects over OAuth, so you register an app on Asana's side and let Odin sign in through it.
+Asana connects over OAuth, so you register an app on Asana's side and let Silk sign in through it.
 
 1. In Asana's [developer console](https://app.asana.com/0/developer-console), create a new app and choose the **MCP app** type. Agree to the terms and create it — you'll get a **Client ID** and **Client Secret**.
-2. In Odin, open the **MCP integrator**, switch to the **form** view, and choose the **HTTP streamable** transport.
+2. In Silk, open the **MCP integrator**, switch to the **form** view, and choose the **HTTP streamable** transport.
 3. Paste Asana's **MCP server URL** (from Asana's MCP docs) into the URL field, then add the **Client ID** and **Client Secret**.
-4. Copy the **redirect URL** Odin shows and paste it into your Asana OAuth app's settings — it must match **exactly**, or the connection is rejected.
+4. Copy the **redirect URL** Silk shows and paste it into your Asana OAuth app's settings — it must match **exactly**, or the connection is rejected.
 5. Click **Connect**. Asana asks you to sign in and **allow** access (create/modify tasks, projects, and comments). Approve it.
-6. Odin updates to **connected** — in the video all 35 Asana tools come through. You can now say *"start a background agent and fetch my pending Asana tasks"* and Odin queries the MCP directly.
+6. Silk updates to **connected** — in the video all 35 Asana tools come through. You can now say *"start a background agent and fetch my pending Asana tasks"* and Silk queries the MCP directly.
 
 <Aside type="tip">
-If you get *"redirect URL does not match"*, re-copy Odin's redirect URL into the Asana app and save — a trailing character or query string mismatch is the usual cause.
+If you get *"redirect URL does not match"*, re-copy Silk's redirect URL into the Asana app and save — a trailing character or query string mismatch is the usual cause.
 </Aside>
 
 ### Systeme.io (API key)
@@ -122,8 +122,8 @@ If you get *"redirect URL does not match"*, re-copy Odin's redirect URL into the
 
 Systeme.io uses a simpler API-key style — you generate a key and pass it with the server URL.
 
-1. In Systeme, go to **Profile → Settings → MCP and API keys** and **generate an MCP key**. Give it a name (e.g. "Odin") and, optionally, an expiry date. Keep the key private.
-2. In Odin, open the **MCP integrator**, switch to the **form** view, and choose the **HTTP streamable** transport. Give the server a **name** (it's required).
+1. In Systeme, go to **Profile → Settings → MCP and API keys** and **generate an MCP key**. Give it a name (e.g. "Silk") and, optionally, an expiry date. Keep the key private.
+2. In Silk, open the **MCP integrator**, switch to the **form** view, and choose the **HTTP streamable** transport. Give the server a **name** (it's required).
 3. Paste Systeme's **remote server URL**, then substitute your generated **MCP key** into the key field. Double-check there are no stray spaces around the key.
 4. Click **Add Server**. Once it shows **connected**, try it: *"start a background agent and look at the last few newsletters I sent in Systeme via the MCP."*
 
@@ -133,12 +133,12 @@ Treat the MCP key like a password. If you ever expose it (for example on screen)
 
 ## Authentication
 
-Many MCP servers require API keys or tokens. Pass these as environment variables in the server configuration. They are stored locally and never sent to Odin's servers.
+Many MCP servers require API keys or tokens. Pass these as environment variables in the server configuration. They are stored locally and never sent to Silk's servers.
 
 ## Managing servers
 
-Go to **Settings → MCP Servers** to view all connected servers, disconnect them, or check their status. Servers are started when Odin launches and stopped when it quits.
+Go to **Settings → MCP Servers** to view all connected servers, disconnect them, or check their status. Servers are started when Silk launches and stopped when it quits.
 
 <Aside type="caution">
-Only connect MCP servers from sources you trust. A malicious server could instruct Odin to read sensitive files or take unintended actions.
+Only connect MCP servers from sources you trust. A malicious server could instruct Silk to read sensitive files or take unintended actions.
 </Aside>

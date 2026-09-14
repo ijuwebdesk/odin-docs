@@ -1,57 +1,178 @@
 /*
- * Odin brand colors mapped to Starlight CSS custom properties.
+ * Silk brand, mapped to Starlight CSS custom properties.
+ * Source of truth: the Silk logo kit README (Colour / Motion sections).
  *
- * Source tokens (from Odin's panel styles.css):
- *   bg: #0d0f0e  |  surface-1: #171918  |  surface-2: #202221  |  surface-3: #272A29
- *   borderSubtle: #373B39  |  borderStrong: #444947
- *   text-1: #F2F4F3  |  text-2: #AEB6B2  |  text-3: #6B736F
- *   blue: #60a5fa  |  violet: #a78bfa  |  teal: #34D399
- *   brand gradient: 135deg, #60a5fa → #818cf8 → #34d399
+ *   Amethyst  #8B7BFF   gradient start, mark
+ *   Cyan      #3FD8C8   gradient 38%, mark tip   (kept from Odin)
+ *   Raw silk  #E9A97E   gradient 58%
+ *   Ivory     #F3EFE7   the full stop, one-colour on dark
+ *   Ink       #171523   one-colour on light
+ *   Ground    #0B0A10   dark ground
+ *
+ * On a light ground the gradient stops shift to #6A55E8 / #12968A / #B4653A.
  */
+
+:root {
+  --silk-amethyst: #8b7bff;
+  --silk-cyan: #3fd8c8;
+  --silk-raw: #e9a97e;
+  --silk-ivory: #f3efe7;
+  --silk-ink: #171523;
+  --silk-ground: #0b0a10;
+
+  /* The sheen. Dark ground by default; overridden for light mode below. */
+  --silk-sheen: linear-gradient(
+    100deg,
+    #8b7bff 0%,
+    #3fd8c8 38%,
+    #e9a97e 58%,
+    #8b7bff 100%
+  );
+}
+
+/* Starlight derives its asides, badges and card accents from four hue numbers,
+ * then computes the light/dark variants itself. Retuning the hues is enough to
+ * pull those surfaces onto the brand without touching the derivation:
+ *   blue   -> cyan       (note)
+ *   purple -> amethyst   (tip)
+ *   orange -> raw silk   (caution)
+ * Red is left alone. Danger has to keep reading as danger. */
+:root {
+  --sl-hue-blue: 174;
+  --sl-hue-purple: 247;
+  --sl-hue-orange: 24;
+}
 
 /* ── Dark mode (Starlight default) ─────────────────────────────────────────── */
 :root {
-  /* Accent — Odin blue */
-  --sl-color-accent-low: #152035;
-  --sl-color-accent: #60a5fa;
-  --sl-color-accent-high: #bfdbfe;
+  /* Accent — amethyst */
+  --sl-color-accent-low: #221c46;
+  --sl-color-accent: #8b7bff;
+  --sl-color-accent-high: #cfc7ff;
 
   /* Gray scale: gray-1 = lightest text, gray-6 = darkest surface, black = bg */
   --sl-color-white: #ffffff;
-  --sl-color-gray-1: #f2f4f3;   /* text-1  */
-  --sl-color-gray-2: #aeb6b2;   /* text-2  */
-  --sl-color-gray-3: #6b736f;   /* text-3  */
-  --sl-color-gray-4: #444947;   /* borderStrong */
-  --sl-color-gray-5: #202221;   /* surface-2 */
-  --sl-color-gray-6: #171918;   /* surface-1 */
-  --sl-color-black: #0d0f0e;    /* bg */
+  --sl-color-gray-1: #f3efe7; /* ivory — body text */
+  --sl-color-gray-2: #a9a3c0; /* muted text */
+  --sl-color-gray-3: #6e6889; /* faint text */
+  --sl-color-gray-4: #3a3550; /* strong border */
+  --sl-color-gray-5: #1f1c2b; /* surface-2 */
+  --sl-color-gray-6: #15131d; /* surface-1 */
+  --sl-color-black: #0b0a10; /* ground */
 }
 
 /* ── Light mode ─────────────────────────────────────────────────────────────── */
-[data-theme='light'] {
-  --sl-color-accent-low: #dbeafe;
-  --sl-color-accent: #2563eb;
-  --sl-color-accent-high: #1e3a8a;
+/* Starlight declares its own light palette on `:root[data-theme='light']`. A bare
+ * `[data-theme='light']` is one specificity step below that and loses every
+ * token silently — the page keeps Starlight's stock blue-on-white. Match its
+ * selector exactly; this file is loaded after Starlight's, so the tie goes here. */
+:root[data-theme='light'] {
+  --silk-sheen: linear-gradient(
+    100deg,
+    #6a55e8 0%,
+    #12968a 38%,
+    #b4653a 58%,
+    #6a55e8 100%
+  );
 
-  --sl-color-white: #ffffff;
-  --sl-color-gray-1: #171918;
-  --sl-color-gray-2: #272a29;
-  --sl-color-gray-3: #444947;
-  --sl-color-gray-4: #6b736f;
-  --sl-color-gray-5: #aeb6b2;
-  --sl-color-gray-6: #e8eae9;
-  --sl-color-black: #f4f5f4;
+  --sl-color-accent-low: #e6e1ff;
+  --sl-color-accent: #6a55e8;
+  --sl-color-accent-high: #3b2ca8;
+
+  /* The scale inverts in light mode: --sl-color-white is the DARKEST text and
+   * --sl-color-black is the page ground. Naming it "white" and giving it #fff
+   * here is the classic way to make every heading disappear. */
+  --sl-color-white: #0f0d18; /* headings — a shade under ink */
+  --sl-color-gray-1: #171523; /* ink — body text */
+  --sl-color-gray-2: #2f2b40;
+  --sl-color-gray-3: #4a4560;
+  --sl-color-gray-4: #7d7795;
+  --sl-color-gray-5: #c4bfd0;
+  --sl-color-gray-6: #e7e3dc;
+  --sl-color-gray-7: #efebe3; /* nav ground, a touch above the page */
+  --sl-color-black: #f3efe7; /* ivory ground */
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * The live wordmark
+ *
+ * Fraunces ROMAN, slanted synthetically by font-style:italic. Fraunces ships a
+ * real italic with a swashed k — a noticeably different word. Do not "fix" this
+ * by loading the ital axis. The full stop is always solid, upright, and out of
+ * the gradient.
+ * ═════════════════════════════════════════════════════════════════════════ */
+.silk {
+  font-family: Fraunces, Georgia, 'Times New Roman', serif;
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.silk .sheen {
+  background: var(--silk-sheen);
+  background-size: 280% 100%;
+  background-position: 8% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: silk-travel 9s ease-in-out infinite;
+}
+.silk .stop {
+  color: var(--silk-ivory);
+  font-style: normal;
+}
+[data-theme='light'] .silk .stop {
+  color: var(--silk-ink);
+}
+@keyframes silk-travel {
+  0%,
+  100% {
+    background-position: 8% 50%;
+  }
+  50% {
+    background-position: 92% 50%;
+  }
+}
+
+/* ── The mark: the Continuous Thread ───────────────────────────────────────── */
+.thread path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+}
+.thread.drawing path {
+  animation: silk-draw-thread 1.4s cubic-bezier(0.65, 0, 0.25, 1);
+}
+@keyframes silk-draw-thread {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Both animations are part of the identity, and both stop on request. */
+@media (prefers-reduced-motion: reduce) {
+  .silk .sheen,
+  .thread path {
+    animation: none;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
  * Home / splash page — elegant hero + cards
- * Brand gradient: 135deg, #60a5fa → #818cf8 → #34d399
  * ═════════════════════════════════════════════════════════════════════════ */
 
 /* Soft ambient glow behind the hero */
 .hero {
   position: relative;
   padding-block: 2rem 1rem;
+  /* The glow below deliberately bleeds 10% past both edges. Clip it here so it
+   * cannot widen the page's scroll area and hand narrow screens a sideways
+   * scrollbar. `clip` rather than `hidden`: no scroll container, so the in-page
+   * anchor links keep working. */
+  overflow-x: clip;
 }
 .hero::before {
   content: '';
@@ -68,14 +189,30 @@
   pointer-events: none;
 }
 
-/* Logo — refined, with a subtle glow */
-.hero img {
-  max-width: min(24rem, 70%);
-  margin-inline: auto;
+/* The hero lockup: the mark drawing itself, the wordmark beneath it.
+ *
+ * This is the STACKED composition, built to the kit's geometry rule. Everything
+ * is sized off the wordmark's font size F, so the proportions hold at any width:
+ *   mark scale  F / 37.5 per unit, and the tight crop is 93 units wide -> 2.48em
+ *   gap         28% of F between the mark's crop bottom and the line box
+ */
+.hero-lockup {
+  font-size: clamp(3rem, 9vw, 5rem); /* F */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.28em;
+}
+.hero-lockup .thread {
+  width: 2.48em;
+  height: auto;
   filter: drop-shadow(0 12px 32px color-mix(in srgb, var(--sl-color-accent) 30%, transparent));
 }
+.hero-lockup .silk {
+  font-size: 1em;
+}
 
-/* The logo image carries the brand — hide the redundant "Odin Docs" heading
+/* The lockup carries the brand — hide the redundant "Silk Docs" heading
  * visually while keeping it in the DOM for screen readers and SEO. */
 .hero h1 {
   position: absolute;
@@ -109,13 +246,14 @@
   transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 .hero .actions a.primary {
-  background: linear-gradient(135deg, #60a5fa 0%, #818cf8 100%);
+  background: linear-gradient(135deg, #8b7bff 0%, #6f5bf5 100%);
   border: none;
-  color: #0d0f0e;
+  color: var(--silk-ivory);
   box-shadow: 0 6px 20px color-mix(in srgb, var(--sl-color-accent) 35%, transparent);
 }
 .hero .actions a.primary:hover {
   transform: translateY(-2px);
+  color: var(--silk-ivory);
   box-shadow: 0 10px 28px color-mix(in srgb, var(--sl-color-accent) 45%, transparent);
 }
 .hero .actions a.secondary {
@@ -146,7 +284,7 @@
   height: 3px;
   margin: 0.6rem auto 0;
   border-radius: 3px;
-  background: linear-gradient(90deg, #60a5fa, #34d399);
+  background: linear-gradient(90deg, var(--silk-amethyst), var(--silk-cyan));
 }
 
 /* Cards — glassy surface, gradient top accent, hover lift */
@@ -164,7 +302,7 @@
   position: absolute;
   inset: 0 0 auto 0;
   height: 2px;
-  background: linear-gradient(90deg, #60a5fa, #818cf8, #34d399);
+  background: linear-gradient(90deg, #8b7bff, #3fd8c8, #e9a97e);
   opacity: 0;
   transition: opacity 0.2s ease;
 }
@@ -177,19 +315,56 @@
   opacity: 1;
 }
 
-/* Card icons in brand accent */
-.card .icon {
-  color: var(--sl-color-accent);
-  background: color-mix(in srgb, var(--sl-color-accent) 12%, transparent);
+/* Card icons.
+ *
+ * Starlight rotates the icon's accent through orange / purple / green / red by
+ * nth-child, which reads as a different brand every fourth card. Rotate through
+ * the three hues of the sheen instead — amethyst, cyan, raw silk — so the rhythm
+ * survives but the palette is Silk's.
+ *
+ * Starlight's own rules read --sl-card-border / --sl-card-bg, so drive those
+ * rather than restating border and background. The doubled class is deliberate:
+ * Starlight's scoped rules land after this file, so matching its specificity
+ * would lose the cascade. */
+.card.card:nth-child(4n + 1),
+.card.card:nth-child(4n + 4) {
+  --silk-card-accent: var(--silk-amethyst);
+}
+.card.card:nth-child(4n + 2) {
+  --silk-card-accent: var(--silk-cyan);
+}
+.card.card:nth-child(4n + 3) {
+  --silk-card-accent: var(--silk-raw);
+}
+[data-theme='light'] .card.card:nth-child(4n + 1),
+[data-theme='light'] .card.card:nth-child(4n + 4) {
+  --silk-card-accent: #6a55e8;
+}
+[data-theme='light'] .card.card:nth-child(4n + 2) {
+  --silk-card-accent: #12968a;
+}
+[data-theme='light'] .card.card:nth-child(4n + 3) {
+  --silk-card-accent: #b4653a;
+}
+/* :nth-child(n) matches every card and costs one more class's worth of
+ * specificity, which is what it takes to outrank Starlight's own
+ * .card:nth-child(4n + 1) assignments. */
+.card.card:nth-child(n) {
+  --sl-card-border: color-mix(in srgb, var(--silk-card-accent) 45%, transparent);
+  --sl-card-bg: color-mix(in srgb, var(--silk-card-accent) 12%, transparent);
+}
+.card .icon.icon {
+  color: var(--silk-card-accent, var(--sl-color-accent));
   border-radius: 0.6rem;
   padding: 0.35rem;
 }
+
 .card .title {
   font-size: 1.05rem;
   letter-spacing: -0.01em;
 }
 
-/* Call-to-action button — brand gradient, used for inline CTAs */
+/* Call-to-action button — the sheen, used for inline CTAs */
 .cta-button {
   display: inline-block;
   padding: 0.85rem 1.8rem;
@@ -197,14 +372,14 @@
   font-weight: 600;
   font-size: 1.05rem;
   text-decoration: none;
-  color: #0d0f0e;
-  background: linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #34d399 100%);
+  color: var(--silk-ground);
+  background: linear-gradient(135deg, #8b7bff 0%, #3fd8c8 55%, #e9a97e 100%);
   box-shadow: 0 6px 20px color-mix(in srgb, var(--sl-color-accent) 35%, transparent);
   transition: transform 0.15s ease, box-shadow 0.2s ease;
 }
 .cta-button:hover {
   transform: translateY(-2px);
-  color: #0d0f0e;
+  color: var(--silk-ground);
   box-shadow: 0 10px 28px color-mix(in srgb, var(--sl-color-accent) 45%, transparent);
 }
 
@@ -221,5 +396,14 @@
   box-shadow: 0 12px 30px -12px color-mix(in srgb, var(--sl-color-accent) 40%, transparent);
 }
 .sl-link-card .title {
-  color: var(--sl-color-white);
+  color: var(--sl-color-gray-1);
+}
+
+/* The header lockup draws its thread on hover. */
+.site-title:hover img,
+a.site-title:hover img {
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--sl-color-accent) 45%, transparent));
+}
+.site-title img {
+  transition: filter 0.25s ease;
 }

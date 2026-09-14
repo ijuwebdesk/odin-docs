@@ -1,6 +1,6 @@
 ---
 title: Telegram Bridge
-description: How to connect Odin to Telegram so you can send tasks from your phone.
+description: How to connect Silk to Telegram so you can send tasks from your phone.
 sidebar:
   order: 9
 ---
@@ -16,40 +16,40 @@ import { Steps, Aside } from '@astrojs/starlight/components'
   />
 </div>
 
-The Telegram Bridge lets you send tasks and messages to Odin from your phone via Telegram. Odin receives them, runs them as background agent sessions, and replies in the same chat.
+The Telegram Bridge lets you send tasks and messages to Silk from your phone via Telegram. Silk receives them, runs them as background agent sessions, and replies in the same chat.
 
 <Aside>
-The bridge connects to the Odin instance running on your desktop. Your computer needs to be on and Odin needs to be running for the bridge to work.
+The bridge connects to the Silk instance running on your desktop. Your computer needs to be on and Silk needs to be running for the bridge to work.
 </Aside>
 
 ## Setting up the Telegram Bridge
 
 <Steps>
-1. Open the Odin panel and go to **Settings → Telegram**.
+1. Open the Silk panel and go to **Settings → Telegram**.
 
-2. Click **Connect**. Odin generates a time-limited pairing code and displays it on screen along with the exact command to send.
+2. Click **Connect**. Silk generates a time-limited pairing code and displays it on screen along with the exact command to send.
 
-3. Open Telegram on your phone and search for **@UseOdinAI_bot**. Open a chat with it.
+3. Open Telegram on your phone and search for **@SilkAI_bot**. Open a chat with it.
 
-4. Send the command Odin shows — it looks like:
+4. Send the command Silk shows — it looks like:
    ```
    /pair XXXXXX
    ```
-   where `XXXXXX` is the code shown in Odin.
+   where `XXXXXX` is the code shown in Silk.
 
-5. The bot confirms the pairing and Odin's settings panel updates to show **Connected**.
+5. The bot confirms the pairing and Silk's settings panel updates to show **Connected**.
 </Steps>
 
 The pairing code expires after a short time. If it runs out before you send the command, click **Connect** again to generate a new one.
 
 ## Sending tasks
 
-Once paired, any message you send to **@UseOdinAI_bot** in Telegram is forwarded to Odin and handled as a background agent task. Odin streams its progress back into the same Telegram chat as it works — for example, send "hey" and Odin launches an agent and replies asking what you'd like help with.
+Once paired, any message you send to **@SilkAI_bot** in Telegram is forwarded to Silk and handled as a background agent task. Silk streams its progress back into the same Telegram chat as it works — for example, send "hey" and Silk launches an agent and replies asking what you'd like help with.
 
-You can also send **voice messages** (Odin transcribes them) and **files / screenshots** as part of a task.
+You can also send **voice messages** (Silk transcribes them) and **files / screenshots** as part of a task.
 
 <Aside>
-Sending and receiving text messages works on any paired plan. Having Odin **pull in and work with files from your computer** is included with the **Unlimited plan** — you'll need at least that tier for full file access over the bridge.
+Sending and receiving text messages works on any paired plan. Having Silk **pull in and work with files from your computer** is included with the **Unlimited plan** — you'll need at least that tier for full file access over the bridge.
 </Aside>
 
 ## Disconnecting

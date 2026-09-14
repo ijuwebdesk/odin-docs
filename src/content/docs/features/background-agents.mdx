@@ -1,13 +1,13 @@
 ---
 title: Background Agents
-description: How Odin runs headless agents to complete multi-step tasks.
+description: How Silk runs headless agents to complete multi-step tasks.
 sidebar:
   order: 4
 ---
 
 import { Aside } from '@astrojs/starlight/components'
 
-Background agents are Odin's way of handling tasks that take more than a quick answer. When you ask Odin to do something that involves multiple steps — writing code, researching a topic, creating files, building a plan — it can spin up a headless agent to work through the task while you continue with whatever you were doing.
+Background agents are Silk's way of handling tasks that take more than a quick answer. When you ask Silk to do something that involves multiple steps — writing code, researching a topic, creating files, building a plan — it can spin up a headless agent to work through the task while you continue with whatever you were doing.
 
 ## How to trigger an agent
 
@@ -24,13 +24,13 @@ There are three ways to launch a background agent:
 > "Look up the Claude API pricing and compare it to OpenAI."
 
 <Aside type="caution">
-When you **speak** a task, include the phrase "start a background agent." If you don't, Odin may run it in **[Act mode](/features/act-mode/)** instead — taking control of your mouse and keyboard so you can't use your computer while it works. Typed tasks always run in the background.
+When you **speak** a task, include the phrase "start a background agent." If you don't, Silk may run it in **[Act mode](/features/act-mode/)** instead — taking control of your mouse and keyboard so you can't use your computer while it works. Typed tasks always run in the background.
 </Aside>
 
-When Odin launches an agent, it responds with a short spoken acknowledgement ("on it", "kicking that off", "got it") and the agent appears in the **Agent Dock** — a vertical stack of orbs on the right edge of your screen.
+When Silk launches an agent, it responds with a short spoken acknowledgement ("on it", "kicking that off", "got it") and the agent appears in the **Agent Dock** — a vertical stack of orbs on the right edge of your screen.
 
 <Aside>
-Odin's spoken response when launching an agent is intentionally brief. The agent's progress is visible in the dock — Odin won't narrate the steps it's taking.
+Silk's spoken response when launching an agent is intentionally brief. The agent's progress is visible in the dock — Silk won't narrate the steps it's taking.
 </Aside>
 
 ## The Agent Dock
@@ -46,13 +46,13 @@ You can open multiple agents simultaneously. They run in parallel.
 
 ## What agents can do
 
-Background agents have access to the same tools as Odin's main process:
+Background agents have access to the same tools as Silk's main process:
 
 - **File system** — read, write, and create files
 - **Web search** — look things up
 - **Code execution** — run shell commands, scripts
 - **MCP tools** — any MCP servers you've connected
-- **Memory** — read and write to Odin's memory store
+- **Memory** — read and write to Silk's memory store
 
 ## Stopping an agent
 

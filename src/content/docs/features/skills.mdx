@@ -1,6 +1,6 @@
 ---
 title: Skills
-description: Reusable instructions that give Odin specialized capabilities.
+description: Reusable instructions that give Silk specialized capabilities.
 sidebar:
   order: 7
 ---
@@ -16,29 +16,29 @@ import { Aside } from '@astrojs/starlight/components'
   />
 </div>
 
-Skills are saved sets of instructions that Odin applies automatically during agent sessions. When skills are enabled, they are injected silently into every agent task — Odin reads them and applies them when relevant, without you needing to invoke them explicitly.
+Skills are saved sets of instructions that Silk applies automatically during agent sessions. When skills are enabled, they are injected silently into every agent task — Silk reads them and applies them when relevant, without you needing to invoke them explicitly.
 
 ## What is a skill?
 
-A skill is a named instruction set you write once and Odin uses forever. Each skill has:
+A skill is a named instruction set you write once and Silk uses forever. Each skill has:
 
 - A **name** — used to identify it in the Skills editor
 - A **description** — one line explaining when it applies
-- **Content** — the instructions Odin follows
+- **Content** — the instructions Silk follows
 
 Examples of useful skills:
 
-- A **code-review** skill that focuses Odin on correctness and performance over style
-- A **writing-coach** skill that asks Odin to improve clarity and tone
+- A **code-review** skill that focuses Silk on correctness and performance over style
+- A **writing-coach** skill that asks Silk to improve clarity and tone
 - A **sql-tutor** skill that emphasizes query optimization and explains trade-offs
 - A **commit-messages** skill that formats git commit messages your preferred way
 
 ## Built-in skills
 
-Odin ships with a set of default skills (the exact set depends on your plan). For example:
+Silk ships with a set of default skills (the exact set depends on your plan). For example:
 
-- **screenshot-to-file** — captures the current screen and saves it to the desktop as a time-stamped image. Just ask Odin to "take a screenshot" and it uses this skill.
-- **web-search** — lets Odin research the web as part of a task.
+- **screenshot-to-file** — captures the current screen and saves it to the desktop as a time-stamped image. Just ask Silk to "take a screenshot" and it uses this skill.
+- **web-search** — lets Silk research the web as part of a task.
 
 These are a good template to learn from — open one in the Skills editor to see how it's written.
 
@@ -46,13 +46,13 @@ These are a good template to learn from — open one in the Skills editor to see
 
 There are two ways to create a skill.
 
-### The easy way — ask Odin
+### The easy way — ask Silk
 
-The simplest approach is to just **ask Odin to make the skill for you**. Make sure the mode selector is on **Auto**, then describe what you want:
+The simplest approach is to just **ask Silk to make the skill for you**. Make sure the mode selector is on **Auto**, then describe what you want:
 
 > "Create a new skill where, whenever I ask you to do research and save a report, you always save it as a PDF instead of a markdown file."
 
-Odin writes the skill and saves it automatically — you'll see the new skill appear in the Skills editor, fully formatted.
+Silk writes the skill and saves it automatically — you'll see the new skill appear in the Skills editor, fully formatted.
 
 ### Manually in the editor
 
@@ -66,7 +66,7 @@ Open the panel and click **Skills** to open the Skills editor window. The left p
 You can also draft a skill in your favorite AI tool (ChatGPT, Claude, etc.) — paste one of your existing skills as a template and ask it to write a new one in the same shape, then add it with the **+** button.
 </Aside>
 
-Skills are ideal for **repetitive tasks** where Odin isn't getting something quite the way you want. Explain the behavior you'd prefer once, save it as a skill, and Odin applies it automatically next time.
+Skills are ideal for **repetitive tasks** where Silk isn't getting something quite the way you want. Explain the behavior you'd prefer once, save it as a skill, and Silk applies it automatically next time.
 
 **Skill format:**
 
@@ -94,7 +94,7 @@ Apply this when the user shares code for review or asks you to look at an implem
 Skills can be toggled on or off globally in Settings. When enabled, all saved skills are injected into agent sessions. When disabled, none are.
 
 <Aside>
-Skills are also built automatically by background agents. When an agent discovers a useful pattern or workflow, it can write it as a skill so Odin remembers it for the future.
+Skills are also built automatically by background agents. When an agent discovers a useful pattern or workflow, it can write it as a skill so Silk remembers it for the future.
 </Aside>
 
 ## Deleting a skill

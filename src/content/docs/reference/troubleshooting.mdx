@@ -16,53 +16,53 @@ import { Aside } from '@astrojs/starlight/components'
   />
 </div>
 
-## Odin won't accept my OpenRouter API key
+## Silk won't accept my OpenRouter API key
 
 This is almost always caused by **extra invisible characters** copied along with the key.
 
-- Always use OpenRouter's **copy button** rather than selecting the text by hand — a manual copy can pick up a leading/trailing space that Odin silently rejects.
+- Always use OpenRouter's **copy button** rather than selecting the text by hand — a manual copy can pick up a leading/trailing space that Silk silently rejects.
 - To check, paste the key into a plain notepad first and look for stray spaces or characters, then copy the clean value.
-- If you **can't paste at all**, click the **detach** button so Odin pops out into its own window, then paste there and click **Save**.
+- If you **can't paste at all**, click the **detach** button so Silk pops out into its own window, then paste there and click **Save**.
 
 ---
 
-## Odin isn't responding to push-to-talk
+## Silk isn't responding to push-to-talk
 
 **Check permissions first.** Go to the panel and click the shield icon. If Microphone shows a red status, re-grant it in System Settings.
 
-**Check the hotkey.** Push-to-talk is a **toggle** — press `Ctrl+Space` once to start, speak, then press it again to stop. Odin only processes your query after that second press.
+**Check the hotkey.** Push-to-talk is a **toggle** — press `Ctrl+Space` once to start, speak, then press it again to stop. Silk only processes your query after that second press.
 
-**Select the right microphone.** Open the panel's **audio** settings and make sure the correct mic is selected, then use the **test** button — the input bars should move when you speak. If your reply only ever shows the word "you" (or nothing), Odin can't hear you and the wrong mic is usually why.
+**Select the right microphone.** Open the panel's **audio** settings and make sure the correct mic is selected, then use the **test** button — the input bars should move when you speak. If your reply only ever shows the word "you" (or nothing), Silk can't hear you and the wrong mic is usually why.
 
 **Check your microphone at the system level.** Open another app (e.g., QuickTime → New Audio Recording) to confirm the mic works.
 
-**Restart Odin.** Quit from the tray menu and relaunch.
+**Restart Silk.** Quit from the tray menu and relaunch.
 
 <Aside type="tip">
-Odin shows a **feedback pop-up** when something isn't working. Send it — it helps the team diagnose and fix the issue for you.
+Silk shows a **feedback pop-up** when something isn't working. Send it — it helps the team diagnose and fix the issue for you.
 </Aside>
 
 ---
 
 ## Make sure you're on the latest version
 
-Several issues are already fixed in newer builds. In the panel, click **Check for updates**. If you're behind, Odin downloads the update and the button changes to **Restart Odin** — click it, then try again.
+Several issues are already fixed in newer builds. In the panel, click **Check for updates**. If you're behind, Silk downloads the update and the button changes to **Restart Silk** — click it, then try again.
 
 ---
 
 ## No audio response
 
-**Check system volume.** Odin's audio plays through your default output device — make sure it isn't muted or at zero.
+**Check system volume.** Silk's audio plays through your default output device — make sure it isn't muted or at zero.
 
-**Check if TTS is configured.** If the audio server is unreachable, Odin will respond without audio. You'll see the text in the panel history even if you hear nothing.
+**Check if TTS is configured.** If the audio server is unreachable, Silk will respond without audio. You'll see the text in the panel history even if you hear nothing.
 
 ---
 
-## Odin can't see my screen (no screen context in responses)
+## Silk can't see my screen (no screen context in responses)
 
-**macOS:** Screen Recording permission may not be granted. Go to **System Settings → Privacy & Security → Screen Recording** and enable Odin AI. Quit and relaunch Odin after granting the permission.
+**macOS:** Screen Recording permission may not be granted. Go to **System Settings → Privacy & Security → Screen Recording** and enable Silk. Quit and relaunch Silk after granting the permission.
 
-**Check if responses reference your screen content.** If Odin is answering without mentioning what's visible, this is the most likely cause.
+**Check if responses reference your screen content.** If Silk is answering without mentioning what's visible, this is the most likely cause.
 
 ---
 
@@ -70,7 +70,7 @@ Several issues are already fixed in newer builds. In the panel, click **Check fo
 
 - Confirm Screen Recording is granted on macOS.
 - The overlay may be hidden behind a full-screen app. Try in a windowed app first.
-- Restart Odin if the overlay was working and suddenly stopped.
+- Restart Silk if the overlay was working and suddenly stopped.
 
 ---
 
@@ -78,8 +78,8 @@ Several issues are already fixed in newer builds. In the panel, click **Check fo
 
 Act Mode controls your mouse and keyboard in real time. If it stops:
 
-- A CAPTCHA or 2FA prompt may have appeared — Odin will pause and ask you to complete it.
-- The target page may have changed layout since Odin last captured it.
+- A CAPTCHA or 2FA prompt may have appeared — Silk will pause and ask you to complete it.
+- The target page may have changed layout since Silk last captured it.
 - Stop Act Mode via the panel and retry with a more specific task description.
 
 ---
@@ -104,10 +104,10 @@ Act Mode controls your mouse and keyboard in real time. If it stops:
 
 - Check the server command is correct and the required binary/package is installed.
 - Check that any required API keys or environment variables are set in the server config.
-- Look at Odin's console log (open from the tray menu → **Developer → Open Logs**) for error messages from the server process.
+- Look at Silk's console log (open from the tray menu → **Developer → Open Logs**) for error messages from the server process.
 
 ---
 
 ## Still having issues?
 
-Contact support at [support.heyodinai.com](https://support.heyodinai.com).
+Contact support at [support.heysilkai.com](https://support.heysilkai.com).
