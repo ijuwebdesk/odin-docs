@@ -17,7 +17,8 @@ SUPPORT_EMAIL = "support@heysilkai.com"
 NOTIFY_EMAIL = "ijuwebdesk@gmail.com"
 ACCESS_TEAM_DOMAIN = "holy-fire-69de.cloudflareaccess.com"
 ACCESS_AUD = "5d1f2f48b197d0cd868f3a4eafd87e3d961c9adfedcda65ffdf6cc7bf20dc0ed"
-ADMIN_EMAILS = "ijuwebdesk@gmail.com"
+# Must match the emails allowed by the Cloudflare Access policy "Silk admins".
+ADMIN_EMAILS = "ijuwebdesk@gmail.com,ijuwebdesk@yahoo.com"
 
 [[d1_databases]]
 binding = "DB"
@@ -42,7 +43,8 @@ SUPPORT_EMAIL = "support@heysilkai.com"
 NOTIFY_EMAIL = "ijuwebdesk@gmail.com"
 ACCESS_TEAM_DOMAIN = "holy-fire-69de.cloudflareaccess.com"
 ACCESS_AUD = "5d1f2f48b197d0cd868f3a4eafd87e3d961c9adfedcda65ffdf6cc7bf20dc0ed"
-ADMIN_EMAILS = "ijuwebdesk@gmail.com"
+# Must match the emails allowed by the Cloudflare Access policy "Silk admins".
+ADMIN_EMAILS = "ijuwebdesk@gmail.com,ijuwebdesk@yahoo.com"
 
 [[env.preview.d1_databases]]
 binding = "DB"
