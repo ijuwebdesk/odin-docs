@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
+import supportKnowledgeBundle from './integrations/support-kb.mjs'
 
 export default defineConfig({
   // Kept from the Odin naming so existing links and bookmarks survive the rebrand.
@@ -8,6 +9,7 @@ export default defineConfig({
     '/getting-started/using-odin-effectively/': '/getting-started/using-silk-effectively/',
   },
   integrations: [
+    supportKnowledgeBundle(),
     starlight({
       title: 'Silk Docs',
       description: 'Documentation for Silk — your always-on screen companion.',
@@ -47,6 +49,7 @@ export default defineConfig({
       ],
       social: {},
       sidebar: [
+        { label: 'Ask Silk', link: '/support/', badge: { text: 'AI', variant: 'tip' } },
         {
           label: 'Getting Started',
           items: [

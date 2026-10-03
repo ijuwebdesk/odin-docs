@@ -1,0 +1,426 @@
+---
+/**
+ * The support inbox. Static shell; everything is loaded from /api/admin.
+ * Both this page and its API sit behind Cloudflare Access, and the API
+ * re-verifies the Access login on every call (functions/api/admin/_middleware.js).
+ */
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
+---
+
+<StarlightPage
+  frontmatter={{
+    title: 'Support inbox',
+    template: 'splash',
+    pagefind: false,
+    prev: false,
+    next: false,
+    head: [{ tag: 'meta', attrs: { name: 'robots', content: 'noindex, nofollow' } }],
+  }}
+>
+  <div class="admin not-content" data-admin>
+    <header class="bar">
+      <nav class="tabs" aria-label="Views">
+        <a href="#/open" data-tab="open">Open <span class="count" data-count="open"></span></a>
+        <a href="#/answered" data-tab="answered">Answered <span class="count" data-count="answered"></span></a>
+        <a href="#/closed" data-tab="closed">Closed</a>
+        <a href="#/all" data-tab="all">All</a>
+        <a href="#/insights" data-tab="insights">Insights</a>
+      </nav>
+      <span class="who" data-who></span>
+    </header>
+
+    <div class="layout" data-layout>
+      <aside class="list" data-list aria-label="Tickets"></aside>
+      <section class="detail" data-detail aria-live="polite">
+        <p class="placeholder">Select a ticket.</p>
+      </section>
+    </div>
+
+    <section class="insights" data-insights hidden></section>
+    <div class="toast" data-toast role="status" hidden></div>
+  </div>
+</StarlightPage>
+
+<script>
+  import { initAdmin } from '../../support/admin'
+  initAdmin(document.querySelector<HTMLElement>('[data-admin]')!)
+</script>
+
+<style is:global>
+  /* The inbox wants the full width the splash template allows. */
+  [data-admin] {
+    --admin-border: var(--sl-color-gray-5);
+    --admin-surface: color-mix(in srgb, var(--sl-color-gray-6) 55%, transparent);
+  }
+  .main-frame:has([data-admin]) .sl-container,
+  .main-pane:has([data-admin]) .sl-container {
+    max-width: 90rem;
+  }
+</style>
+
+<style>
+  /* Layout rules below set display, which would otherwise beat the hidden attribute. */
+  .admin [hidden] {
+    display: none !important;
+  }
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+  .tabs a {
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.6rem;
+    text-decoration: none;
+    color: var(--sl-color-gray-2);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .tabs a[aria-current='page'] {
+    background: var(--sl-color-accent-low);
+    color: var(--sl-color-text-accent);
+  }
+  .count:not(:empty) {
+    margin-left: 0.2rem;
+    padding: 0 0.45rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    background: var(--sl-color-gray-5);
+  }
+  .who {
+    font-size: 0.85rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(16rem, 22rem) 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+  @media (max-width: 50rem) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+    .layout[data-open] .list {
+      display: none;
+    }
+    .layout:not([data-open]) .detail {
+      display: none;
+    }
+  }
+  .list,
+  .detail,
+  .insights {
+    border: 1px solid var(--admin-border);
+    border-radius: 0.9rem;
+    background: var(--admin-surface);
+  }
+  .list {
+    max-height: calc(100vh - 12rem);
+    overflow-y: auto;
+  }
+  .detail {
+    padding: 1.25rem;
+    min-height: 20rem;
+  }
+  .placeholder {
+    color: var(--sl-color-gray-3);
+  }
+  .insights {
+    padding: 1.25rem;
+  }
+
+  /* Rendered by script. */
+  .list :global(.item) {
+    display: block;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--admin-border);
+    text-decoration: none;
+    color: inherit;
+  }
+  .list :global(.item:hover) {
+    background: color-mix(in srgb, var(--sl-color-accent) 6%, transparent);
+  }
+  .list :global(.item[aria-current='true']) {
+    background: color-mix(in srgb, var(--sl-color-accent) 12%, transparent);
+    box-shadow: inset 3px 0 0 var(--sl-color-accent);
+  }
+  .list :global(.item-top) {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-3);
+  }
+  .list :global(.item-subject) {
+    margin-top: 0.15rem;
+    font-weight: 600;
+    color: var(--sl-color-gray-1);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .list :global(.item-from) {
+    font-size: 0.85rem;
+    color: var(--sl-color-gray-2);
+  }
+  .list :global(.empty) {
+    padding: 1.5rem 1rem;
+    color: var(--sl-color-gray-3);
+  }
+  .admin :global(.pill) {
+    display: inline-block;
+    padding: 0.05rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid var(--admin-border);
+  }
+  .admin :global(.pill.ready) {
+    color: var(--sl-color-green-high, #4ade80);
+    border-color: currentColor;
+  }
+  .admin :global(.pill.pending) {
+    color: var(--sl-color-orange-high, #fb923c);
+    border-color: currentColor;
+  }
+  .admin :global(.pill.failed) {
+    color: var(--sl-color-red-high, #f87171);
+    border-color: currentColor;
+  }
+
+  .detail :global(.head) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    align-items: flex-start;
+  }
+  .detail :global(h2) {
+    margin: 0;
+    font-size: 1.3rem;
+    overflow-wrap: anywhere;
+  }
+  .detail :global(.sub) {
+    margin-top: 0.25rem;
+    font-size: 0.9rem;
+    color: var(--sl-color-gray-3);
+  }
+  .detail :global(.sub a) {
+    color: var(--sl-color-text-accent);
+  }
+  .detail :global(.back) {
+    display: none;
+  }
+  @media (max-width: 50rem) {
+    .detail :global(.back) {
+      display: inline-block;
+      margin-bottom: 0.75rem;
+    }
+  }
+  .detail :global(.message) {
+    margin-top: 1rem;
+    padding: 0.9rem 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--admin-border);
+    background: var(--sl-color-black);
+  }
+  .detail :global(.message .text) {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .detail :global(.message.out) {
+    border-color: color-mix(in srgb, var(--sl-color-accent) 40%, transparent);
+    background: color-mix(in srgb, var(--sl-color-accent) 7%, var(--sl-color-black));
+  }
+  .detail :global(.message-label) {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--sl-color-gray-3);
+  }
+  .detail :global(details) {
+    margin-top: 1rem;
+    border: 1px dashed var(--admin-border);
+    border-radius: 0.75rem;
+    padding: 0.6rem 1rem;
+  }
+  .detail :global(summary) {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--sl-color-gray-2);
+  }
+  .detail :global(.turn) {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+  }
+  .detail :global(.turn b) {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--sl-color-gray-3);
+  }
+  .detail :global(.turn .sl-markdown-content > * + *) {
+    margin-top: 0.5rem;
+  }
+
+  .detail :global(.composer) {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--admin-border);
+  }
+  .detail :global(.composer-head) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+  }
+  .detail :global(.composer-head .model) {
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-3);
+  }
+  .detail :global(.notes) {
+    margin-top: 0.75rem;
+    padding: 0.6rem 0.9rem;
+    border-radius: 0.6rem;
+    font-size: 0.9rem;
+    white-space: pre-wrap;
+    background: color-mix(in srgb, var(--sl-color-orange, #fb923c) 10%, transparent);
+    color: var(--sl-color-gray-2);
+  }
+  .detail :global(.notes b) {
+    color: var(--sl-color-gray-1);
+  }
+  .detail :global(textarea),
+  .detail :global(input[type='text']) {
+    width: 100%;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid var(--sl-color-gray-4);
+    border-radius: 0.6rem;
+    background: var(--sl-color-black);
+    color: var(--sl-color-gray-1);
+    font: inherit;
+  }
+  .detail :global(textarea) {
+    margin-top: 0.75rem;
+    min-height: 16rem;
+    resize: vertical;
+    line-height: 1.55;
+  }
+  .detail :global(.actions) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+  .detail :global(.regen) {
+    display: flex;
+    flex: 1 1 18rem;
+    gap: 0.5rem;
+  }
+  .admin :global(button.btn) {
+    border: 1px solid var(--sl-color-gray-4);
+    border-radius: 0.6rem;
+    padding: 0.55rem 1rem;
+    background: none;
+    color: var(--sl-color-gray-1);
+    font: inherit;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .admin :global(button.btn.primary) {
+    border: none;
+    color: var(--silk-ivory);
+    background: linear-gradient(135deg, #8b7bff 0%, #6f5bf5 100%);
+  }
+  .admin :global(button.btn:disabled) {
+    opacity: 0.55;
+    cursor: default;
+  }
+  .admin :global(.check) {
+    display: inline-flex;
+    gap: 0.4rem;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--sl-color-gray-2);
+  }
+  .admin :global(.hint) {
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  .insights :global(.stats) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: 0.75rem;
+  }
+  .insights :global(.stat) {
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--admin-border);
+    border-radius: 0.75rem;
+    background: var(--sl-color-black);
+  }
+  .insights :global(.stat b) {
+    display: block;
+    font-size: 1.6rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .insights :global(.stat span) {
+    font-size: 0.85rem;
+    color: var(--sl-color-gray-3);
+  }
+  .insights :global(h2) {
+    margin: 1.75rem 0 0.25rem;
+    font-size: 1.15rem;
+  }
+  .insights :global(.gap) {
+    display: grid;
+    grid-template-columns: 6rem 1fr auto;
+    gap: 0.75rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--admin-border);
+    font-size: 0.92rem;
+  }
+  @media (max-width: 40rem) {
+    .insights :global(.gap) {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
+  }
+  .insights :global(.gap time) {
+    color: var(--sl-color-gray-3);
+  }
+  .insights :global(.gap .flags) {
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.7rem 1.1rem;
+    border-radius: 0.7rem;
+    background: var(--sl-color-gray-1);
+    color: var(--sl-color-black);
+    font-weight: 600;
+    box-shadow: var(--sl-shadow-lg);
+    z-index: 100;
+  }
+</style>

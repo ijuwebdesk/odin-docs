@@ -4,3 +4,5 @@ node_modules/
 .DS_Store
 *.local
 .wrangler/
+server/kb.generated.js
+.dev.vars
