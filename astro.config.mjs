@@ -93,6 +93,9 @@ export default defineConfig({
           ],
         },
       ],
+      components: {
+        Banner: './src/components/Banner.astro',
+      },
       customCss: ['./src/styles/custom.css'],
     }),
   ],

@@ -1,0 +1,25 @@
+---
+// Site-wide rebrand notice. A page's own `banner` frontmatter still wins.
+const { banner } = Astro.locals.starlightRoute.entry.data;
+const content =
+	banner?.content ??
+	'<strong>Odin is now Silk.</strong> Some videos may still show or mention Odin while we update them — the information in them still applies.';
+---
+
+<div class="sl-banner" set:html={content} />
+
+<style>
+	.sl-banner {
+		--__sl-banner-text: var(--sl-color-banner-text, var(--sl-color-text-invert));
+		padding: var(--sl-nav-pad-y) var(--sl-nav-pad-x);
+		background-color: var(--sl-color-banner-bg, var(--sl-color-bg-accent));
+		color: var(--__sl-banner-text);
+		line-height: var(--sl-line-height-headings);
+		text-align: center;
+		text-wrap: balance;
+		box-shadow: var(--sl-shadow-sm);
+	}
+	.sl-banner :global(a) {
+		color: var(--__sl-banner-text);
+	}
+</style>
