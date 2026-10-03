@@ -1,14 +1,12 @@
 /**
- * POST /api/tickets — "Talk to a human". Creates a ticket, then in the
- * background drafts an AI reply and emails both the support inbox and the
- * customer.
+ * POST /api/tickets — "Talk to a human". Creates a ticket; the customer
+ * gets a confirmation, the team an alert, and the ticket an AI draft.
  *
  * Body: { name, email, subject, question, conversationId?, turnstileToken }
  */
 import { error, isEmail, json, readJson, text, ticketRef } from '../../server/http.js'
 import { allow, ipHash, verifyTurnstile } from '../../server/limits.js'
-import { confirmToCustomer, notifyNewTicket } from '../../server/mail.js'
-import { generateDraft, loadTicket } from '../../server/tickets.js'
+import { createTicket } from '../../server/tickets.js'
 
 export async function onRequestPost({ request, env, waitUntil }) {
   const body = await readJson(request)
@@ -38,38 +36,6 @@ export async function onRequestPost({ request, env, waitUntil }) {
     conversationId = row?.id ?? null
   }
 
-  const now = Date.now()
-  const { id } = await db
-    .prepare(
-      `INSERT INTO tickets (name, email, subject, question, conversation_id, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id`,
-    )
-    .bind(name, email, subject, question, conversationId, now, now)
-    .first()
-  if (conversationId) {
-    await db.prepare('UPDATE conversations SET ticket_id = ? WHERE id = ?').bind(id, conversationId).run()
-  }
-
-  waitUntil(
-    (async () => {
-      const ticket = await loadTicket(db, id)
-      // Emails first: they matter more than the draft and finish quickly.
-      const [confirmation] = await Promise.allSettled([
-        confirmToCustomer(env, ticket),
-        notifyNewTicket(env, ticket),
-      ]).then((outcomes) => {
-        for (const o of outcomes) if (o.status === 'rejected') console.error('ticket email failed', id, o.reason)
-        return outcomes
-      })
-      if (confirmation.status === 'fulfilled' && confirmation.value?.messageId) {
-        await db
-          .prepare('UPDATE tickets SET thread_message_id = ? WHERE id = ?')
-          .bind(confirmation.value.messageId, id)
-          .run()
-      }
-      await generateDraft(env, id)
-    })(),
-  )
-
+  const id = await createTicket(env, waitUntil, { name, email, subject, question, conversationId })
   return json({ ok: true, ref: ticketRef(id) }, { status: 201 })
 }

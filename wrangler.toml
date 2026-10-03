@@ -7,11 +7,14 @@ compatibility_date = "2026-09-01"
 #   OPENROUTER_API_KEY   OpenRouter key; give it a credit limit
 #   TURNSTILE_SECRET     Turnstile widget secret for the chat and ticket forms
 #   IP_HASH_SALT         any long random string; salts the rate-limit IP hashes
+#   INBOUND_SECRET       shared with the mailer Worker; authorizes POST /api/inbound
 
 [vars]
-CHAT_MODEL = "anthropic/claude-haiku-4.5"
-DRAFT_MODEL = "anthropic/claude-sonnet-5.5"
+CHAT_MODEL = "deepseek/deepseek-v4.1-flash"
+DRAFT_MODEL = "deepseek/deepseek-v4.1-flash"
 SUPPORT_EMAIL = "support@heysilkai.com"
+# New-ticket and customer-reply alerts. Never support@: that address now makes tickets.
+NOTIFY_EMAIL = "ijuwebdesk@gmail.com"
 ACCESS_TEAM_DOMAIN = "holy-fire-69de.cloudflareaccess.com"
 ACCESS_AUD = "5d1f2f48b197d0cd868f3a4eafd87e3d961c9adfedcda65ffdf6cc7bf20dc0ed"
 ADMIN_EMAILS = "ijuwebdesk@gmail.com"
@@ -32,9 +35,11 @@ service = "silk-support-mailer"
 # tickets never land in the real inbox. Pages env blocks don't inherit, hence
 # the repetition.
 [env.preview.vars]
-CHAT_MODEL = "anthropic/claude-haiku-4.5"
-DRAFT_MODEL = "anthropic/claude-sonnet-5.5"
+CHAT_MODEL = "deepseek/deepseek-v4.1-flash"
+DRAFT_MODEL = "deepseek/deepseek-v4.1-flash"
 SUPPORT_EMAIL = "support@heysilkai.com"
+# New-ticket and customer-reply alerts. Never support@: that address now makes tickets.
+NOTIFY_EMAIL = "ijuwebdesk@gmail.com"
 ACCESS_TEAM_DOMAIN = "holy-fire-69de.cloudflareaccess.com"
 ACCESS_AUD = "5d1f2f48b197d0cd868f3a4eafd87e3d961c9adfedcda65ffdf6cc7bf20dc0ed"
 ADMIN_EMAILS = "ijuwebdesk@gmail.com"

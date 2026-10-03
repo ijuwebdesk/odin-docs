@@ -71,7 +71,8 @@ export async function onRequestPost({ request, env, waitUntil }) {
     answer = await stream(env, {
       model: env.CHAT_MODEL ?? DEFAULT_CHAT_MODEL,
       messages: chatMessages(history),
-      maxTokens: 900,
+      // Headroom for models that reason before answering; reasoning counts toward the cap.
+      maxTokens: 2500,
     })
   } catch (err) {
     console.error('chat failed', err)

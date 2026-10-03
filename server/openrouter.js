@@ -2,8 +2,8 @@
 
 const ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions'
 
-export const DEFAULT_CHAT_MODEL = 'anthropic/claude-haiku-4.5'
-export const DEFAULT_DRAFT_MODEL = 'anthropic/claude-sonnet-5.5'
+export const DEFAULT_CHAT_MODEL = 'deepseek/deepseek-v4.1-flash'
+export const DEFAULT_DRAFT_MODEL = 'deepseek/deepseek-v4.1-flash'
 
 function request(env, body) {
   if (!env.OPENROUTER_API_KEY) throw new Error('OPENROUTER_API_KEY is not set')

@@ -12,5 +12,12 @@
       "allowed_sender_addresses": ["support@heysilkai.com"]
     }
   ],
+  "vars": {
+    // Inbound mail is handed to this site's /api/inbound (secret: INBOUND_SECRET).
+    "SITE_URL": "https://support.heysilkai.com",
+    // A verified Email Routing destination: gets the original when the site
+    // can't take a message, or when it has attachments the portal won't store.
+    "FALLBACK_FORWARD": "ijuwebdesk@gmail.com"
+  },
   "observability": { "enabled": true }
 }

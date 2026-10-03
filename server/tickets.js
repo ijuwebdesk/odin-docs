@@ -1,6 +1,62 @@
-/** Ticket reads and the AI draft, shared by the public and admin routes. */
+/** Tickets: creation, customer replies, reads, and the AI draft. Shared by every route. */
+import { confirmToCustomer, notifyCustomerReply, notifyNewTicket } from './mail.js'
 import { complete, DEFAULT_DRAFT_MODEL } from './openrouter.js'
 import { draftMessages, splitDraft } from './prompts.js'
+
+/**
+ * Opens a ticket from the web form or an email, then in the background
+ * confirms to the customer, alerts the team, and drafts a reply.
+ */
+export async function createTicket(env, waitUntil, { name, email, subject, question, conversationId = null }) {
+  const db = env.DB
+  const now = Date.now()
+  const { id } = await db
+    .prepare(
+      `INSERT INTO tickets (name, email, subject, question, conversation_id, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id`,
+    )
+    .bind(name, email, subject, question, conversationId, now, now)
+    .first()
+  if (conversationId) {
+    await db.prepare('UPDATE conversations SET ticket_id = ? WHERE id = ?').bind(id, conversationId).run()
+  }
+
+  waitUntil(
+    (async () => {
+      const ticket = await loadTicket(db, id)
+      // Emails first: they matter more than the draft and finish quickly.
+      const [confirmation, alert] = await Promise.allSettled([
+        confirmToCustomer(env, ticket),
+        notifyNewTicket(env, ticket),
+      ])
+      for (const o of [confirmation, alert]) if (o.status === 'rejected') console.error('ticket email failed', id, o.reason)
+      if (confirmation.status === 'fulfilled' && confirmation.value?.messageId) {
+        await db
+          .prepare('UPDATE tickets SET thread_message_id = ? WHERE id = ?')
+          .bind(confirmation.value.messageId, id)
+          .run()
+      }
+      await generateDraft(env, id)
+    })(),
+  )
+  return id
+}
+
+/** Records a customer's emailed reply, reopens the ticket, alerts the team, and redrafts. */
+export async function addCustomerReply(env, waitUntil, ticket, body) {
+  const now = Date.now()
+  await env.DB.batch([
+    env.DB.prepare(
+      "INSERT INTO ticket_messages (ticket_id, direction, body, author, created_at) VALUES (?, 'in', ?, ?, ?)",
+    ).bind(ticket.id, body, ticket.email, now),
+    env.DB.prepare("UPDATE tickets SET status = 'open', updated_at = ? WHERE id = ?").bind(now, ticket.id),
+  ])
+  waitUntil(
+    Promise.allSettled([notifyCustomerReply(env, ticket, body), generateDraft(env, ticket.id)]).then((outcomes) => {
+      for (const o of outcomes) if (o.status === 'rejected') console.error('reply handling failed', ticket.id, o.reason)
+    }),
+  )
+}
 
 export async function loadTicket(db, id) {
   return db.prepare('SELECT * FROM tickets WHERE id = ?').bind(id).first()
@@ -44,7 +100,7 @@ export async function generateDraft(env, ticketId, note = '') {
     const result = await complete(env, {
       model: env.DRAFT_MODEL ?? DEFAULT_DRAFT_MODEL,
       messages: draftMessages({ ticket, transcript, thread, note }),
-      maxTokens: 1200,
+      maxTokens: 4000,
     })
     const { draft, notes } = splitDraft(result.text)
     if (!draft) throw new Error('The model returned an empty draft')

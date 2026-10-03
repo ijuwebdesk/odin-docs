@@ -43,21 +43,37 @@ function subjectFor(ticket) {
   return `[${ticketRef(ticket.id)}] ${ticket.subject}`
 }
 
-/** Tells the support inbox a ticket arrived. Reply-To is the customer. */
-export function notifyNewTicket(env, ticket) {
+/**
+ * Where "a ticket needs you" alerts go. Not support@ itself: mail to support@
+ * now becomes tickets, so an alert sent there would open a ticket of its own.
+ */
+function alert(env, ticket, label, heading, message) {
+  if (!env.NOTIFY_EMAIL) {
+    console.warn('NOTIFY_EMAIL is not set; skipping team alert for ticket', ticket.id)
+    return null
+  }
   const body = [
-    `New support ticket ${ticketRef(ticket.id)} from ${ticket.name} <${ticket.email}>.`,
+    `${heading}`,
     `Subject: ${ticket.subject}`,
-    ticket.question,
-    `An AI draft reply is being prepared. Review and send it here:\n${SITE}/admin/#/t/${ticket.id}`,
+    message,
+    `An AI draft reply is being prepared. Review and send it in the portal, not by replying here:\n${SITE}/admin/#/t/${ticket.id}`,
   ].join('\n\n')
   return send(env, {
-    to: supportAddress(env),
-    replyTo: ticket.email,
-    subject: `New ticket ${subjectFor(ticket)}`,
+    to: env.NOTIFY_EMAIL,
+    subject: `${label}: ${subjectFor(ticket)}`,
     text: body,
     html: toHtml(body),
   })
+}
+
+/** Alerts the team that a ticket arrived. */
+export function notifyNewTicket(env, ticket) {
+  return alert(env, ticket, 'New ticket', `New ticket from ${ticket.name} <${ticket.email}>.`, ticket.question)
+}
+
+/** Alerts the team that a customer wrote back on an existing ticket. */
+export function notifyCustomerReply(env, ticket, reply) {
+  return alert(env, ticket, 'Customer replied', `Customer reply from ${ticket.name} <${ticket.email}>.`, reply)
 }
 
 /** Confirms receipt to the customer. Its Message-ID anchors the email thread. */
