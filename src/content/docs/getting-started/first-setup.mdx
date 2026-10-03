@@ -36,6 +36,19 @@ Silk uses [OpenRouter](https://openrouter.ai) to access AI models. OpenRouter is
 Setting a monthly credit limit on the key is a good way to stay in control of spend — the key stops working once it hits the cap and resets each month.
 </Aside>
 
+<Aside type="caution">
+**Can't tick the "agree" box on OpenRouter?** That's a problem on the OpenRouter website, not in Silk. Try a different browser (Chrome or Edge), or zoom out with `Ctrl` + `-` (`⌘` + `-` on Mac) in case the checkbox sits off-screen.
+</Aside>
+
+### What does the AI cost?
+
+Silk is **bring your own AI engine**: your purchase is the Silk software, and the AI "brain" runs on your own OpenRouter account. OpenRouter bills you directly for what you use; Silk never charges you for AI usage.
+
+- **It's usage-based, and small.** With the default model, a typical task costs around a cent. A credit top-up lasts a long time for everyday use.
+- **The minimum top-up is OpenRouter's**, not a Silk fee, and it isn't a subscription.
+- **Other AI subscriptions can't be used.** Silk connects only to OpenRouter, so a ChatGPT, Claude, Gemini or Copilot subscription can't power it.
+- **You're always in control.** A credit limit on the key (step 4 above) means you can never be charged more than you set.
+
 ## Step 2 — Enter the key in Silk
 
 <Steps>
@@ -48,25 +61,33 @@ Setting a monthly credit limit on the key is a good way to stay in control of sp
 Silk stores the key locally on your device. It's only ever sent to OpenRouter's servers when making AI requests.
 
 <Aside type="tip">
-**Can't paste the key?** Click the **detach** button to pop Silk out into its own window, then paste. If it still won't accept the key, paste it into a plain notepad first — copying by hand can pick up an invisible extra space or character that Silk rejects. Always use OpenRouter's **copy** button rather than selecting the text manually.
+**Can't paste the key?** Click the **Paste** button next to the API key field, or right-click inside the field and choose **Paste**. If neither appears, [update Silk](/reference/troubleshooting/#updating-silk) first: older versions didn't have them.
+
+If Silk says the key is invalid, it has usually picked up an invisible space. Copy the key again with OpenRouter's **copy** button rather than selecting the text by hand, and paste it with no space before or after.
 </Aside>
+
+<Aside type="caution">
+**Never share your API key** with anyone, including Silk support: we will never ask for it. If you've pasted it into an email or chat, delete that key in OpenRouter and create a new one.
+</Aside>
+
+Silk's setup video waits on this step: it continues once a valid key is saved. If the video doesn't move on, the key hasn't been saved yet.
 
 ## Step 3 — Choose a model
 
 In Settings, the **Model ID** field controls which model Silk uses. This is a free-text field — type any model ID from OpenRouter's catalogue.
 
-**Default model:** `qwen/qwen3.7-plus` — fast, capable, and cost-effective for everyday use.
+**Default model:** `deepseek/deepseek-v4.1-flash`, the fastest model with a perfect score in our [October 2026 benchmark](/reference/ai-models/), at about a cent per task.
 
 ### Recommended models
 
-These are the models we've tested with Silk:
-
 | Model ID | Notes |
 |---|---|
-| `qwen/qwen3.7-plus` | Default. Perfectly balanced — fast, capable, and affordable for everyday use. |
-| `moonshotai/kimi-k2.7-code` | Slightly more expensive but faster and higher quality overall. |
-| `minimax/minimax-m3` | Smart and capable — slightly on the expensive side. |
-| `xiaomi/mimo-v2.5` | Cheapest option with good output quality. |
+| `deepseek/deepseek-v4.1-flash` | **Default and top pick.** Passed every test task; fast and inexpensive. |
+| `openai/gpt-6-luna` | **The backup.** Nearly as accurate and the cheapest per task. A good switch if DeepSeek is ever unavailable. |
+| `qwen/qwen3.7-plus` | **The previous default.** Accurate, but slower and about twice the cost. |
+| `xiaomi/mimo-v2.6-pro` | **For unattended work.** Very accurate but slow; best for scheduled and long background tasks. |
+
+The Model ID field suggests the first three as you type. For the full results, and the models we don't recommend, see [Choosing an AI Model](/reference/ai-models/).
 
 <Aside>
 Model IDs follow the format `provider/model-name`. Copy the ID from the table above and paste it directly into the Model ID field in Silk's settings.

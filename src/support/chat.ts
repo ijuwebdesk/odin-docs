@@ -298,5 +298,9 @@ export function initSupportChat(root: HTMLElement) {
     input.value = prefill.slice(0, 2000)
     autosize()
   }
+  // Links to /support/#human (from the docs, or from an AI answer on this page) open the form.
   if (location.hash === '#human') openTicket()
+  window.addEventListener('hashchange', () => {
+    if (location.hash === '#human') openTicket()
+  })
 }

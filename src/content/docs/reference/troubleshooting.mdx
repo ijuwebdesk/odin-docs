@@ -1,11 +1,11 @@
 ---
 title: Troubleshooting
-description: Common issues and how to fix them.
+description: Fixes for the most common Silk problems, from voice and API keys to updates, network errors and activation.
 sidebar:
   order: 3
 ---
 
-import { Aside } from '@astrojs/starlight/components'
+import { Aside, Steps } from '@astrojs/starlight/components'
 
 <div style="position:relative;padding-bottom:79.7%;height:0;overflow:hidden;border-radius:8px;margin:1.5rem 0">
   <iframe
@@ -16,98 +16,204 @@ import { Aside } from '@astrojs/starlight/components'
   />
 </div>
 
-## Silk won't accept my OpenRouter API key
+<Aside type="tip">
+**Start here: make sure you're on the latest version.** Many problems are already fixed in newer builds. See [Updating Silk](#updating-silk).
+</Aside>
 
-This is almost always caused by **extra invisible characters** copied along with the key.
+## Silk won't talk to me / doesn't respond to my voice
 
-- Always use OpenRouter's **copy button** rather than selecting the text by hand — a manual copy can pick up a leading/trailing space that Silk silently rejects.
-- To check, paste the key into a plain notepad first and look for stray spaces or characters, then copy the clean value.
-- If you **can't paste at all**, click the **detach** button so Silk pops out into its own window, then paste there and click **Save**.
+This is the most common problem, and it usually comes down to one of a few things. Work through them in order.
+
+**1. Press the hotkey twice: once to start, once to send.** Push-to-talk is a **toggle**, not hold-to-talk:
+
+<Steps>
+1. Press `Ctrl+Space` once (don't hold it).
+2. Speak.
+3. Press `Ctrl+Space` again. Silk only sends your request after this second press.
+</Steps>
+
+Holding the keys down, or pressing once and waiting, leaves Silk listening forever with nothing sent.
+
+**2. Check whether Silk heard you.** After you speak, does the text of what you said appear in the panel?
+
+- **No text appears:** Silk isn't hearing you. Open the panel's **Audio** settings, choose the right **microphone** (the default is often a webcam or a Bluetooth headset in another room), and run the **mic test**: the level bars should move when you speak. If they don't, pick another mic and test again. If your request only ever shows up as "you" or nothing at all, it's the wrong mic.
+- **Your words appear but you hear nothing:** go to step 3.
+
+**3. Check that speaking is on and you can hear it.**
+
+- In **Settings → Audio**, make sure **Speaking** is set to **On**.
+- Check your computer's volume, the output device (speakers vs. headphones), and that Do Not Disturb or Focus mode isn't muting it. Play any video to confirm sound works.
+- Even with no sound, Silk's reply still appears as text in the panel.
+
+**4. Check permissions.** Click the **shield icon** at the top of the panel. If Microphone shows a red status, grant it again. See [Permissions Setup](/getting-started/permissions/).
+
+**5. Try a different network.** Silk's voice features need the internet. If everything above looks right, connect your computer to your **phone's hotspot** and try again. If it works there, your Wi-Fi, VPN, firewall or security software is blocking Silk.
+
+<Aside>
+**In Act mode Silk speaks very little:** it's busy doing the task. If you're expecting a spoken answer, ask a question like *"What's on my screen?"* in Guide or Auto mode. See [Using Silk Effectively](/getting-started/using-silk-effectively/).
+</Aside>
+
+### On Windows, `Ctrl+Space` beeps and flickers on and off
+
+That's Windows using `Ctrl+Space` to switch keyboard languages. Change Silk's hotkey to `Alt+Space` or `Ctrl+Shift+Space`. See [the fix on the Push-to-Talk page](/features/push-to-talk/#windows-ctrlspace-beeps-or-flickers-on-and-off).
 
 ---
 
-## Silk isn't responding to push-to-talk
+## OpenRouter API key problems
 
-**Check permissions first.** Go to the panel and click the shield icon. If Microphone shows a red status, re-grant it in System Settings.
+### I can't paste my key
 
-**Check the hotkey.** Push-to-talk is a **toggle** — press `Ctrl+Space` once to start, speak, then press it again to stop. Silk only processes your query after that second press.
+Click the **Paste** button next to the API key field, or right-click inside the field and choose **Paste**. If you don't see a Paste button, [update Silk](#updating-silk) first.
 
-**Select the right microphone.** Open the panel's **audio** settings and make sure the correct mic is selected, then use the **test** button — the input bars should move when you speak. If your reply only ever shows the word "you" (or nothing), Silk can't hear you and the wrong mic is usually why.
+### Silk says my key is invalid, but it works elsewhere
 
-**Check your microphone at the system level.** Open another app (e.g., QuickTime → New Audio Recording) to confirm the mic works.
+The key almost always has an invisible space or line break stuck to it. In OpenRouter, copy the key again using its **copy** button (don't select the text by hand), then paste it into Silk with nothing before or after it, and click **Save**. If it still fails, create a new key in OpenRouter and use that.
 
-**Restart Silk.** Quit from the tray menu and relaunch.
+### "Insufficient credits"
 
-<Aside type="tip">
-Silk shows a **feedback pop-up** when something isn't working. Send it — it helps the team diagnose and fix the issue for you.
+Your OpenRouter balance has run out. Add credits at [openrouter.ai/credits](https://openrouter.ai/credits). If you set a monthly credit limit on the key, you may have reached it; raise the limit or wait for it to reset.
+
+<Aside type="caution">
+**Never share your API key**, including with Silk support. If you've pasted it into an email or chat, delete that key in OpenRouter and create a new one.
 </Aside>
 
 ---
 
-## Make sure you're on the latest version
+## "API error: fetch failed" or other network errors
 
-Several issues are already fixed in newer builds. In the panel, click **Check for updates**. If you're behind, Silk downloads the update and the button changes to **Restart Silk** — click it, then try again.
+This means Silk's request to the AI never reached OpenRouter. It's a network problem, not your key, your credits or your task: it fails the same way on simple and complex requests. Silk has no email or account connections to reset, so there's nothing to fix in its settings.
 
----
-
-## No audio response
-
-**Check system volume.** Silk's audio plays through your default output device — make sure it isn't muted or at zero.
-
-**Check if TTS is configured.** If the audio server is unreachable, Silk will respond without audio. You'll see the text in the panel history even if you hear nothing.
-
----
-
-## Silk can't see my screen (no screen context in responses)
-
-**macOS:** Screen Recording permission may not be granted. Go to **System Settings → Privacy & Security → Screen Recording** and enable Silk. Quit and relaunch Silk after granting the permission.
-
-**Check if responses reference your screen content.** If Silk is answering without mentioning what's visible, this is the most likely cause.
+<Steps>
+1. **Update Silk.** Newer versions automatically retry when a connection drops for a moment, which clears most cases. See [Updating Silk](#updating-silk).
+2. **Mac users: turn off iCloud Private Relay** (System Settings → your Apple Account → iCloud → Private Relay) and try again. It's the most common cause on Macs.
+3. **Pause your VPN, firewall or security software** (for example Little Snitch, Norton or McAfee) and try again.
+4. **Try your phone's hotspot.** If Silk works on the hotspot but not on your usual Wi-Fi, that network is blocking the connection.
+</Steps>
 
 ---
 
-## The cursor overlay triangle doesn't appear
+## Updating Silk
 
-- Confirm Screen Recording is granted on macOS.
-- The overlay may be hidden behind a full-screen app. Try in a windowed app first.
-- Restart Silk if the overlay was working and suddenly stopped.
+Silk checks for updates when it starts and every few hours after that, and downloads them in the background. **An update is only installed when Silk restarts**, and Silk never restarts on its own, so nothing changes while you're in the middle of something.
+
+When an update is ready, you'll see:
+
+- **A banner at the top of the panel:** *"Version x.y.z is ready · Restart"*. Click **Restart**.
+- **A dot on the Silk menu-bar icon**, with **Restart to update** at the top of its menu.
+- **A notification**, at most once a day, if you haven't restarted for a while.
+
+Restarting takes a few seconds and Silk comes back on its own. **Nothing is lost:** your skills, memory, schedules, license and API key are all kept.
+
+**Not sure if you're up to date?** Open the panel and look at the button in the bottom bar:
+
+| It says | What to do |
+|---|---|
+| **Restart to update** | The update is downloaded and waiting: click it. |
+| **Check for updates** | Click it. If nothing is found, you're up to date, or the download hasn't finished yet: leave Silk running for a few minutes and check again. |
+| **Check failed** | Silk couldn't reach the update server. Try another network (see [network errors](#api-error-fetch-failed-or-other-network-errors)). |
+
+You can also always download the latest version from [download.heysilkai.com](https://download.heysilkai.com) and install it over the old one.
+
+---
+
+## I can't find the Silk icon
+
+Silk is still running; its icon is just hidden. A full macOS menu bar (especially on MacBooks with a notch) or a menu-bar manager like Bartender can hide it, and Windows tucks tray icons behind the **^** arrow.
+
+- **Press the panel shortcut:** `⌃⇧Space` (Control+Shift+Space) on Mac or `Ctrl+Shift+Space` on Windows opens Silk from anywhere.
+- **Give Silk its own window:** in **Settings → Window**, turn on **Detached window**. Silk gets a normal Dock or taskbar icon and stops depending on the menu bar.
+- **On a Mac,** hold `⌘` and drag menu-bar icons to rearrange them, or quit a few other menu-bar apps to make room.
+
+---
+
+## Silk can't see my screen
+
+On macOS, Silk needs **Screen Recording** permission. Go to **System Settings → Privacy & Security → Screen Recording** and turn on Silk, then **quit and reopen Silk**: macOS only applies the permission after a restart.
+
+If Silk answers without mentioning what's on your screen, this is almost always the cause.
+
+---
+
+## The cursor overlay
+
+**It doesn't appear:** confirm Screen Recording is granted on macOS, try in a normal (not full-screen) window, and restart Silk if it was working before. Check it isn't switched off: the bottom of the panel should say **Hide Overlay**, not **Show Overlay**.
+
+**It seems to block my clicks:** update Silk; this was fixed in an earlier version. If it happens anyway, press `Escape` to stop any running task, then quit and reopen Silk.
+
+To hide the overlay, use **Hide Overlay** at the bottom of the panel. `Escape` stops tasks; it doesn't hide the overlay.
 
 ---
 
 ## Act Mode isn't working / stops unexpectedly
 
-Act Mode controls your mouse and keyboard in real time. If it stops:
+Act Mode controls your mouse and keyboard in real time. It stops on purpose if you move the mouse yourself or press `Escape`. Other reasons it may stop:
 
-- A CAPTCHA or 2FA prompt may have appeared — Silk will pause and ask you to complete it.
-- The target page may have changed layout since Silk last captured it.
-- Stop Act Mode via the panel and retry with a more specific task description.
-
----
-
-## Background agent isn't running / no output
-
-- Check the Agent Dock in the panel — the agent may have errored. Expand it to see the last output.
-- Very long-running agents may time out. Break the task into smaller steps.
-- If the agent needs to write files, confirm the destination path exists.
+- A CAPTCHA or two-factor prompt appeared: Silk pauses and asks you to complete it.
+- The page layout changed since Silk last looked at it.
+- Stop it from the panel and try again with a more specific request.
 
 ---
 
-## High cost / many tokens
+## Background agents
 
-- Longer conversation histories and more screenshots increase token usage.
-- Use `⌘K` (macOS) or `Ctrl+K` (Windows) to clear the conversation and start fresh.
-- Choose a faster, lighter model in Settings for simple tasks.
+**Where's the "create agent" button?** There isn't one: you start an agent by asking. Say or type something like *"Start a background agent to research our three biggest competitors and write a summary."* It appears in the **Agent Dock**. See [Background Agents](/features/background-agents/).
+
+**An agent isn't running or produced nothing:**
+
+- Check the Agent Dock: the agent may have hit an error. Expand it to see its last output.
+- Very long tasks can time out. Break them into smaller steps.
+- If it needs to save files, check the destination folder exists. You can choose where agents save their work in **Settings → Background task folder**.
+
+---
+
+## Silk is slow, or using a lot of credits
+
+- **Check your model first.** The default, `deepseek/deepseek-v4.1-flash`, is the fastest accurate model in [our benchmark](/reference/ai-models/) at about a cent per task. Older or heavier models can be several times slower and pricier.
+- **Start fresh.** Long conversations make every request bigger. Click **Clear context** in the panel when you change topic.
+- **Watch your spend:** Settings shows today's **API spend** for your key.
+
+---
+
+## "Application error: a client-side exception has occurred"
+
+This message comes from **a website Silk was browsing**, not from Silk itself: that site hit an error in your browser. Reload the page or try again later. If it keeps happening on one site, the problem is on that site's end.
+
+---
+
+## Several apps stopped working at once (Windows)
+
+If Silk's microphone or audio breaks **at the same time as other apps** (Discord, other AI or voice apps), or your monitor briefly goes black, the cause is usually a **graphics driver**, not Silk. Update your graphics driver (Intel Arc systems in particular) and chipset drivers from your PC maker or Intel, then restart.
+
+---
+
+## Windows shows a SmartScreen warning when installing
+
+Silk's Windows installer is signed, but Windows can still show a SmartScreen prompt for newer software. Click **More info → Run anyway**. It isn't a sign of a problem, and the warning fades as more people install Silk.
+
+---
+
+## Activation and license problems
+
+Sign-in email not arriving, "all seats in use", or new features missing after an upgrade: see [Activation & License](/getting-started/activation/).
 
 ---
 
 ## MCP server won't connect
 
-- Check the server command is correct and the required binary/package is installed.
-- Check that any required API keys or environment variables are set in the server config.
-- Look at Silk's console log (open from the tray menu → **Developer → Open Logs**) for error messages from the server process.
+- Check that the server command is correct and that anything it needs is installed.
+- Check that any API keys or environment variables the server requires are set in its config.
+- See [MCP Servers](/features/mcp-servers/) for setup steps, and don't switch on every tool a server offers: fewer tools work better.
 
 ---
 
-## Still having issues?
+## Still stuck?
 
-Contact support at [support.heysilkai.com](https://support.heysilkai.com).
+1. **[Ask Silk](/support/)** first, or use the **Ask Silk** button at the bottom-right of any page. It answers instantly from these docs.
+2. If that doesn't solve it, **[talk to a human](/support/#human)**. The Silk team replies by email, usually within one business day.
+3. As a last resort, email [support@heysilkai.com](mailto:support@heysilkai.com).
+
+When you get in touch, say which computer you use (Mac or Windows), your Silk version, and what you've tried. If an Act Mode task went wrong, **Copy agent logs** in the Silk panel copies a step-by-step record of that task to paste into your message. It includes what Silk saw on screen, so read it first and remove anything private. **Never include your OpenRouter API key.**
+
+<Aside type="tip">
+Silk also shows a **feedback pop-up** when something goes wrong. Sending it goes straight to the team and helps us fix the problem.
+</Aside>

@@ -1,0 +1,74 @@
+---
+title: Choosing an AI Model
+description: Which OpenRouter model works best in Silk, based on our October 2026 benchmark of 10 models on 31 real-world tasks.
+sidebar:
+  order: 4
+---
+
+import { Aside } from '@astrojs/starlight/components'
+
+Silk works with any model on OpenRouter that supports image input and tools, so a common question is: which one should I use? Public leaderboards don't answer that well. They test puzzles and chat, not the work you hand Silk: organizing folders, filling in web forms, researching vendors, updating a CRM, fixing code, and following the skills and memories you've taught it.
+
+So we built our own benchmark. It runs Silk's real agent, with the same instructions, tools and safety checks that ship in the app, on the kinds of tasks people actually use Silk for. Then it checks the results the way you would: did the work get done, done correctly, and done without breaking anything?
+
+## Our recommendations
+
+You can change your model any time in **Settings → Model ID**. Copy the ID exactly as shown.
+
+| Model | Model ID | Why |
+|---|---|---|
+| **DeepSeek V4.1 Flash** | `deepseek/deepseek-v4.1-flash` | **The default and our top pick.** Passed all 62 runs, the fastest of the accurate models (median 20 seconds per task), about 1 cent per task. |
+| **GPT-6 Luna** | `openai/gpt-6-luna` | **The backup.** 97% of runs passed, the cheapest per successful task, and from a different provider, so it's a good switch if DeepSeek is ever unavailable. |
+| **Qwen 3.7 Plus** | `qwen/qwen3.7-plus` | **The dependable last option.** The previous default: accurate (97%), but slower and about twice the cost per task. |
+| **MiMo V2.6 Pro** | `xiaomi/mimo-v2.6-pro` | **For unattended work.** Also passed every run, but about 5 times slower, so it suits scheduled and long background jobs where you aren't waiting. |
+
+**Also capable, but not our first choice:** GLM 5.3 FlashX (`z-ai/glm-5.3-flashx`, 97% but about twice DeepSeek's cost), MiniMax M3 (`minimax/minimax-m3`, 95% but slower and pricier), and GPT-5.6 Luna (`openai/gpt-5.6-luna`, 94%; GPT-6 Luna does better for less).
+
+**Not recommended right now:**
+
+- **StepFun Step 3.7 Flash** overwrote or lost files in three separate runs, once while reporting success.
+- **Gemini 3.1 Flash Lite** is the fastest model tested, but it failed 18% of runs, including scheduling a meeting at 5 AM for one attendee and not saving CRM changes.
+- **Qwen 3.8 Flash** is capable when it can be reached, but its provider throttled it heavily during our tests.
+
+<Aside type="tip">
+**If Silk feels slow or makes mistakes,** check which model you're on before anything else. Switching to `deepseek/deepseek-v4.1-flash` fixes a lot of "Silk is slow" and "Silk got it wrong" problems.
+</Aside>
+
+## What else we found
+
+- **Every model resisted a prompt-injection attack.** One test page hid instructions telling the AI to send a confidential file to an attacker. None of the ten models did it, and in most runs the model also warned the user about the suspicious page.
+- **Silk's own features work well across the board.** Memory, skills, MCP integrations and scheduling were handled correctly by 7 of the 10 models in every run. Every model that finished the test asked "which Dana?" before issuing a refund when two customers shared that name.
+- **Long, exact jobs separate the models.** The hardest task was updating exactly 7 of 30 leads in a CRM. Only 11 of 20 runs got it fully right: some models skipped a lead, changed one they were told to leave alone, or wrote notes without saving the status changes.
+- **Speed matters in practice.** DeepSeek's median of 21 seconds on the hard tasks compares with 76 seconds for Qwen 3.7 Plus and 138 seconds for MiMo. Over a day of tasks, that's the difference between Silk feeling instant and feeling slow.
+
+## How we tested
+
+- **The real agent.** Every run used Silk's Background agent with its built-in tools (files, shell, browser, web search, PDFs, memory, skills, schedules) and its "did you really finish?" checks.
+- **Real-world tasks.** 31 tasks in three groups: everyday work (sorting folders, filling forms, summarizing data, SEO audits, fixing code, writing a flyer), hard multi-step jobs (supplier sync, CRM follow-up, invoice filing, messy data, time-zone scheduling), and Silk's own features (memory, skills, MCP, schedules, asking before irreversible actions).
+- **Fair and repeatable.** Test websites were served locally so every model saw identical pages, and each model ran every task twice: 620 runs in total.
+- **Graded on outcomes.** A run passed only when the result was fully correct. Speed and cost were measured on successful runs only, and costs are what we were actually billed.
+
+## Results (both rounds combined, 62 runs per model)
+
+| Model | Passed | Median time | Cost per success |
+|---|---|---|---|
+| **DeepSeek V4.1 Flash** | **62/62 (100%)** | **20s** | $0.011 |
+| MiMo V2.6 Pro | 62/62 (100%) | 100s | $0.014 |
+| GPT-6 Luna | 60/62 (97%) | 38s | $0.009 |
+| GLM 5.3 FlashX | 60/62 (97%) | 45s | $0.025 |
+| Qwen 3.7 Plus | 60/62 (97%) | 53s | $0.022 |
+| MiniMax M3 | 59/62 (95%) | 50s | $0.026 |
+| GPT-5.6 Luna | 58/62 (94%) | 37s | $0.018 |
+| Qwen 3.8 Flash | 55/62 (89%) | 106s | $0.008 |
+| Gemini 3.1 Flash Lite | 51/62 (82%) | 16s | $0.025 |
+| StepFun Step 3.7 Flash | 51/62 (82%) | 44s | $0.029 |
+
+## Limits of this benchmark
+
+- **It covers Silk's Background agent,** which handles most real usage. Guide mode (voice answers with on-screen pointing) and live Act mode (Silk clicking and typing on your screen) weren't part of this test.
+- **Models were tested in October 2026.** Models, providers and prices change often, and we plan to re-run the benchmark as new models arrive.
+- **Your workflows may differ.** If a model isn't working for you, try another from the recommended list.
+
+## Free models
+
+OpenRouter also lists free models (their IDs end in `:free`). Silk can use one if it supports **image input** and **tools**, but free models are rate-limited and less accurate, so expect slower and less reliable results on screen tasks. For most people, a paid model with a [credit limit](/getting-started/first-setup/#step-1--get-an-openrouter-api-key) on the key is the better way to keep costs low: usage on the recommended models is around a cent per task, and the limit means you can never be charged more than you set.

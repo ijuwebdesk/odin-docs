@@ -55,6 +55,7 @@ export default defineConfig({
           items: [
             { label: 'What is Silk?', slug: 'getting-started/what-is-silk' },
             { label: 'Installation', slug: 'getting-started/installation' },
+            { label: 'Activation & License', slug: 'getting-started/activation' },
             { label: 'Permissions Setup', slug: 'getting-started/permissions' },
             { label: 'First Setup', slug: 'getting-started/first-setup' },
             { label: 'Quick Start', slug: 'getting-started/quick-start' },
@@ -68,6 +69,7 @@ export default defineConfig({
             { label: 'Screen Capture & Analysis', slug: 'features/screen-capture' },
             { label: 'Cursor Overlay', slug: 'features/cursor-overlay' },
             { label: 'Background Agents', slug: 'features/background-agents' },
+            { label: 'Scheduled Tasks', slug: 'features/scheduled-tasks' },
           ],
         },
         {
@@ -93,6 +95,8 @@ export default defineConfig({
             { label: 'Settings', slug: 'reference/settings' },
             { label: 'Keyboard Shortcuts', slug: 'reference/shortcuts' },
             { label: 'Troubleshooting', slug: 'reference/troubleshooting' },
+            { label: 'Choosing an AI Model', slug: 'reference/ai-models' },
+            { label: 'FAQ', slug: 'reference/faq' },
           ],
         },
       ],

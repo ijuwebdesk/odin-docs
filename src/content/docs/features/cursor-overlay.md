@@ -31,9 +31,13 @@ Silk does **not** point when the answer has nothing to do with the screen, or th
 
 The overlay appears on the correct display — Silk tracks which screen contains the relevant element and positions the triangle there.
 
-## Dismissing the overlay
+## Showing and hiding the overlay
 
-The overlay fades out automatically after Silk finishes speaking. You can also click anywhere to dismiss it immediately.
+By default the overlay **stays on screen**, so you always see where Silk is pointing. It never blocks your clicks: you can work straight through it.
+
+To have it appear only while Silk is pointing at something, click **Hide Overlay** at the bottom of the Silk panel. Click **Show Overlay** to bring it back.
+
+`Escape` doesn't hide the overlay. It stops a task Silk is running.
 
 ## Overlay visibility
 

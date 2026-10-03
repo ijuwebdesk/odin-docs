@@ -52,6 +52,43 @@ You can also send **voice messages** (Silk transcribes them) and **files / scree
 Sending and receiving text messages works on any paired plan. Having Silk **pull in and work with files from your computer** is included with the **Unlimited plan** — you'll need at least that tier for full file access over the bridge.
 </Aside>
 
+## Commands
+
+In a direct chat you can just type what you want. These commands are also available; tap the **☰ menu** button in the chat to see them.
+
+| Command | What it does |
+|---|---|
+| `/do <task>` | Run a task now, e.g. `/do summarise my inbox`. **Required in group chats.** |
+| `/status` | What Silk is working on right now |
+| `/abort` | Stop the current task |
+| `/new` | Start fresh on your next message |
+| `/schedule <when>, <task>` | Create a [scheduled task](/features/scheduled-tasks/), e.g. `/schedule every weekday at 9am, email me the orders` |
+| `/schedules` | List your scheduled tasks |
+| `/pause 1` / `/resume 1` | Pause or resume a scheduled task |
+| `/unschedule 1` | Delete a scheduled task |
+| `/startup on` | Start Silk at login, so schedules always fire |
+| `/pair <code>` | Connect this chat to your computer |
+| `/unpair` | Disconnect this chat |
+| `/help` | Show what Silk can do |
+
+## Using Silk in a group chat
+
+You can add **@SilkAI_bot** to a Telegram group and pair the group, but there's one difference: **in a group, start every task with `/do`**.
+
+```
+/do summarise my inbox and email me the highlights
+```
+
+Plain messages in a group are never delivered to the bot. That's a Telegram privacy feature, and we keep it on deliberately, so Silk never sees your group's unrelated conversation. If Silk answers `/help` in your group but ignores everything else, this is why. All the other commands work the same as in a direct chat.
+
+<Aside type="caution">
+**A pairing connects a chat, not a person.** In a paired group, **every member can run tasks on your computer and see the results.** If you want a private remote control, pair a direct chat with the bot instead, and use `/unpair` to disconnect a group.
+</Aside>
+
 ## Disconnecting
 
-Go to **Settings → Telegram** and click **Unpair** to remove the connection. You can re-pair at any time by clicking **Connect** again.
+Go to **Settings → Telegram** and click **Unpair** to remove the connection, or send `/unpair` in the chat. You can re-pair at any time by clicking **Connect** again.
+
+<Aside>
+**Messaging @UseOdinAI_bot?** That was the bot's name before Odin became Silk. It has been retired and replies with a pointer to the new one. Open **@SilkAI_bot**, send `/start`, and carry on: your pairing carries over, so there is no need to pair again.
+</Aside>

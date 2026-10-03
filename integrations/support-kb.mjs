@@ -18,6 +18,38 @@ import { fileURLToPath } from 'node:url'
 const DOCS_DIR = fileURLToPath(new URL('../src/content/docs/', import.meta.url))
 const OUT_FILE = fileURLToPath(new URL('../server/kb.generated.js', import.meta.url))
 
+/**
+ * Things that must never reach the public docs, and so never the support AI,
+ * which reads every page verbatim. Internal notes (the app repo's SUPPORT.md)
+ * are full of them, so content copied from there is checked on every build.
+ * A match fails the build, naming the file and the rule.
+ */
+const SENSITIVE = [
+  ['an OpenRouter API key', /sk-or-v1-[A-Za-z0-9]{16,}/],
+  ['a payment-provider or cloud secret', /\b(?:sk|rk)_(?:live|test)_[A-Za-z0-9]{8,}|\bAKIA[0-9A-Z]{16}\b|\bgh[pousr]_[A-Za-z0-9]{20,}|\bxox[abpr]-[A-Za-z0-9-]{10,}/],
+  ['a private key', /-----BEGIN [A-Z ]*PRIVATE KEY-----/],
+  // Customer-facing settings the docs teach people to fill in themselves are allowed (see below).
+  ['a secret variable name', /\b(?!GITHUB_PERSONAL_ACCESS_TOKEN\b)[A-Z][A-Z0-9_]*_(?:SECRET|TOKEN|PASSWORD|API_KEY)\b|X-Internal-Secret/],
+  ['an IP address', /\b(?:\d{1,3}\.){3}\d{1,3}\b/],
+  ['an internal server or database', /audio\.hey(?:odin|silk)ai\.com|\bodin-waitlist\b|\bwrangler\s+d1\b|\b(?:purchase_events|license_devices|activation_tokens)\b/],
+  ['an internal link or code', /calendly\.com|kvsocial|ijuwebdesk\/learn|OdinExclusive|dfy\?k=/i],
+  ['a payment-platform product ID', /\b(?:product|bump|upsell)-\d{2,}\b/],
+]
+const PUBLIC_EMAILS = new Set(['support@heysilkai.com', 'hello@heysilkai.com'])
+
+function assertPublishable(file, source) {
+  const where = relative(DOCS_DIR, file)
+  for (const [what, pattern] of SENSITIVE) {
+    const match = source.match(pattern)
+    if (match) throw new Error(`${where} contains ${what} ("${match[0]}"). Remove it: the docs are public and feed the support AI.`)
+  }
+  for (const email of source.match(/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g) ?? []) {
+    if (!PUBLIC_EMAILS.has(email.toLowerCase())) {
+      throw new Error(`${where} contains the email address ${email}. Only ${[...PUBLIC_EMAILS].join(' and ')} may appear in the docs.`)
+    }
+  }
+}
+
 async function listDocs(dir) {
   const entries = await readdir(dir, { withFileTypes: true })
   const files = await Promise.all(
@@ -85,6 +117,7 @@ export async function buildKnowledgeBundle() {
   const pages = await Promise.all(
     files.map(async (file) => {
       const source = await readFile(file, 'utf8')
+      assertPublishable(file, source)
       const [, frontmatter = '', body = source] = source.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/) ?? []
       return {
         url: urlFor(file),

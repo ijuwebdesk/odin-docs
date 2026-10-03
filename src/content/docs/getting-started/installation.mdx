@@ -37,7 +37,7 @@ If macOS shows "Silk cannot be opened because the developer cannot be verified",
 4. Launch Silk from the Start menu or desktop shortcut.
 
 <Aside type="note">
-The SmartScreen warning appears because Silk's Windows installer is not yet signed with a trusted certificate. A code-signing certificate is in progress and will be available within the next week, after which the warning will no longer appear. The installer is safe to run.
+Silk's Windows installer is signed, but because Silk is a newer app, Windows SmartScreen may still show a warning the first time. Click **More info → Run anyway**. It isn't a sign of a problem, and the warning fades as more people install Silk.
 </Aside>
 
   </TabItem>
@@ -45,7 +45,9 @@ The SmartScreen warning appears because Silk's Windows installer is not yet sign
 
 ## First launch
 
-When you first open Silk, it walks you through a short onboarding flow to grant the permissions it needs:
+When you first open Silk, it asks you to **activate** it with the email address you bought it with. See [Activation & License](/getting-started/activation/).
+
+Then it walks you through a short onboarding flow to grant the permissions it needs:
 
 1. **Microphone** — required for push-to-talk voice input.
 2. **Screen Recording** — required on macOS for screen capture and AI analysis.
@@ -54,6 +56,8 @@ You must grant both permissions before Silk can function fully. See [Permissions
 
 After permissions are granted, Silk's icon appears in your **menu bar** (macOS) or **system tray** (Windows). Click it to open the companion panel.
 
+Can't see the icon? A full menu bar or the Windows tray overflow (**^**) can hide it. Press `⌃⇧Space` (Control+Shift+Space) on Mac or `Ctrl+Shift+Space` on Windows to open Silk from anywhere. More fixes in [Troubleshooting](/reference/troubleshooting/#i-cant-find-the-silk-icon).
+
 ## Updating
 
-Silk updates itself automatically in the background. When a new version is available, it downloads silently and applies on the next launch. You can check your current version in the panel settings.
+Silk downloads updates automatically in the background and installs them when it restarts. When one is ready, a banner at the top of the panel says so: click **Restart**. Nothing is lost on restart. See [Updating Silk](/reference/troubleshooting/#updating-silk).

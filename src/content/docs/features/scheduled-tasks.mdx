@@ -1,0 +1,67 @@
+---
+title: Scheduled Tasks
+description: Have Silk run a task automatically every day, week, month, or at a set time.
+sidebar:
+  order: 5
+---
+
+import { Steps, Aside } from '@astrojs/starlight/components'
+
+Scheduled tasks let Silk do recurring work on its own: a morning digest, a weekly report, a monthly invoice run. Each one runs as a [background agent](/features/background-agents/) at the time you choose.
+
+<Aside type="caution">
+**Scheduled tasks only run while Silk is open.** If your computer is off or Silk isn't running at the scheduled time, that run is skipped. Turn on **Start Silk at login** (in the Scheduled Tasks window) so Silk is always running when it should be.
+</Aside>
+
+## Creating a schedule
+
+<Steps>
+1. Open the Silk panel and choose **Scheduled tasks** from the menu.
+2. Click **New schedule**.
+3. Under **When**, describe the timing in plain words, for example *"every weekday at 9am"* or *"on the 1st of each month at 9am"*. Silk fills in the timing for you, or you can set it by hand.
+4. Under **What Silk should do**, write the task as if you were asking a person who wasn't there when you set it up: *"Summarise yesterday's orders and email them to me."*
+5. Optionally give it a **Name**, and tick **Send the results to my Telegram chat** if you use the [Telegram Bridge](/features/telegram/).
+6. Click **Schedule it**.
+</Steps>
+
+### Repeat options
+
+| Repeat | Example |
+|---|---|
+| **Daily** | Every day at 8:00 |
+| **Weekly** | Every Monday and Thursday at 17:30 (pick the days) |
+| **Monthly** | The 1st of each month at 9:00. Months without that day run on their last day. |
+| **Every N** | Every 90 minutes. 15 minutes is the minimum, and spacing counts from the previous run. |
+| **Once** | A single run at a date and time you pick |
+
+**Times use your computer's time zone**, shown under the timing when you create the schedule.
+
+## Managing schedules
+
+In the Scheduled Tasks window, each schedule has buttons to:
+
+- **Run now**: run it immediately, without changing its schedule. A good way to test a new one.
+- **Pause / Resume**: stop it temporarily without deleting it.
+- **Edit** or **Delete**.
+
+## Scheduling from Telegram
+
+If you've connected the [Telegram Bridge](/features/telegram/), you can manage schedules from your phone:
+
+| Command | What it does |
+|---|---|
+| `/schedule every weekday at 9am, email me the orders` | Create a schedule: the timing, a comma, then the task |
+| `/schedules` | List your schedules with their numbers |
+| `/pause 1` / `/resume 1` | Pause or resume schedule number 1 |
+| `/unschedule 1` | Delete schedule number 1 |
+| `/startup on` | Start Silk at login, so schedules always fire |
+
+## Plan limits
+
+The Basic plan includes **one active schedule** at a time. Higher plans have no limit.
+
+## Tips
+
+- **Write instructions that stand on their own.** A scheduled run doesn't see your earlier conversation, so include everything it needs: which inbox, which folder, where to send the result.
+- **Test with Run now** before relying on a new schedule.
+- **Unattended jobs suit careful models.** If accuracy matters more than speed, see [Choosing an AI Model](/reference/ai-models/).

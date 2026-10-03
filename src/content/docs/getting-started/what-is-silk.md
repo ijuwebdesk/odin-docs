@@ -7,7 +7,7 @@ sidebar:
 
 Silk is an AI companion that lives in your menu bar. It watches your screen, listens when you speak, and responds with a voice — all in real time.
 
-Unlike a chat window you switch to, Silk stays in the background until you need it. Hold your push-to-talk key, say something, and Silk hears you, sees your screen, and replies through your speakers. No typing. No alt-tabbing.
+Unlike a chat window you switch to, Silk stays in the background until you need it. Press your push-to-talk key, say something, press it again, and Silk hears you, sees your screen, and replies through your speakers. No typing. No alt-tabbing.
 
 ## What Silk can do
 

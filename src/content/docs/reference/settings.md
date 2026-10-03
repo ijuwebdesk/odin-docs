@@ -1,69 +1,69 @@
 ---
 title: Settings
-description: All configurable settings in Silk.
+description: Every setting in Silk and what it does.
 sidebar:
   order: 1
 ---
 
-Open the Silk panel and click the gear icon to access settings.
+Open the Silk panel and click the **gear icon** to open Settings.
 
-## General
+## AI
 
-| Setting | Description |
+| Setting | What it does |
 |---|---|
-| **Window mode** | `Docked` pins Silk under the menu bar tray icon. `Windowed` opens it as a normal movable window with a Dock icon. |
+| **OpenRouter API Key** | The key Silk uses to reach the AI. Paste it with the **Paste** button next to the field. See [First Setup](/getting-started/first-setup/). |
+| **API spend** | How much this key has spent today, so you can keep an eye on costs. |
+| **Model ID** | Which AI model Silk uses. The default is `deepseek/deepseek-v4.1-flash`; see [Choosing an AI Model](/reference/ai-models/) for alternatives. |
+| **Background task folder** | Where [background agents](/features/background-agents/) save the files they create. |
 
-## AI Model
+## Window and appearance
 
-| Setting | Description |
+| Setting | What it does |
 |---|---|
-| **Model** | The language model used for responses. Different models offer different trade-offs between speed, quality, and cost. |
-| **Cost tracking** | View cumulative token usage and estimated cost for the current session. |
+| **Detached window** | Off: Silk lives under its icon in the menu bar or system tray. On: Silk gets its own movable window and a Dock or taskbar icon. Handy if your menu bar is full. |
+| **Text size** | Makes the panel's text larger or smaller. |
+| **Theme** | Dark or light. |
 
 ## Voice
 
-| Setting | Description |
+| Setting | What it does |
 |---|---|
-| **TTS Voice** | The voice used for spoken responses. Available voices: `af_heart`, `af_bella`, `af_sky`, `bm_lewis`, `bm_george`. |
-| **Playback speed** | Adjust how fast the TTS audio plays back. |
+| **Voice hotkey** | The push-to-talk shortcut, `Ctrl+Space` by default. Click it and press a new combination to change it; **Reset** restores the default. See [Push-to-Talk](/features/push-to-talk/#changing-the-hotkey). |
+| **Language** | The language you speak to Silk in, and the voice it answers with: English, Spanish, French, Chinese, Japanese or Korean. [More about languages](/features/push-to-talk/#languages). |
+| **Speaking** | Turn Silk's spoken replies on or off. Replies always appear as text in the panel too. |
+| **Sound when tied off** | A short sound when a task finishes. Nothing else in Silk makes a sound. |
+| **Microphone** | Choose which microphone Silk listens to, and test it: the level bars should move when you speak. |
 
-## Memory
+## Pointing
 
-| Setting | Description |
+| Setting | What it does |
 |---|---|
-| **Memory enabled** | Toggle whether memory is read and injected at the start of each agent session. |
-| **Memory button** | Opens the Memory editor window — a full text editor for your memory file. |
+| **High-accuracy pointing** | Off by default. Turn it on if you work in design or custom-drawn apps (Photoshop, Figma and similar) where the [cursor overlay](/features/cursor-overlay/) doesn't land exactly on the right element. It uses a more powerful model only when needed, so it costs a little more. |
 
-## Skills
+## Privacy
 
-| Setting | Description |
+| Setting | What it does |
 |---|---|
-| **Skills enabled** | Toggle whether skills are injected into agent sessions. |
-| **Skills button** | Opens the Skills editor window — create, edit, and delete skills. |
-
-## MCP Servers
-
-| Setting | Description |
-|---|---|
-| **Add server** | Connect a new MCP server by command or URL. |
-| **Manage servers** | View, edit, or disconnect existing MCP servers. |
+| **Share anonymous usage** | On by default. Sends anonymous counts and timings (never your screen, recordings, prompts or files) to help us improve Silk. Turn it off any time. |
 
 ## Telegram
 
-| Setting | Description |
-|---|---|
-| **Connect / Disconnect** | Link or unlink your Telegram account for the Telegram Bridge. |
+At the bottom of Settings: **Connect** pairs Silk with Telegram so you can send it tasks from your phone, and **Unpair** disconnects. See [Telegram Bridge](/features/telegram/).
 
-## License
+## Panel menu
 
-| Setting | Description |
+These open from the menu in the Silk panel rather than from Settings:
+
+| Item | What it opens |
 |---|---|
-| **License key** | Enter or view your Silk license key. |
-| **Deactivate** | Deactivate the license on this machine so it can be used elsewhere. |
+| **Skills** | Create, edit and turn on [skills](/features/skills/). |
+| **Teach a skill** | Show Silk how to do something once, and it saves it as a reusable skill. |
+| **Scheduled tasks** | Set up [recurring tasks](/features/scheduled-tasks/). |
+| **Memory** | View and edit what Silk [remembers](/features/memory/) about you. |
+| **Conversation history** | Your past conversations. |
+| **MCP servers** | Connect [MCP servers](/features/mcp-servers/) for extra tools. |
+| **License** | Your plan, **Refresh license**, and **Deactivate this PC**. See [Activation & License](/getting-started/activation/). |
 
 ## Permissions
 
-| Setting | Description |
-|---|---|
-| **Microphone** | Check and re-prompt for microphone access. |
-| **Screen Recording** | Check and re-prompt for screen recording access (macOS). |
+Click the **shield icon** at the top of the panel, or choose **Permissions…** from the Silk menu-bar or tray menu, to check and re-grant **Microphone** and (on macOS) **Screen Recording**. See [Permissions Setup](/getting-started/permissions/).

@@ -5,7 +5,7 @@ sidebar:
   order: 1
 ---
 
-import { Aside } from '@astrojs/starlight/components'
+import { Aside, Steps } from '@astrojs/starlight/components'
 
 {/* VIDEO: covered in "First Use.mov" and "Using odin Efficently.mp4". */}
 
@@ -26,11 +26,41 @@ Push-to-talk is a **toggle, not a hold**. Press once to start and once to stop �
 
 ## Hotkey
 
-The push-to-talk hotkey is **`Ctrl+Space`** on both macOS and Windows.
+The push-to-talk hotkey is **`Ctrl+Space`** on both macOS and Windows by default.
+
+### Changing the hotkey
+
+<Steps>
+1. Open the Silk panel and go to **Settings → Voice hotkey**.
+2. Click the hotkey button. It shows *Press a key combination…*
+3. Press the combination you want, for example `Alt+Space` or `Ctrl+Shift+Space`.
+4. To go back to `Ctrl+Space`, click **Reset**.
+</Steps>
+
+If you don't see **Voice hotkey** in Settings, [update Silk](/reference/troubleshooting/#updating-silk): older versions couldn't change it.
+
+### Windows: `Ctrl+Space` beeps or flickers on and off
+
+On Windows, `Ctrl+Space` is also the shortcut for **switching keyboard language or input method**. If you have more than one keyboard language installed, Windows can grab the shortcut before Silk does: you hear a beep and listening flips on and off, so nothing is ever sent. It isn't a microphone problem.
+
+**Fix:** change Silk's hotkey to `Alt+Space` or `Ctrl+Shift+Space` (see above). Or, if you'd rather keep `Ctrl+Space`, go to Windows **Settings → Time & language → Typing → Advanced keyboard settings → Input language hot keys** and set the switching shortcut to **Not assigned**.
 
 <Aside type="tip">
 The push-to-talk key is a global hotkey — it works even when Silk's panel isn't focused or visible. You don't need to click on anything first.
 </Aside>
+
+## Languages
+
+Choose the language you speak in **Settings → Language**. It sets how Silk transcribes you and the voice it answers with. Spoken conversations are supported in:
+
+- English
+- Spanish (Español)
+- French (Français)
+- Chinese (中文)
+- Japanese (日本語)
+- Korean (한국어)
+
+**Typing works in any language.** Typed requests (including through [Telegram](/features/telegram/)) go straight to the AI model, which understands almost every language, and Silk can read screens and apps in any language too. If your language isn't in the list above, type your requests and Silk will work well; for voice, use one of the listed languages.
 
 ## Conversation continuity
 
