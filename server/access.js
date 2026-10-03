@@ -42,21 +42,30 @@ function tokenFrom(request) {
 /** The signed-in admin's email, or null if the request isn't authenticated. */
 export async function adminEmail(request, env) {
   if (isLocal(request)) return 'dev@localhost'
-  if (!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD) return null
+  const reason = await rejection(request, env)
+  if (typeof reason === 'object') return reason.email
+  // Never the token itself: just enough to tell a misconfiguration from a stranger.
+  console.warn('admin auth rejected:', reason, new URL(request.url).pathname)
+  return null
+}
+
+/** `{ email }` for a valid Access login, otherwise a short reason it was refused. */
+async function rejection(request, env) {
+  if (!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD) return 'ACCESS_TEAM_DOMAIN or ACCESS_AUD not set'
 
   const token = tokenFrom(request)
-  if (!token) return null
+  if (!token) return 'no Access token on the request'
   const [headerB64, payloadB64, signatureB64] = token.split('.')
-  if (!signatureB64) return null
+  if (!signatureB64) return 'malformed token'
 
   try {
     const decoder = new TextDecoder()
     const header = JSON.parse(decoder.decode(base64UrlDecode(headerB64)))
     const payload = JSON.parse(decoder.decode(base64UrlDecode(payloadB64)))
-    if (header.alg !== 'RS256') return null
+    if (header.alg !== 'RS256') return `unexpected alg ${header.alg}`
 
     const jwk = (await signingKeys(env.ACCESS_TEAM_DOMAIN)).find((k) => k.kid === header.kid)
-    if (!jwk) return null
+    if (!jwk) return 'no signing key matches the token'
     const key = await crypto.subtle.importKey(
       'jwk',
       jwk,
@@ -70,20 +79,20 @@ export async function adminEmail(request, env) {
       base64UrlDecode(signatureB64),
       new TextEncoder().encode(`${headerB64}.${payloadB64}`),
     )
-    if (!valid) return null
+    if (!valid) return 'bad signature'
 
     const audiences = Array.isArray(payload.aud) ? payload.aud : [payload.aud]
-    if (!audiences.includes(env.ACCESS_AUD)) return null
-    if (payload.iss !== `https://${env.ACCESS_TEAM_DOMAIN}`) return null
-    if (typeof payload.exp !== 'number' || payload.exp * 1000 < Date.now()) return null
-    if (!payload.email) return null
+    if (!audiences.includes(env.ACCESS_AUD)) return 'audience does not match ACCESS_AUD'
+    if (payload.iss !== `https://${env.ACCESS_TEAM_DOMAIN}`) return `issuer ${payload.iss} does not match`
+    if (typeof payload.exp !== 'number' || payload.exp * 1000 < Date.now()) return 'token expired'
+    if (!payload.email) return 'token has no email'
 
     // Optional extra allowlist, in case the Access policy is ever loosened.
     const allowed = (env.ADMIN_EMAILS ?? '').split(',').map((e) => e.trim().toLowerCase()).filter(Boolean)
-    if (allowed.length && !allowed.includes(payload.email.toLowerCase())) return null
+    if (allowed.length && !allowed.includes(payload.email.toLowerCase())) return 'email not in ADMIN_EMAILS'
 
-    return payload.email
-  } catch {
-    return null
+    return { email: payload.email }
+  } catch (err) {
+    return `verification error: ${err?.message ?? err}`
   }
 }

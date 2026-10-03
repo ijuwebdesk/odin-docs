@@ -6,9 +6,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "dev:support": "astro build && wrangler pages dev dist",
-    "db:migrate": "wrangler d1 migrations apply silk-support --remote && wrangler d1 migrations apply silk-support-preview --remote -e preview",
-    "deploy:mailer": "wrangler deploy --config workers/mailer/wrangler.jsonc"
+    "dev:support": "astro build && npx wrangler pages dev dist",
+    "db:migrate": "npx wrangler d1 migrations apply silk-support --remote && npx wrangler d1 migrations apply silk-support-preview --remote -e preview",
+    "deploy:mailer": "npx wrangler deploy --config workers/mailer/wrangler.jsonc"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.32.5",
