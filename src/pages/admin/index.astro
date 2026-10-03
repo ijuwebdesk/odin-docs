@@ -26,7 +26,10 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
         <a href="#/all" data-tab="all">All</a>
         <a href="#/insights" data-tab="insights">Insights</a>
       </nav>
-      <span class="who" data-who></span>
+      <div class="bar-end">
+        <span class="who" data-who></span>
+        <a class="new-btn" href="#/new">+ New ticket</a>
+      </div>
     </header>
 
     <div class="layout" data-layout>
@@ -94,6 +97,23 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
     border-radius: 999px;
     font-size: 0.8rem;
     background: var(--sl-color-gray-5);
+  }
+  .bar-end {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .new-btn {
+    padding: 0.45rem 0.95rem;
+    border-radius: 0.6rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    color: var(--silk-ivory);
+    background: linear-gradient(135deg, #8b7bff 0%, #6f5bf5 100%);
+  }
+  .new-btn:hover {
+    color: var(--silk-ivory);
   }
   .who {
     font-size: 0.85rem;
@@ -422,5 +442,41 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
     font-weight: 600;
     box-shadow: var(--sl-shadow-lg);
     z-index: 100;
+  }
+
+  .detail :global(.new-ticket) {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.25rem;
+  }
+  .detail :global(.new-ticket .field-row) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1rem;
+  }
+  .detail :global(.new-ticket label:not(.check)) {
+    display: grid;
+    gap: 0.35rem;
+  }
+  .detail :global(.new-ticket label > span) {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--sl-color-gray-2);
+  }
+  .detail :global(.new-ticket input[type='email']) {
+    width: 100%;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid var(--sl-color-gray-4);
+    border-radius: 0.6rem;
+    background: var(--sl-color-black);
+    color: var(--sl-color-gray-1);
+    font: inherit;
+  }
+  .detail :global(.new-ticket textarea) {
+    min-height: 10rem;
+    margin-top: 0;
+  }
+  .detail :global(.new-ticket .actions a) {
+    color: var(--sl-color-text-accent);
   }
 </style>

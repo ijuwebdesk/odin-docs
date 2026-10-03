@@ -1,5 +1,10 @@
-/** GET /api/admin/tickets?status=open|answered|closed|all — the inbox, plus counts for the tabs. */
-import { json } from '../../../../server/http.js'
+/**
+ * GET  /api/admin/tickets?status=open|answered|closed|all — the inbox, plus counts for the tabs.
+ * POST /api/admin/tickets — { name, email, subject, question, confirm } opens a ticket on a
+ *      customer's behalf, e.g. for a request that came in by phone or social media.
+ */
+import { error, isEmail, json, readJson, text } from '../../../../server/http.js'
+import { createTicket } from '../../../../server/tickets.js'
 
 const STATUSES = ['open', 'answered', 'closed']
 
@@ -22,4 +27,26 @@ export async function onRequestGet({ request, env, data }) {
     tickets,
     counts: Object.fromEntries(STATUSES.map((s) => [s, counts.find((c) => c.status === s)?.n ?? 0])),
   })
+}
+
+export async function onRequestPost({ request, env, waitUntil }) {
+  const body = await readJson(request)
+  if (!body) return error(400, 'Invalid request')
+
+  const name = text(body.name, 100)
+  const email = text(body.email, 254).toLowerCase()
+  const subject = text(body.subject, 150)
+  const question = text(body.question, 20000)
+  if (!name) return error(400, "Enter the customer's name")
+  if (!isEmail(email)) return error(400, "Enter the customer's email address")
+  if (!subject) return error(400, 'Enter a subject')
+  if (!question) return error(400, 'Describe what the customer needs')
+
+  const id = await createTicket(
+    env,
+    waitUntil,
+    { name, email, subject, question },
+    { confirm: body.confirm !== false, alert: false },
+  )
+  return json({ id }, { status: 201 })
 }

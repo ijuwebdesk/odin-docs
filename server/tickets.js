@@ -4,10 +4,16 @@ import { complete, DEFAULT_DRAFT_MODEL } from './openrouter.js'
 import { draftMessages, splitDraft } from './prompts.js'
 
 /**
- * Opens a ticket from the web form or an email, then in the background
- * confirms to the customer, alerts the team, and drafts a reply.
+ * Opens a ticket from the web form, an email, or the admin, then in the
+ * background confirms to the customer, alerts the team, and drafts a reply.
+ * The admin skips the alert (they made the ticket) and may skip the confirmation.
  */
-export async function createTicket(env, waitUntil, { name, email, subject, question, conversationId = null }) {
+export async function createTicket(
+  env,
+  waitUntil,
+  { name, email, subject, question, conversationId = null },
+  { confirm = true, alert = true } = {},
+) {
   const db = env.DB
   const now = Date.now()
   const { id } = await db
@@ -25,11 +31,12 @@ export async function createTicket(env, waitUntil, { name, email, subject, quest
     (async () => {
       const ticket = await loadTicket(db, id)
       // Emails first: they matter more than the draft and finish quickly.
-      const [confirmation, alert] = await Promise.allSettled([
-        confirmToCustomer(env, ticket),
-        notifyNewTicket(env, ticket),
+      const outcomes = await Promise.allSettled([
+        confirm ? confirmToCustomer(env, ticket) : null,
+        alert ? notifyNewTicket(env, ticket) : null,
       ])
-      for (const o of [confirmation, alert]) if (o.status === 'rejected') console.error('ticket email failed', id, o.reason)
+      for (const o of outcomes) if (o.status === 'rejected') console.error('ticket email failed', id, o.reason)
+      const [confirmation] = outcomes
       if (confirmation.status === 'fulfilled' && confirmation.value?.messageId) {
         await db
           .prepare('UPDATE tickets SET thread_message_id = ? WHERE id = ?')

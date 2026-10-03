@@ -258,6 +258,60 @@ export function initAdmin(root: HTMLElement) {
     })
   }
 
+  // ── New ticket, on a customer's behalf ───────────────────────────────────
+  function renderNewTicket() {
+    detail.innerHTML = `
+      <a class="back" href="#/${tab}">← All tickets</a>
+      <h2>New ticket</h2>
+      <p class="sub">For a request that reached you another way: a call, a DM, a chat. The AI drafts a
+        reply as usual, and replies go to the customer by email.</p>
+      <form class="new-ticket" data-new-ticket novalidate>
+        <div class="field-row">
+          <label><span>Customer name</span><input type="text" name="name" maxlength="100" required /></label>
+          <label><span>Customer email</span><input type="email" name="email" maxlength="254" required /></label>
+        </div>
+        <label><span>Subject</span><input type="text" name="subject" maxlength="150" required /></label>
+        <label><span>What do they need?</span>
+          <textarea name="question" required placeholder="Their question or problem, in their words if you have them."></textarea>
+        </label>
+        <label class="check"><input type="checkbox" name="confirm" checked />
+          Email the customer a confirmation with their ticket number</label>
+        <div class="actions">
+          <button type="submit" class="btn primary" data-create>Create ticket</button>
+          <a href="#/${tab}">Cancel</a>
+        </div>
+      </form>`
+
+    const form = detail.querySelector<HTMLFormElement>('[data-new-ticket]')!
+    const create = form.querySelector<HTMLButtonElement>('[data-create]')!
+    form.querySelector<HTMLInputElement>('[name="name"]')!.focus()
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      const data = new FormData(form)
+      create.disabled = true
+      create.textContent = 'Creating…'
+      try {
+        const { id } = await api<{ id: number }>('/tickets', {
+          method: 'POST',
+          body: JSON.stringify({
+            name: data.get('name'),
+            email: data.get('email'),
+            subject: data.get('subject'),
+            question: data.get('question'),
+            confirm: data.get('confirm') === 'on',
+          }),
+        })
+        toast(`${ref(id)} created`)
+        tab = 'open'
+        location.hash = `#/t/${id}`
+      } catch (err) {
+        toast((err as Error).message)
+        create.disabled = false
+        create.textContent = 'Create ticket'
+      }
+    })
+  }
+
   // ── Insights ─────────────────────────────────────────────────────────────
   async function loadInsights() {
     insights.innerHTML = '<p class="placeholder">Loading…</p>'
@@ -325,6 +379,10 @@ export function initAdmin(root: HTMLElement) {
       if (ticketMatch) {
         openId = Number(ticketMatch[1])
         layout.setAttribute('data-open', '')
+      } else if (hash === 'new') {
+        openId = null
+        layout.setAttribute('data-open', '')
+        renderNewTicket()
       } else {
         tab = ['open', 'answered', 'closed', 'all'].includes(hash) ? hash : 'open'
         openId = null
