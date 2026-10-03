@@ -25,6 +25,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
         <a href="#/closed" data-tab="closed">Closed</a>
         <a href="#/all" data-tab="all">All</a>
         <a href="#/insights" data-tab="insights">Insights</a>
+        <a href="#/articles" data-tab="articles">Articles</a>
       </nav>
       <div class="bar-end">
         <span class="who" data-who></span>
@@ -478,5 +479,79 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
   }
   .detail :global(.new-ticket .actions a) {
     color: var(--sl-color-text-accent);
+  }
+
+  .insights :global(.article) {
+    border-bottom: 1px solid var(--admin-border);
+  }
+  .insights :global(.article summary) {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 0;
+    cursor: pointer;
+    list-style: none;
+  }
+  .insights :global(.article summary::-webkit-details-marker) {
+    display: none;
+  }
+  .insights :global(.article-title) {
+    font-weight: 600;
+  }
+  .insights :global(.article-title small) {
+    display: block;
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-3);
+  }
+  .insights :global(.votes) {
+    font-variant-numeric: tabular-nums;
+    font-size: 0.9rem;
+    color: var(--sl-color-gray-2);
+    white-space: nowrap;
+  }
+  .insights :global(.meter) {
+    width: 7rem;
+    height: 0.5rem;
+    border-radius: 999px;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--sl-color-red, #f87171) 55%, transparent);
+  }
+  .insights :global(.meter span) {
+    display: block;
+    height: 100%;
+    background: var(--sl-color-green, #4ade80);
+  }
+  .insights :global(.comments) {
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.5rem;
+  }
+  .insights :global(.comments li) {
+    padding: 0.6rem 0.8rem;
+    border-radius: 0.6rem;
+    background: var(--sl-color-black);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    font-size: 0.92rem;
+  }
+  .insights :global(.comments .meta) {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+    font-size: 0.78rem;
+    color: var(--sl-color-gray-3);
+    white-space: normal;
+  }
+  @media (max-width: 40rem) {
+    .insights :global(.article summary) {
+      grid-template-columns: 1fr auto;
+    }
+    .insights :global(.meter) {
+      display: none;
+    }
   }
 </style>

@@ -3,6 +3,7 @@
  *   #/open  #/answered  #/closed  #/all   ticket lists
  *   #/t/1001                              one ticket, inside the last list
  *   #/insights                            chat stats and doc gaps
+ *   #/articles                            "was this page helpful?" votes and comments
  */
 import { escapeHtml, renderMarkdown, timeAgo, visibleAnswer } from './render'
 
@@ -359,17 +360,75 @@ export function initAdmin(root: HTMLElement) {
       }`
   }
 
+  // ── Article feedback ─────────────────────────────────────────────────────
+  async function loadArticles() {
+    insights.innerHTML = '<p class="placeholder">Loading…</p>'
+    const { days, pages } = await api<{
+      days: number
+      pages: {
+        page: string
+        title: string
+        yes: number
+        no: number
+        comments: { helpful: number; comment: string; created_at: number }[]
+      }[]
+    }>('/articles')
+
+    const yes = pages.reduce((n, p) => n + p.yes, 0)
+    const no = pages.reduce((n, p) => n + p.no, 0)
+    const comments = pages.reduce((n, p) => n + p.comments.length, 0)
+    const pct = (a: number, b: number) => (a + b ? `${Math.round((a / (a + b)) * 100)}%` : '–')
+
+    insights.innerHTML = `
+      <div class="stats">
+        <div class="stat"><b>${yes + no}</b><span>votes, last ${days} days</span></div>
+        <div class="stat"><b>${pct(yes, no)}</b><span>found the page helpful</span></div>
+        <div class="stat"><b>${pages.filter((p) => p.no > 0).length}</b><span>pages with a thumbs down</span></div>
+        <div class="stat"><b>${comments}</b><span>comments from readers</span></div>
+      </div>
+      <h2>Pages, least helpful first</h2>
+      <p class="hint">Open a page to read what readers said was missing. Fix the page, and the Ask Silk AI
+        learns the fix on the next deploy too.</p>
+      ${
+        pages.length
+          ? pages
+              .map(
+                (p) => `<details class="article">
+                  <summary>
+                    <span class="article-title">${escapeHtml(p.title)}
+                      <small><a href="${escapeHtml(p.page)}" target="_blank" rel="noopener">${escapeHtml(p.page)}</a></small></span>
+                    <span class="votes">👍 ${p.yes} · 👎 ${p.no}${p.comments.length ? ` · 💬 ${p.comments.length}` : ''}</span>
+                    <span class="meter" title="${pct(p.yes, p.no)} helpful"><span style="width:${p.yes + p.no ? (p.yes / (p.yes + p.no)) * 100 : 0}%"></span></span>
+                  </summary>
+                  ${
+                    p.comments.length
+                      ? `<ul class="comments">${p.comments
+                          .map(
+                            (c) => `<li><div class="meta">
+                                <span class="pill ${c.helpful ? 'ready' : 'failed'}">${c.helpful ? 'helpful' : 'not helpful'}</span>
+                                <span>${timeAgo(c.created_at)}</span></div>${escapeHtml(c.comment)}</li>`,
+                          )
+                          .join('')}</ul>`
+                      : '<p class="hint">No comments yet, just votes.</p>'
+                  }
+                </details>`,
+              )
+              .join('')
+          : '<p class="placeholder">No article feedback yet.</p>'
+      }`
+  }
+
   // ── Routing ──────────────────────────────────────────────────────────────
   async function route() {
     clearTimeout(pollTimer)
     const hash = location.hash.replace(/^#\/?/, '') || 'open'
     try {
-      if (hash === 'insights') {
+      if (hash === 'insights' || hash === 'articles') {
         openId = null
-        markTab('insights')
+        markTab(hash)
         layout.hidden = true
         insights.hidden = false
-        await loadInsights()
+        await (hash === 'insights' ? loadInsights() : loadArticles())
         return
       }
       layout.hidden = false

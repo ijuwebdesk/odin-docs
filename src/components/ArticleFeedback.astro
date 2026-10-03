@@ -1,0 +1,238 @@
+---
+/**
+ * "Was this page helpful?" at the end of each docs article. A thumbs down
+ * asks what was missing. Votes and comments land in the admin's Articles tab
+ * (functions/api/admin/articles.js), where they show which pages to rewrite.
+ */
+const path = Astro.url.pathname
+---
+
+<section class="article-feedback not-content" data-article-feedback data-page={path} aria-label="Page feedback">
+  <div class="row" data-step="ask">
+    <span class="question">Was this page helpful?</span>
+    <div class="votes">
+      <button type="button" class="vote" data-vote="yes" aria-pressed="false">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"
+          ><path
+            fill="currentColor"
+            d="M2 21h3V9H2v12Zm20-11a2 2 0 0 0-2-2h-6.3l1-4.6v-.3c0-.4-.2-.8-.4-1.1L13.2 1 6.6 7.6C6.2 8 6 8.5 6 9v10a2 2 0 0 0 2 2h9c.8 0 1.5-.5 1.8-1.2l3-7.1c.1-.2.2-.5.2-.7v-2Z"
+          ></path></svg
+        >
+        Yes
+      </button>
+      <button type="button" class="vote" data-vote="no" aria-pressed="false">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"
+          ><path
+            fill="currentColor"
+            d="M22 3h-3v12h3V3ZM2 14a2 2 0 0 0 2 2h6.3l-1 4.6v.3c0 .4.2.8.4 1.1l1.1 1 6.6-6.6c.4-.4.6-.9.6-1.4V5a2 2 0 0 0-2-2H7c-.8 0-1.5.5-1.8 1.2l-3 7.1c-.1.2-.2.5-.2.7v2Z"
+          ></path></svg
+        >
+        No
+      </button>
+    </div>
+  </div>
+
+  <form class="why" data-step="why" hidden>
+    <label for="article-feedback-why">Sorry about that. What was missing, unclear or wrong?</label>
+    <textarea
+      id="article-feedback-why"
+      maxlength="2000"
+      rows="3"
+      placeholder="For example: the steps don't match what I see on Windows"></textarea>
+    <div class="actions">
+      <button type="submit" class="send">Send feedback</button>
+      <button type="button" class="skip" data-skip>Skip</button>
+    </div>
+  </form>
+
+  <p class="thanks" data-step="thanks" hidden></p>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-article-feedback]')
+  if (root) {
+    const page = root.dataset.page!
+    const storageKey = `silk-article-vote:${page}`
+    const ask = root.querySelector<HTMLElement>('[data-step="ask"]')!
+    const why = root.querySelector<HTMLFormElement>('[data-step="why"]')!
+    const thanks = root.querySelector<HTMLElement>('[data-step="thanks"]')!
+    const comment = why.querySelector('textarea')!
+
+    type Vote = { id: number; helpful: boolean }
+    let vote: Vote | null = null
+    try {
+      vote = JSON.parse(localStorage.getItem(storageKey) ?? 'null')
+    } catch {}
+
+    async function send(payload: object): Promise<number | null> {
+      try {
+        const res = await fetch('/api/article-feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        })
+        return res.ok ? ((await res.json()).id as number) : null
+      } catch {
+        return null
+      }
+    }
+
+    function remember(next: Vote) {
+      vote = next
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(next))
+      } catch {}
+    }
+
+    function markPressed() {
+      ask.querySelectorAll<HTMLButtonElement>('[data-vote]').forEach((b) => {
+        b.setAttribute('aria-pressed', String(vote !== null && (b.dataset.vote === 'yes') === vote.helpful))
+      })
+    }
+
+    function showThanks(helpful: boolean) {
+      why.hidden = true
+      thanks.hidden = false
+      thanks.innerHTML = helpful
+        ? 'Thanks! Glad it helped.'
+        : 'Thanks, this helps us improve the page. Still stuck? <a href="/support/">Ask Silk</a> or <a href="/support/#human">talk to a human</a>.'
+    }
+
+    ask.addEventListener('click', async (e) => {
+      const button = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-vote]')
+      if (!button) return
+      const helpful = button.dataset.vote === 'yes'
+      if (vote?.helpful === helpful) return
+
+      // A changed mind updates the existing vote rather than adding a second one.
+      const id = vote ? await send({ id: vote.id, helpful }) : await send({ page, helpful })
+      remember({ id: id ?? vote?.id ?? 0, helpful })
+      markPressed()
+
+      if (helpful) return showThanks(true)
+      thanks.hidden = true
+      why.hidden = false
+      comment.focus()
+    })
+
+    why.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      const text = comment.value.trim()
+      if (text && vote?.id) await send({ id: vote.id, comment: text })
+      comment.value = ''
+      showThanks(false)
+    })
+    why.querySelector('[data-skip]')!.addEventListener('click', () => showThanks(false))
+
+    markPressed()
+  }
+</script>
+
+<style>
+  .article-feedback {
+    margin-top: 3rem;
+    padding: 1.1rem 1.25rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.9rem;
+    background: color-mix(in srgb, var(--sl-color-gray-6) 55%, transparent);
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+  }
+  .question {
+    font-weight: 600;
+    color: var(--sl-color-white);
+  }
+  .votes {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .vote {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--sl-color-gray-4);
+    border-radius: 999px;
+    background: none;
+    color: var(--sl-color-gray-2);
+    font: inherit;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition:
+      border-color 0.15s ease,
+      color 0.15s ease;
+  }
+  .vote:hover {
+    border-color: var(--sl-color-accent);
+    color: var(--sl-color-white);
+  }
+  .vote[aria-pressed='true'] {
+    border-color: var(--sl-color-accent);
+    background: var(--sl-color-accent-low);
+    color: var(--sl-color-text-accent);
+  }
+  .why {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+  .why[hidden],
+  .thanks[hidden] {
+    display: none;
+  }
+  .why label {
+    font-size: 0.95rem;
+    color: var(--sl-color-gray-2);
+  }
+  .why textarea {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--sl-color-gray-4);
+    border-radius: 0.6rem;
+    background: var(--sl-color-black);
+    color: var(--sl-color-gray-1);
+    font: inherit;
+    resize: vertical;
+  }
+  .why textarea:focus {
+    outline: 2px solid color-mix(in srgb, var(--sl-color-accent) 60%, transparent);
+    outline-offset: 1px;
+  }
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .send {
+    border: none;
+    border-radius: 0.6rem;
+    padding: 0.5rem 1rem;
+    font: inherit;
+    font-weight: 600;
+    color: var(--silk-ivory);
+    background: linear-gradient(135deg, #8b7bff 0%, #6f5bf5 100%);
+    cursor: pointer;
+  }
+  .skip {
+    border: none;
+    background: none;
+    padding: 0;
+    font: inherit;
+    color: var(--sl-color-gray-3);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .thanks {
+    margin: 0.75rem 0 0;
+    color: var(--sl-color-gray-2);
+  }
+  .thanks :global(a) {
+    color: var(--sl-color-text-accent);
+  }
+</style>
