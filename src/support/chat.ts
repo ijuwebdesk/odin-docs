@@ -274,7 +274,9 @@ export function initSupportChat(root: HTMLElement) {
       ticketDone.hidden = false
       ticketDone.innerHTML = `<p><strong>Sent. Your ticket number is ${escapeHtml(result.ref)}.</strong></p>
         <p>We’ve emailed a confirmation to ${escapeHtml(email)}. The team usually replies within one business day.
-        If the email doesn’t arrive, check your spam folder.</p>`
+        If the email doesn’t arrive, check your spam folder.</p>
+        <p><button type="button" class="link" data-back-to-chat>Back to chat</button></p>`
+      ticketDone.querySelector('[data-back-to-chat]')!.addEventListener('click', () => (ticket.hidden = true))
       ticketDone.scrollIntoView({ behavior: 'smooth', block: 'center' })
     } catch (err) {
       fail((err as Error).message)

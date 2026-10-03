@@ -1,0 +1,9 @@
+---
+// Starlight's footer, plus the floating "Ask Silk" chat bubble. The footer is
+// the one component every page renders, so the bubble rides along with it.
+import Default from '@astrojs/starlight/components/Footer.astro'
+import ChatBubble from './ChatBubble.astro'
+---
+
+<Default {...Astro.props}><slot /></Default>
+<ChatBubble />

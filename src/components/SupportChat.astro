@@ -1,0 +1,497 @@
+---
+/**
+ * The support chat and "Talk to a human" form, wired up by src/support/chat.ts.
+ * Rendered full-size on /support and compact inside the floating chat bubble
+ * (ChatBubble.astro). Both share one conversation through sessionStorage.
+ */
+interface Props {
+  variant: 'page' | 'panel'
+}
+const { variant } = Astro.props
+
+const suggestions = [
+  'How do I give Silk screen recording permission?',
+  'What can Act Mode do?',
+  'Push-to-talk isn’t picking up my voice',
+  'How do I connect Silk to Telegram?',
+]
+---
+
+<div class="support not-content" data-support data-variant={variant}>
+  {
+    variant === 'page' && (
+      <p class="lede">
+        Ask anything about Silk. Answers come from these docs, with links to the pages they’re based on. If the
+        docs don’t cover it, a person on the Silk team will.
+      </p>
+    )
+  }
+
+  <section class="chat" aria-label="Support chat">
+    <div class="chat-log" data-log aria-live="polite">
+      <div class="chat-empty" data-empty>
+        <p class="chat-empty-label">Try asking</p>
+        <div class="chips">
+          {suggestions.map((s) => <button type="button" class="chip" data-suggestion>{s}</button>)}
+        </div>
+      </div>
+    </div>
+
+    <form class="chat-input" data-form>
+      <label for="support-question" class="sr-only">Your question</label>
+      <textarea
+        id="support-question"
+        data-input
+        rows="1"
+        maxlength="2000"
+        placeholder="Ask a question about Silk…"
+        autocomplete="off"></textarea>
+      <button type="submit" class="send" data-send aria-label="Ask">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"
+          ><path fill="currentColor" d="M3.4 20.4 21 12 3.4 3.6l-.01 6.53L15 12 3.39 13.87z"></path></svg
+        >
+      </button>
+    </form>
+    <div class="turnstile" data-turnstile></div>
+
+    <p class="chat-foot">
+      <span>AI answers can be wrong, so check the linked page. Chats are saved to help us improve these docs.</span>
+      <span class="chat-foot-actions">
+        <button type="button" class="link" data-new-chat hidden>New chat</button>
+        <button type="button" class="link strong" data-open-ticket>Talk to a human</button>
+      </span>
+    </p>
+  </section>
+
+  <section class="ticket" data-ticket hidden aria-labelledby="ticket-heading">
+    <h2 id="ticket-heading">Talk to a human</h2>
+    <p class="ticket-intro">
+      Tell us what you need and the Silk team will reply by email, usually within one business day.
+    </p>
+    <form data-ticket-form novalidate>
+      <div class="field-row">
+        <label>
+          <span>Name</span>
+          <input name="name" autocomplete="name" required maxlength="100" />
+        </label>
+        <label>
+          <span>Email</span>
+          <input name="email" type="email" autocomplete="email" required maxlength="254" />
+        </label>
+      </div>
+      <label>
+        <span>Subject</span>
+        <input name="subject" maxlength="150" placeholder="A few words about the problem" />
+      </label>
+      <label>
+        <span>How can we help?</span>
+        <textarea name="question" rows="6" required maxlength="5000"></textarea>
+      </label>
+      <label class="check" data-include-chat hidden>
+        <input type="checkbox" name="includeChat" checked />
+        <span>Include this chat, so the team can see what you’ve already tried</span>
+      </label>
+      <p class="form-error" data-ticket-error role="alert" hidden></p>
+      <div class="ticket-actions">
+        <button type="submit" class="primary" data-ticket-submit>Send to the Silk team</button>
+        <button type="button" class="link" data-close-ticket>Cancel</button>
+      </div>
+    </form>
+    <div class="ticket-done" data-ticket-done hidden></div>
+  </section>
+
+  <p class="direct" hidden={variant === 'panel'}>Prefer email? Write to <a href="mailto:support@heysilkai.com">support@heysilkai.com</a>.</p>
+</div>
+
+<style>
+  .support {
+    max-width: 46rem;
+    margin-inline: auto;
+  }
+  .lede {
+    color: var(--sl-color-gray-2);
+    font-size: 1.05rem;
+    margin-bottom: 1.5rem;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  /* ── Chat ─────────────────────────────────────────────────────────────── */
+  .chat {
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--sl-color-gray-6) 55%, transparent);
+    overflow: hidden;
+  }
+  .chat-log {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    padding: 1.25rem;
+    min-height: 16rem;
+    max-height: min(60vh, 40rem);
+    overflow-y: auto;
+  }
+  .chat-empty {
+    margin: auto 0;
+    text-align: center;
+  }
+  .chat-empty-label {
+    color: var(--sl-color-gray-3);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+  .chip {
+    border: 1px solid var(--sl-color-gray-5);
+    background: var(--sl-color-black);
+    color: var(--sl-color-gray-1);
+    border-radius: 999px;
+    padding: 0.45rem 0.9rem;
+    font: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+  }
+  .chip:hover {
+    border-color: var(--sl-color-accent);
+  }
+
+  .chat-input {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border-top: 1px solid var(--sl-color-gray-5);
+    background: var(--sl-color-black);
+  }
+  .chat-input textarea {
+    flex: 1;
+    resize: none;
+    border: none;
+    background: transparent;
+    color: var(--sl-color-gray-1);
+    font: inherit;
+    line-height: 1.5;
+    padding: 0.45rem 0.5rem;
+    max-height: 10rem;
+    outline: none;
+  }
+  .send {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border: none;
+    border-radius: 0.65rem;
+    color: var(--silk-ivory);
+    background: linear-gradient(135deg, #8b7bff 0%, #6f5bf5 100%);
+    cursor: pointer;
+  }
+  .send:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+  .chat-input:focus-within {
+    box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--sl-color-accent) 45%, transparent);
+  }
+  .turnstile:empty {
+    display: none;
+  }
+  .turnstile {
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem;
+  }
+  .chat-foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    margin: 0;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    color: var(--sl-color-gray-3);
+    border-top: 1px solid var(--sl-color-gray-5);
+  }
+  .chat-foot-actions {
+    display: flex;
+    gap: 1rem;
+  }
+  .link,
+  .chat-log :global(.escalate button),
+  .ticket-done :global(button) {
+    border: none;
+    background: none;
+    padding: 0;
+    font: inherit;
+    color: var(--sl-color-text-accent);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .link.strong,
+  .chat-log :global(.escalate button) {
+    font-weight: 600;
+  }
+  .direct {
+    margin-top: 1.25rem;
+    text-align: center;
+    color: var(--sl-color-gray-3);
+    font-size: 0.9rem;
+  }
+  .direct a {
+    color: var(--sl-color-text-accent);
+  }
+  .support [hidden] {
+    display: none !important;
+  }
+
+  /* Messages are rendered by script, so their styles reach in with :global. */
+  .chat-log :global(.msg) {
+    max-width: 100%;
+  }
+  .chat-log :global(.msg-user) {
+    align-self: flex-end;
+    max-width: 85%;
+    padding: 0.6rem 0.9rem;
+    border-radius: 1rem 1rem 0.25rem 1rem;
+    background: var(--sl-color-accent-low);
+    color: var(--sl-color-gray-1);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .chat-log :global(.msg-assistant) {
+    align-self: flex-start;
+    overflow-wrap: anywhere;
+  }
+  .chat-log :global(.msg-assistant > .body > :first-child) {
+    margin-top: 0;
+  }
+  .chat-log :global(.msg-assistant .body > * + *) {
+    margin-top: 0.75rem;
+  }
+  .chat-log :global(.msg-assistant .body ol),
+  .chat-log :global(.msg-assistant .body ul) {
+    padding-inline-start: 1.4rem;
+  }
+  .chat-log :global(.msg-assistant .body li + li) {
+    margin-top: 0.3rem;
+  }
+  .chat-log :global(.typing) {
+    display: inline-flex;
+    gap: 0.3rem;
+    padding: 0.4rem 0;
+  }
+  .chat-log :global(.typing i) {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: var(--sl-color-gray-3);
+    animation: support-blink 1.2s infinite ease-in-out;
+  }
+  .chat-log :global(.typing i:nth-child(2)) {
+    animation-delay: 0.15s;
+  }
+  .chat-log :global(.typing i:nth-child(3)) {
+    animation-delay: 0.3s;
+  }
+  @keyframes support-blink {
+    0%,
+    80%,
+    100% {
+      opacity: 0.25;
+    }
+    40% {
+      opacity: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .chat-log :global(.typing i) {
+      animation: none;
+      opacity: 0.6;
+    }
+  }
+  .chat-log :global(.msg-error) {
+    color: var(--sl-color-red-high, #f87171);
+  }
+  .chat-log :global(.msg-meta) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.75rem;
+    margin-top: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--sl-color-gray-3);
+  }
+  .chat-log :global(.vote) {
+    border: 1px solid var(--sl-color-gray-5);
+    background: none;
+    color: var(--sl-color-gray-2);
+    border-radius: 999px;
+    padding: 0.15rem 0.7rem;
+    font: inherit;
+    cursor: pointer;
+  }
+  .chat-log :global(.vote[aria-pressed='true']) {
+    border-color: var(--sl-color-accent);
+    color: var(--sl-color-text-accent);
+  }
+  .chat-log :global(.escalate) {
+    margin-top: 0.75rem;
+    padding: 0.8rem 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid color-mix(in srgb, var(--sl-color-accent) 40%, transparent);
+    background: color-mix(in srgb, var(--sl-color-accent) 8%, transparent);
+    font-size: 0.95rem;
+  }
+
+  /* ── Ticket form ──────────────────────────────────────────────────────── */
+  .ticket {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--sl-color-gray-6) 55%, transparent);
+  }
+  .ticket h2 {
+    margin: 0;
+    font-size: 1.4rem;
+  }
+  .ticket-intro {
+    color: var(--sl-color-gray-2);
+  }
+  .ticket form {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.25rem;
+  }
+  .field-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1rem;
+  }
+  .ticket label:not(.check) {
+    display: grid;
+    gap: 0.35rem;
+    margin: 0;
+  }
+  .ticket label > span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--sl-color-gray-2);
+  }
+  .ticket input:not([type='checkbox']),
+  .ticket textarea {
+    width: 100%;
+    margin: 0;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--sl-color-gray-4);
+    border-radius: 0.6rem;
+    background: var(--sl-color-black);
+    color: var(--sl-color-gray-1);
+    font: inherit;
+  }
+  .ticket input:focus,
+  .ticket textarea:focus {
+    outline: 2px solid color-mix(in srgb, var(--sl-color-accent) 60%, transparent);
+    outline-offset: 1px;
+  }
+  .ticket textarea {
+    resize: vertical;
+  }
+  .check {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    font-size: 0.95rem;
+    color: var(--sl-color-gray-2);
+  }
+  .check input {
+    margin-top: 0.3rem;
+  }
+  .form-error {
+    margin: 0;
+    color: var(--sl-color-red-high, #f87171);
+  }
+  .ticket-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .primary {
+    border: none;
+    border-radius: 0.7rem;
+    padding: 0.7rem 1.4rem;
+    font: inherit;
+    font-weight: 600;
+    color: var(--silk-ivory);
+    background: linear-gradient(135deg, #8b7bff 0%, #6f5bf5 100%);
+    cursor: pointer;
+  }
+  .primary:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+  .ticket-done {
+    margin-top: 1rem;
+    font-size: 1.05rem;
+  }
+
+  /* ── Compact variant, inside the chat bubble ──────────────────────────── */
+  .support[data-variant='panel'] {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-width: none;
+  }
+  [data-variant='panel'] .chat {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    border: none;
+    border-radius: 0;
+    background: none;
+  }
+  [data-variant='panel'] .chat-log {
+    flex: 1;
+    min-height: 0;
+    max-height: none;
+    padding: 1rem;
+  }
+  [data-variant='panel'] .chip {
+    font-size: 0.85rem;
+  }
+  [data-variant='panel'] .chat-foot {
+    font-size: 0.8rem;
+  }
+  /* The form takes the panel over while it's open; Cancel brings the chat back. */
+  [data-variant='panel']:has(.ticket:not([hidden])) .chat {
+    display: none;
+  }
+  [data-variant='panel'] .ticket {
+    margin: 0;
+    padding: 1rem;
+    border: none;
+    border-radius: 0;
+    background: none;
+    overflow-y: auto;
+  }
+  [data-variant='panel'] .ticket h2 {
+    font-size: 1.15rem;
+  }
+</style>
