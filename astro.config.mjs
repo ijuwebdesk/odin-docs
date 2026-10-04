@@ -58,6 +58,7 @@ export default defineConfig({
             { label: 'Activation & License', slug: 'getting-started/activation' },
             { label: 'Permissions Setup', slug: 'getting-started/permissions' },
             { label: 'First Setup', slug: 'getting-started/first-setup' },
+            { label: 'Use Your ChatGPT Subscription', slug: 'getting-started/chatgpt-subscription' },
             { label: 'Quick Start', slug: 'getting-started/quick-start' },
             { label: 'Using Silk Effectively', slug: 'getting-started/using-silk-effectively' },
           ],

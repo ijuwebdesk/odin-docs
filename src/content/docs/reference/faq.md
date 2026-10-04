@@ -13,7 +13,9 @@ Yes, and it's usually very little. Silk is **bring your own AI engine**: your pu
 
 ### Can I use my ChatGPT, Claude, Gemini or Copilot subscription?
 
-No. Silk connects only to OpenRouter, so subscriptions to other AI apps can't power it. OpenRouter gives you access to models from all the major providers under one key.
+**ChatGPT, yes.** From Silk 1.1.79, Settings has **Use my ChatGPT subscription**, which runs Silk on your ChatGPT plan with no OpenRouter account or extra AI bill. Plus or Pro is recommended. See [Use Your ChatGPT Subscription](/getting-started/chatgpt-subscription/).
+
+Claude, Gemini and Copilot subscriptions can't power Silk. OpenRouter gives you models from all the major providers under one key.
 
 ### Can I run Silk for free?
 
@@ -74,7 +76,7 @@ No. Silk looks at your screen when you ask it something, so it can see what you'
 
 ### Where do my requests go?
 
-Your requests go from your computer to the AI model you chose, through your own OpenRouter account. Your API key is stored on your computer and only sent to OpenRouter.
+Your requests go from your computer to the AI model you chose, through your own OpenRouter account. Your API key is stored on your computer and only sent to OpenRouter. If you use your ChatGPT subscription instead, requests go to OpenAI through your ChatGPT account, and Silk never sees your ChatGPT password.
 
 ### Does Silk collect data about me?
 

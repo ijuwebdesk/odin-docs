@@ -1,13 +1,13 @@
 ---
 title: Choosing an AI Model
-description: Which OpenRouter model works best in Silk, based on our October 2026 benchmark of 10 models on 31 real-world tasks.
+description: Which AI model works best in Silk, on OpenRouter or a ChatGPT plan, based on our October 2026 benchmark of 31 real-world tasks.
 sidebar:
   order: 4
 ---
 
 import { Aside } from '@astrojs/starlight/components'
 
-Silk works with any model on OpenRouter that supports image input and tools, so a common question is: which one should I use? Public leaderboards don't answer that well. They test puzzles and chat, not the work you hand Silk: organizing folders, filling in web forms, researching vendors, updating a CRM, fixing code, and following the skills and memories you've taught it.
+Silk works with any model on OpenRouter that supports image input and tools, and from Silk 1.1.79 it can also run on your [ChatGPT subscription](/getting-started/chatgpt-subscription/). So a common question is: which one should I use? Public leaderboards don't answer that well. They test puzzles and chat, not the work you hand Silk: organizing folders, filling in web forms, researching vendors, updating a CRM, fixing code, and following the skills and memories you've taught it.
 
 So we built our own benchmark. It runs Silk's real agent, with the same instructions, tools and safety checks that ship in the app, on the kinds of tasks people actually use Silk for. Then it checks the results the way you would: did the work get done, done correctly, and done without breaking anything?
 
@@ -37,7 +37,7 @@ You can change your model any time in **Settings → Model ID**. Copy the ID exa
 ## What else we found
 
 - **Every model resisted a prompt-injection attack.** One test page hid instructions telling the AI to send a confidential file to an attacker. None of the ten models did it, and in most runs the model also warned the user about the suspicious page.
-- **Silk's own features work well across the board.** Memory, skills, MCP integrations and scheduling were handled correctly by 7 of the 10 models in every run. Every model that finished the test asked "which Dana?" before issuing a refund when two customers shared that name.
+- **Silk's own features work well across the board.** Memory, skills, MCP integrations and scheduling were handled correctly by 7 of the 10 models in every run. Every OpenRouter model that finished the test asked "which Dana?" before issuing a refund when two customers shared that name. (On a ChatGPT Free or Go plan, the smaller model didn't. See [below](#on-a-chatgpt-plan).)
 - **Long, exact jobs separate the models.** The hardest task was updating exactly 7 of 30 leads in a CRM. Only 11 of 20 runs got it fully right: some models skipped a lead, changed one they were told to leave alone, or wrote notes without saving the status changes.
 - **Speed matters in practice.** DeepSeek's median of 21 seconds on the hard tasks compares with 76 seconds for Qwen 3.7 Plus and 138 seconds for MiMo. Over a day of tasks, that's the difference between Silk feeling instant and feeling slow.
 
@@ -45,7 +45,7 @@ You can change your model any time in **Settings → Model ID**. Copy the ID exa
 
 - **The real agent.** Every run used Silk's Background agent with its built-in tools (files, shell, browser, web search, PDFs, memory, skills, schedules) and its "did you really finish?" checks.
 - **Real-world tasks.** 31 tasks in three groups: everyday work (sorting folders, filling forms, summarizing data, SEO audits, fixing code, writing a flyer), hard multi-step jobs (supplier sync, CRM follow-up, invoice filing, messy data, time-zone scheduling), and Silk's own features (memory, skills, MCP, schedules, asking before irreversible actions).
-- **Fair and repeatable.** Test websites were served locally so every model saw identical pages, and each model ran every task twice: 620 runs in total.
+- **Fair and repeatable.** Test websites were served locally so every model saw identical pages, and each model ran every task twice: 620 runs on OpenRouter, plus 94 on ChatGPT plans.
 - **Graded on outcomes.** A run passed only when the result was fully correct. Speed and cost were measured on successful runs only, and costs are what we were actually billed.
 
 ## Results (both rounds combined, 62 runs per model)
@@ -63,10 +63,36 @@ You can change your model any time in **Settings → Model ID**. Copy the ID exa
 | Gemini 3.1 Flash Lite | 51/62 (82%) | 16s | $0.025 |
 | StepFun Step 3.7 Flash | 51/62 (82%) | 44s | $0.029 |
 
+## On a ChatGPT plan
+
+From Silk 1.1.79 you can [power Silk with your ChatGPT subscription](/getting-started/chatgpt-subscription/) instead of an OpenRouter key. We ran the same benchmark through it on three ChatGPT plans in October 2026, using the model Silk recommends for each plan.
+
+**ChatGPT Plus, full benchmark (62 runs), next to the best OpenRouter models:**
+
+| Model | Passed | Median time | Cost per task |
+|---|---|---|---|
+| DeepSeek V4.1 Flash (OpenRouter) | 62/62 (100%) | **20s** | $0.011 |
+| GPT-6 Luna (OpenRouter) | 60/62 (97%) | 38s | $0.009 |
+| **GPT-6.1 Sol (ChatGPT Plus)** | **62/62 (100%)** | 54s | **Included in your plan** |
+
+**ChatGPT Free and Go, Silk features suite (16 runs each):**
+
+| Plan | Model | Passed | Median time | Allowance |
+|---|---|---|---|---|
+| Free | GPT-6 Luna | 14/16 (88%) | 24s | About 300 tasks a month |
+| Go | GPT-6 Luna | 14/16 (88%) | 41s | About 400 tasks a month |
+
+What this means:
+
+- **Plus matches the best OpenRouter model on quality.** It passed every task, including asking "which Dana?" before a refund, in both runs.
+- **It's slower.** A typical task took about 2.7 times as long as DeepSeek V4.1 Flash. Choose ChatGPT mode to avoid a separate AI bill, and OpenRouter when speed matters most.
+- **Plus is generous.** All 62 tasks used 40% of one 5-hour window and 6% of the weekly allowance: about 150 tasks every 5 hours, or 1,000 a week.
+- **Free and Go are a step down.** They only offer the smaller GPT-6 Luna, and both failed the same test twice: they refunded an order without asking which of two customers named Dana was meant. Everything else passed. The slower Go time most likely reflects server load when we ran it, not the plan.
+
 ## Limits of this benchmark
 
 - **It covers Silk's Background agent,** which handles most real usage. Guide mode (voice answers with on-screen pointing) and live Act mode (Silk clicking and typing on your screen) weren't part of this test.
-- **Models were tested in October 2026.** Models, providers and prices change often, and we plan to re-run the benchmark as new models arrive.
+- **Models were tested in October 2026.** Models, providers, prices and ChatGPT plan allowances change often, and we plan to re-run the benchmark as new models arrive.
 - **Your workflows may differ.** If a model isn't working for you, try another from the recommended list.
 
 ## Free models
