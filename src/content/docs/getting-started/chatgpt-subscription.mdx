@@ -11,16 +11,20 @@ If you already pay for ChatGPT, you can use that plan to power Silk. You don't n
 
 It works on macOS and Windows from **Silk 1.1.79**. If you don't see the option, [update Silk](/reference/troubleshooting/#updating-silk) first. Nothing changes for you unless you choose it. Silk keeps using your OpenRouter key until you switch.
 
+Pay for Claude instead? You can [use your Claude subscription](/getting-started/claude-subscription/) the same way.
+
 ## Set it up
 
 <Steps>
 1. Open the Silk panel and click the **gear icon** to open **Settings & tools**.
-2. Under **How do you want to power Silk?**, click **Use my ChatGPT subscription**.
+2. Under **Power Silk with**, click **ChatGPT**.
 3. Click **Sign in with ChatGPT**. Your browser opens OpenAI's sign-in page. Sign in and approve.
-4. Back in Silk, you'll see **Connected: your email, ChatGPT (your plan)**. That's it.
+4. Back in Silk, the ChatGPT row shows **Connected** with your plan, and you'll see **Signed in as** your email. Click **Done**. That's it.
 </Steps>
 
-A **Model** menu appears under the Connected line. Leave it on **Recommended** unless you have a reason to change it: Silk picks the best model your plan allows.
+From then on, Settings shows **Silk is powered by ChatGPT Plus · GPT-6.1 Sol** (or your plan and model). Click **Change** to see the options again.
+
+A **Model** menu appears under your email. Leave it on **Recommended** unless you have a reason to change it: Silk picks the best model your plan allows.
 
 <Aside type="note">
 **OpenAI asks you to "approve Codex". That's expected.** Codex is OpenAI's own app, and Silk includes it to connect to your ChatGPT plan. It's safe to approve. Silk never sees your ChatGPT password, and your sign-in is kept separate from any Codex app you've installed yourself.
@@ -41,12 +45,12 @@ On Free and Go, the smaller model sometimes acts before checking. In our tests i
 
 - **Silk is slower than on OpenRouter.** Every ChatGPT request takes about 4 to 5 seconds before the first word, so spoken answers take roughly 9 to 12 seconds, and tasks take about 2 to 3 times longer than on Silk's default OpenRouter model. If speed matters more to you than cost, OpenRouter is faster.
 - **There's no API spend panel.** It only shows when you use an OpenRouter key. On a ChatGPT plan, your usage counts against the plan, and you can check it in your ChatGPT (Codex) usage settings.
-- **Only ChatGPT plans work this way.** Claude, Gemini and Copilot subscriptions can't power Silk.
-- **The setup video still talks about OpenRouter.** At the API key step, Silk shows both options, and signing in with ChatGPT moves the video on just like saving a key.
+- **ChatGPT and Claude plans work this way.** See [Use Your Claude Subscription](/getting-started/claude-subscription/). Gemini and Copilot subscriptions can't power Silk.
+- **The setup video still talks about OpenRouter.** At the API key step, Silk shows all three options, and signing in with ChatGPT moves the video on just like saving a key.
 
-## Switching back to OpenRouter
+## Switching to Claude or OpenRouter
 
-In Settings, click **Use an OpenRouter key**. If you saved a key before, it still works. To disconnect your ChatGPT account, click **Sign out** under the Connected line.
+In Settings, click **Change**, then pick **Claude** or **OpenRouter**. If you saved an OpenRouter key before, it still works. To disconnect your ChatGPT account, pick **ChatGPT** and click **Sign out**.
 
 You can switch either way at any time. Some people keep both: ChatGPT for everyday use, and OpenRouter when they hit their plan's limit or want more speed.
 
@@ -70,12 +74,12 @@ Your ChatGPT plan's allowance has run out. This isn't a Silk bug or a Silk charg
 
 - wait for the reset,
 - upgrade your ChatGPT plan (Free and Go users are asked to upgrade to Plus), or
-- switch Silk to an OpenRouter key in Settings to keep going now.
+- switch Silk to Claude or an OpenRouter key in Settings to keep going now.
 
 ### "Your ChatGPT sign-in has expired"
 
-Open Settings and click **Sign in with ChatGPT** again.
+Open Settings, pick **ChatGPT** and click **Sign in with ChatGPT** again.
 
 ### I upgraded my ChatGPT plan, but Silk still shows the old one
 
-Silk normally picks up a plan change by itself, along with the extra models it unlocks. If it still shows your old plan, click **Sign out** under the Connected line, then **Sign in with ChatGPT** again.
+Silk normally picks up a plan change by itself, along with the extra models it unlocks. If it still shows your old plan, pick **ChatGPT** in Settings, click **Sign out**, then **Sign in with ChatGPT** again.

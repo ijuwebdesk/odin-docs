@@ -1,13 +1,13 @@
 ---
 title: Choosing an AI Model
-description: Which AI model works best in Silk, on OpenRouter or a ChatGPT plan, based on our October 2026 benchmark of 31 real-world tasks.
+description: Which AI model works best in Silk, on OpenRouter, a ChatGPT plan or a Claude plan, based on our October 2026 benchmark of 31 real-world tasks.
 sidebar:
   order: 4
 ---
 
 import { Aside } from '@astrojs/starlight/components'
 
-Silk works with any model on OpenRouter that supports image input and tools, and from Silk 1.1.79 it can also run on your [ChatGPT subscription](/getting-started/chatgpt-subscription/). So a common question is: which one should I use? Public leaderboards don't answer that well. They test puzzles and chat, not the work you hand Silk: organizing folders, filling in web forms, researching vendors, updating a CRM, fixing code, and following the skills and memories you've taught it.
+Silk works with any model on OpenRouter that supports image input and tools, and it can also run on your [ChatGPT subscription](/getting-started/chatgpt-subscription/) (from Silk 1.1.79) or your [Claude subscription](/getting-started/claude-subscription/) (from Silk 1.1.81). So a common question is: which one should I use? Public leaderboards don't answer that well. They test puzzles and chat, not the work you hand Silk: organizing folders, filling in web forms, researching vendors, updating a CRM, fixing code, and following the skills and memories you've taught it.
 
 So we built our own benchmark. It runs Silk's real agent, with the same instructions, tools and safety checks that ship in the app, on the kinds of tasks people actually use Silk for. Then it checks the results the way you would: did the work get done, done correctly, and done without breaking anything?
 
@@ -89,12 +89,16 @@ What this means:
 - **Plus is generous.** All 62 tasks used 40% of one 5-hour window and 6% of the weekly allowance: about 150 tasks every 5 hours, or 1,000 a week.
 - **Free and Go are a step down.** They only offer the smaller GPT-6 Luna, and both failed the same test twice: they refunded an order without asking which of two customers named Dana was meant. Everything else passed. The slower Go time most likely reflects server load when we ran it, not the plan.
 
+## On a Claude plan
+
+From Silk 1.1.81 you can [power Silk with your Claude subscription](/getting-started/claude-subscription/). We haven't run the full benchmark on it yet, so there are no Claude results here for now. We'll add them once we have. Until then, leave the model on **Recommended (Sonnet)**: Opus is more capable but uses up your plan's allowance faster, and Haiku is quicker but less careful on multi-step work.
+
 ## Limits of this benchmark
 
 - **It covers Silk's Background agent,** which handles most real usage. Guide mode (voice answers with on-screen pointing) and live Act mode (Silk clicking and typing on your screen) weren't part of this test.
-- **Models were tested in October 2026.** Models, providers, prices and ChatGPT plan allowances change often, and we plan to re-run the benchmark as new models arrive.
+- **Models were tested in October 2026.** Models, providers, prices and ChatGPT and Claude plan allowances change often, and we plan to re-run the benchmark as new models arrive.
 - **Your workflows may differ.** If a model isn't working for you, try another from the recommended list.
 
 ## Free models
 
-OpenRouter also lists free models (their IDs end in `:free`). Silk can use one if it supports **image input** and **tools**, but free models are rate-limited and less accurate, so expect slower and less reliable results on screen tasks. For most people, a paid model with a [credit limit](/getting-started/first-setup/#step-1--get-an-openrouter-api-key) on the key is the better way to keep costs low: usage on the recommended models is around a cent per task, and the limit means you can never be charged more than you set.
+OpenRouter also lists free models (their IDs end in `:free`). Silk can use one if it supports **image input** and **tools**, but free models are rate-limited and less accurate, so expect slower and less reliable results on screen tasks. For most people, a paid model with a [credit limit](/getting-started/first-setup/#get-an-openrouter-api-key) on the key is the better way to keep costs low: usage on the recommended models is around a cent per task, and the limit means you can never be charged more than you set.

@@ -9,13 +9,22 @@ sidebar:
 
 ### Do I have to pay for the AI separately?
 
-Yes, and it's usually very little. Silk is **bring your own AI engine**: your purchase is the Silk software, and the AI runs on your own [OpenRouter](https://openrouter.ai) account, which bills you directly for what you use. With the default model, a typical task costs around a cent. Silk never charges you for AI usage. See [First Setup](/getting-started/first-setup/#what-does-the-ai-cost).
+Not if you already pay for Claude or ChatGPT. Silk is **bring your own AI engine**: your purchase is the Silk software, and the AI runs on your own account. You have three choices:
+
+- **Your Claude plan** (Pro, Max, Team or Enterprise): nothing extra to pay.
+- **Your ChatGPT plan**: nothing extra to pay.
+- **An [OpenRouter](https://openrouter.ai) account**, which bills you directly for what you use. With the default model, a typical task costs around a cent.
+
+Silk never charges you for AI usage. See [First Setup](/getting-started/first-setup/#step-1--choose-how-to-power-silk).
 
 ### Can I use my ChatGPT, Claude, Gemini or Copilot subscription?
 
-**ChatGPT, yes.** From Silk 1.1.79, Settings has **Use my ChatGPT subscription**, which runs Silk on your ChatGPT plan with no OpenRouter account or extra AI bill. Plus or Pro is recommended. See [Use Your ChatGPT Subscription](/getting-started/chatgpt-subscription/).
+**Claude and ChatGPT, yes.** In Settings, under **Power Silk with**, pick **Claude** or **ChatGPT** and sign in. Silk then runs on your plan, with no OpenRouter account or extra AI bill.
 
-Claude, Gemini and Copilot subscriptions can't power Silk. OpenRouter gives you models from all the major providers under one key.
+- **Claude** (from Silk 1.1.81) needs a paid plan: Pro, Max, Team or Enterprise. See [Use Your Claude Subscription](/getting-started/claude-subscription/).
+- **ChatGPT** (from Silk 1.1.79) works on any plan; Plus or Pro is recommended. See [Use Your ChatGPT Subscription](/getting-started/chatgpt-subscription/).
+
+Gemini and Copilot subscriptions can't power Silk. OpenRouter gives you models from all the major providers under one key.
 
 ### Can I run Silk for free?
 
@@ -23,11 +32,11 @@ OpenRouter has free models (IDs ending in `:free`), and Silk can use one that su
 
 ### Which AI model should I use?
 
-The default, `deepseek/deepseek-v4.1-flash`, came top in our benchmark: it passed every test task, was the fastest of the accurate models, and costs about a cent per task. See [Choosing an AI Model](/reference/ai-models/) for alternatives.
+On a Claude or ChatGPT plan, leave the model on **Recommended**. On OpenRouter, the default, `deepseek/deepseek-v4.1-flash`, came top in our benchmark: it passed every test task, was the fastest of the accurate models, and costs about a cent per task. See [Choosing an AI Model](/reference/ai-models/) for alternatives.
 
 ### Will I get a surprise bill?
 
-Not if you set a **credit limit** on your OpenRouter key: the key stops working when it reaches the limit. Silk's Settings also show how much your key has spent today.
+No. On a Claude or ChatGPT plan, Silk only uses your plan's allowance and never adds a charge. On OpenRouter, set a **credit limit** on your key: the key stops working when it reaches the limit. Silk's Settings also show how much your key has spent today.
 
 ## Computers and platforms
 
@@ -76,7 +85,7 @@ No. Silk looks at your screen when you ask it something, so it can see what you'
 
 ### Where do my requests go?
 
-Your requests go from your computer to the AI model you chose, through your own OpenRouter account. Your API key is stored on your computer and only sent to OpenRouter. If you use your ChatGPT subscription instead, requests go to OpenAI through your ChatGPT account, and Silk never sees your ChatGPT password.
+Your requests go from your computer to the AI model you chose, through your own OpenRouter account. Your API key is stored on your computer and only sent to OpenRouter. If you use your Claude or ChatGPT subscription instead, requests go to Anthropic or OpenAI through your own account, and Silk never sees your Claude or ChatGPT password.
 
 ### Does Silk collect data about me?
 

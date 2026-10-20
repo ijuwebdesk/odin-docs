@@ -1,13 +1,13 @@
 ---
 title: First Setup
-description: How to get your OpenRouter API key, choose a model, and configure Silk for the first time.
+description: Choose how to power Silk (your Claude plan, your ChatGPT plan, or an OpenRouter key) and configure it for the first time.
 sidebar:
   order: 3
 ---
 
 import { Steps, Aside, LinkCard } from '@astrojs/starlight/components'
 
-After installing Silk and granting permissions, the settings panel opens automatically on first launch — Silk needs an API key before it can respond to anything.
+After installing Silk and granting permissions, the settings panel opens automatically on first launch. Silk needs an AI engine before it can respond to anything, and there are three ways to give it one. Pick whichever suits you: you can switch at any time.
 
 {/* VIDEO: "First Use.mov" — full install + first-use walkthrough (Mac & Windows). Consider replacing the embed below with it once uploaded. */}
 
@@ -20,9 +20,46 @@ After installing Silk and granting permissions, the settings panel opens automat
   />
 </div>
 
-## Step 1 — Get an OpenRouter API key
+## Step 1 — Choose how to power Silk
 
-Silk uses [OpenRouter](https://openrouter.ai) to access AI models. OpenRouter is a single API that gives you access to hundreds of models from different providers (Anthropic, Google, Meta, Mistral, and many more) under one key and one bill.
+In Settings, under **Power Silk with**, you'll see three options:
+
+| Option | Best if | What it costs |
+|---|---|---|
+| **Claude** | You already pay for Claude Pro, Max, Team or Enterprise | Nothing extra: it uses your Claude plan |
+| **ChatGPT** | You already pay for ChatGPT (Plus or Pro recommended; Free and Go work too) | Nothing extra: it uses your ChatGPT plan |
+| **OpenRouter** | You don't have either subscription, or you want the fastest responses and a choice of hundreds of models | Pay per use, around a cent per task with the default model |
+
+None of them is required. Choose one, follow its steps below, then carry on to [Step 2](#step-2--review-the-other-settings).
+
+<Aside type="tip">
+**Not sure?** If you already pay for Claude or ChatGPT, use that: there's no extra account or bill. Otherwise, OpenRouter takes a few minutes to set up, and it's the fastest of the three.
+</Aside>
+
+## Use your Claude subscription
+
+<Steps>
+1. Under **Power Silk with**, click **Claude**.
+2. If Claude Code isn't installed yet, click **Install Claude Code**. Silk installs Anthropic's free app for you in about a minute, with no admin password.
+3. Click **Sign in with Claude**, sign in in your browser and approve.
+</Steps>
+
+Available from Silk 1.1.81. Full guide, models and fixes: [Use Your Claude Subscription](/getting-started/claude-subscription/).
+
+## Use your ChatGPT subscription
+
+<Steps>
+1. Under **Power Silk with**, click **ChatGPT**.
+2. Click **Sign in with ChatGPT**, sign in in your browser and approve.
+</Steps>
+
+Available from Silk 1.1.79. Full guide, plans and fixes: [Use Your ChatGPT Subscription](/getting-started/chatgpt-subscription/).
+
+## Use an OpenRouter key
+
+### Get an OpenRouter API key
+
+[OpenRouter](https://openrouter.ai) is a single service that gives you access to hundreds of models from different providers (Anthropic, Google, Meta, Mistral, and many more) under one key and one bill.
 
 <Steps>
 1. Go to [openrouter.ai](https://openrouter.ai) and create an account.
@@ -40,22 +77,23 @@ Setting a monthly credit limit on the key is a good way to stay in control of sp
 **Can't tick the "agree" box on OpenRouter?** That's a problem on the OpenRouter website, not in Silk. Try a different browser (Chrome or Edge), or zoom out with `Ctrl` + `-` (`⌘` + `-` on Mac) in case the checkbox sits off-screen.
 </Aside>
 
-### What does the AI cost?
+### What does OpenRouter cost?
 
-Silk is **bring your own AI engine**: your purchase is the Silk software, and the AI "brain" runs on your own OpenRouter account. OpenRouter bills you directly for what you use; Silk never charges you for AI usage.
+Silk is **bring your own AI engine**: your purchase is the Silk software, and the AI "brain" runs on your own account. With OpenRouter, it bills you directly for what you use; Silk never charges you for AI usage.
 
 - **It's usage-based, and small.** With the default model, a typical task costs around a cent. A credit top-up lasts a long time for everyday use.
 - **The minimum top-up is OpenRouter's**, not a Silk fee, and it isn't a subscription.
-- **Already pay for ChatGPT?** From Silk 1.1.79 you can [use your ChatGPT subscription](/getting-started/chatgpt-subscription/) instead, with no OpenRouter account at all. Claude, Gemini and Copilot subscriptions can't power Silk.
+- **Already pay for Claude or ChatGPT?** You don't need OpenRouter at all: use your [Claude](/getting-started/claude-subscription/) or [ChatGPT](/getting-started/chatgpt-subscription/) plan instead. Gemini and Copilot subscriptions can't power Silk.
 - **You're always in control.** A credit limit on the key (step 4 above) means you can never be charged more than you set.
 
-## Step 2 — Enter the key in Silk
+### Enter the key in Silk
 
 <Steps>
 1. Open the Silk panel (click the Silk icon in your menu bar or system tray).
 2. Click the **gear icon** to open Settings.
-3. Paste your key into the **OpenRouter API Key** field.
-4. Click **Save**.
+3. Under **Power Silk with**, click **OpenRouter**.
+4. Paste your key into the **OpenRouter API Key** field.
+5. Click **Save**.
 </Steps>
 
 Silk stores the key locally on your device. It's only ever sent to OpenRouter's servers when making AI requests.
@@ -70,15 +108,13 @@ If Silk says the key is invalid, it has usually picked up an invisible space. Co
 **Never share your API key** with anyone, including Silk support: we will never ask for it. If you've pasted it into an email or chat, delete that key in OpenRouter and create a new one.
 </Aside>
 
-Silk's setup video waits on this step: it continues once a valid key is saved, or once you've signed in with ChatGPT. If the video doesn't move on, neither has happened yet.
+### Choose an OpenRouter model
 
-## Step 3 — Choose a model
-
-In Settings, the **Model ID** field controls which model Silk uses. This is a free-text field — type any model ID from OpenRouter's catalogue.
+In Settings, with OpenRouter selected, the **Model ID** field controls which model Silk uses. This is a free-text field — type any model ID from OpenRouter's catalogue.
 
 **Default model:** `deepseek/deepseek-v4.1-flash`, the fastest model with a perfect score in our [October 2026 benchmark](/reference/ai-models/), at about a cent per task.
 
-### Recommended models
+#### Recommended models
 
 | Model ID | Notes |
 |---|---|
@@ -93,7 +129,7 @@ The Model ID field suggests the first three as you type. For the full results, a
 Model IDs follow the format `provider/model-name`. Copy the ID from the table above and paste it directly into the Model ID field in Silk's settings.
 </Aside>
 
-### Finding other compatible models
+#### Finding other compatible models
 
 <div style="position:relative;padding-bottom:79.7%;height:0;overflow:hidden;border-radius:8px;margin:1.5rem 0">
   <iframe
@@ -108,13 +144,17 @@ Not every model on OpenRouter works with Silk. To see only compatible ones, use 
 
 [Browse compatible models on OpenRouter →](https://openrouter.ai/models?input_modalities=text,image&supported_parameters=tools)
 
-### Changing the model
+#### Changing the model
 
 You can switch models any time in Settings — just type a new model ID and click Save. The change takes effect on the next push-to-talk query.
 
-## Step 4 — Review the other settings
+### The setup video
 
-Below the API key, a few more settings are worth a quick look:
+Silk's setup video waits at the API key step until Silk has an AI engine: it continues once a valid OpenRouter key is saved, or once you've signed in with Claude or ChatGPT. The narration only mentions OpenRouter, but any of the three moves it on. If the video doesn't continue, none of them has finished yet.
+
+## Step 2 — Review the other settings
+
+Below **Power Silk with**, a few more settings are worth a quick look:
 
 - **High-accuracy pointing** — turn this on when you work in precise tools (Photoshop, design apps) so the [cursor overlay](/features/cursor-overlay/) lands exactly on the right element.
 - **Anonymous usage data** — on by default. It's fully anonymous (no screenshots, recordings, or prompts) and only used to improve Silk. Toggle it off any time to opt out.
@@ -122,7 +162,7 @@ Below the API key, a few more settings are worth a quick look:
 
 Click **Save** and your settings are stored.
 
-## Step 5 — Try it
+## Step 3 — Try it
 
 Silk's push-to-talk is **press-to-toggle**, not hold:
 
@@ -131,7 +171,6 @@ Silk's push-to-talk is **press-to-toggle**, not hold:
 3. Press **`Ctrl+Space`** again to stop — Silk then processes and responds within a few seconds.
 
 If nothing happens, check:
-- The key is saved correctly (the field shows dots, not empty)
-- You have credits on your OpenRouter account
+- Settings shows **Silk is powered by** your choice. On OpenRouter, the key is saved (the field shows dots, not empty) and your account has credits. On Claude or ChatGPT, you're signed in and haven't reached your plan's usage limit
 - Microphone permission is granted (shield icon in the panel)
 - The correct microphone is selected in the audio settings

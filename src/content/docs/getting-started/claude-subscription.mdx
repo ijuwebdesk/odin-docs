@@ -1,0 +1,103 @@
+---
+title: Use Your Claude Subscription
+description: Power Silk with your Claude plan instead of an OpenRouter key. Installing Claude Code, signing in, choosing a model, usage limits, and fixes for common problems.
+sidebar:
+  order: 5
+---
+
+import { Steps, Aside } from '@astrojs/starlight/components'
+
+If you already pay for Claude, you can use that plan to power Silk. You don't need an OpenRouter account, an API key or credits, and Silk's AI costs you nothing on top of your Claude plan.
+
+It works on macOS and Windows from **Silk 1.1.81**. If you don't see the option, [update Silk](/reference/troubleshooting/#updating-silk) first. Nothing changes for you unless you choose it.
+
+## What you need
+
+- **A paid Claude plan: Pro, Max, Team or Enterprise.** Silk connects to your plan through Claude Code, and Anthropic only includes Claude Code in paid plans.
+- **Claude Code**, Anthropic's free app. You don't need to know how to use it, and Silk can install it for you in one click (below).
+
+## Set it up
+
+<Steps>
+1. Open the Silk panel and click the **gear icon** to open **Settings & tools**.
+2. Under **Power Silk with**, click **Claude**.
+3. If it says **Not installed**, click **Install Claude Code**. Silk downloads Anthropic's official installer from claude.ai and runs it for you. It needs no admin password and usually takes under a minute.
+4. Click **Sign in with Claude**. Your browser opens Anthropic's sign-in page. Sign in and approve.
+5. Back in Silk, the Claude row shows **Connected** with your plan, and you'll see **Signed in as** your email. Click **Done**. That's it.
+</Steps>
+
+From then on, Settings shows **Silk is powered by Claude Pro · Sonnet** (or your plan and model). Click **Change** to see the options again.
+
+<Aside type="note">
+**Anthropic asks you to approve Claude Code. That's expected.** Claude Code is Anthropic's own app, and it's how Silk connects to your Claude plan. It's safe to approve. Silk never sees your Claude password, and its sign-in is kept separate from your own Claude Code: if you already use Claude Code, your login, settings and projects there aren't touched. That's also why you sign in once more inside Silk, even if you're already signed in to Claude Code.
+</Aside>
+
+## Choosing a model
+
+Once you're connected, a **Model** menu appears. Leave it on **Recommended (Sonnet)** unless you have a reason to change it.
+
+| Model | When to use it |
+|---|---|
+| **Sonnet** | **Recommended.** The best balance of quality, speed and plan usage for everyday Silk tasks. |
+| **Opus** | Anthropic's most capable model. Worth trying for long, complicated jobs, but it uses up your plan's allowance faster. |
+| **Haiku** | The fastest and lightest. Fine for simple tasks, less careful on multi-step work. |
+
+Silk always uses Anthropic's latest version of each model, so new Claude releases reach you without a Silk update.
+
+## What to expect
+
+- **Usage counts against your Claude plan.** Silk shares your plan's allowance with everything else you do in Claude, including the Claude app and Claude Code. Heavy use, or Opus, can reach your plan's limit sooner. Max plans have a much bigger allowance than Pro.
+- **There's no API spend panel.** It only shows when you use an OpenRouter key. You can check your usage in your Claude account's usage settings.
+- **We haven't benchmarked Claude in Silk yet.** Our [model results](/reference/ai-models/) cover OpenRouter and ChatGPT plans. We'll add Claude when we've run the full test.
+- **The setup video still talks about OpenRouter.** At the API key step, Silk shows all three options, and signing in with Claude moves the video on just like saving a key.
+
+## Switching to ChatGPT or OpenRouter
+
+In Settings, click **Change**, then pick **ChatGPT** or **OpenRouter**. If you saved an OpenRouter key before, it still works. To disconnect your Claude account, pick **Claude** and click **Sign out**.
+
+You can switch at any time. Some people keep two options set up: Claude for everyday use, and OpenRouter for when they hit their plan's limit.
+
+## Problems
+
+### Installing Claude Code didn't finish
+
+Silk shows **Install didn't finish** with the reason. Click **Try installing again**. If it fails again, install Claude Code yourself:
+
+<Steps>
+1. Click **Rather install it yourself?**
+2. Silk shows one command. Copy it into **Terminal** (Mac) or **PowerShell** (Windows) and press Enter.
+3. When it finishes, come back to Silk and click **I've installed it**.
+</Steps>
+
+**More ways to install Claude Code** opens Anthropic's page with other options. A company computer may block the installer; if so, ask your IT team, or use [ChatGPT](/getting-started/chatgpt-subscription/) or an [OpenRouter key](/getting-started/first-setup/#use-an-openrouter-key) instead.
+
+### The browser sign-in doesn't come back to Silk
+
+- **The browser didn't open:** click **Browser didn't open? Open the sign-in page**.
+- **Claude shows you a code:** copy it, paste it into the **Code from Claude** box in Silk, and click **Submit**.
+- **You want to start over:** click **Cancel**, then **Sign in with Claude** again.
+
+### Sign-in fails, or Claude says your plan doesn't include Claude Code
+
+Check that you're signing in with the account that has your paid Claude plan. Free Claude accounts can't be used.
+
+### "You've reached your Claude plan's usage limit for now"
+
+Your Claude plan's allowance has run out. This isn't a Silk bug or a Silk charge. Silk's message shows when it resets. You can:
+
+- wait for the reset,
+- switch to a lighter model (Sonnet or Haiku) if you were on Opus,
+- upgrade your Claude plan, or
+- switch Silk to ChatGPT or an OpenRouter key in Settings to keep going now.
+
+### "Your Claude sign-in has expired"
+
+Open Settings, pick **Claude** and click **Sign in with Claude** again.
+
+### "Claude is overloaded right now"
+
+Anthropic's servers are busy. Wait a minute and try again.
+
+### "Using your Claude subscription is paused for now"
+
+We've temporarily turned off Claude mode for everyone, for example while we adapt to a change on Anthropic's side. Silk has moved you to OpenRouter. Pick **ChatGPT** or **OpenRouter** in Settings to keep using Silk, and check back later. Tasks that were already running finish normally.
