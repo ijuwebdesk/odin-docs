@@ -26,6 +26,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
         <a href="#/all" data-tab="all">All</a>
         <a href="#/insights" data-tab="insights">Insights</a>
         <a href="#/articles" data-tab="articles">Articles</a>
+        <a href="#/knowledge" data-tab="knowledge">Knowledge</a>
       </nav>
       <div class="bar-end">
         <span class="who" data-who></span>
@@ -553,5 +554,62 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
     .insights :global(.meter) {
       display: none;
     }
+  }
+
+  .insights :global(.week) {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.35rem 0;
+    font-size: 0.9rem;
+  }
+  .insights :global(.week .meter) {
+    width: auto;
+  }
+  .insights :global(.fact) {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0.6rem 0;
+    padding: 0.75rem;
+    border: 1px solid var(--admin-border);
+    border-radius: 0.75rem;
+    background: var(--sl-color-black);
+  }
+  .insights :global(.fact textarea) {
+    width: 100%;
+    min-height: 3.5rem;
+    margin: 0;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--sl-color-gray-1);
+    font: inherit;
+    font-size: 0.92rem;
+    resize: vertical;
+  }
+  .insights :global(.fact-foot) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+  }
+  .insights :global(.fact-foot select) {
+    padding: 0.35rem 0.5rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    background: var(--sl-color-black);
+    color: var(--sl-color-gray-1);
+    font: inherit;
+    font-size: 0.85rem;
+  }
+  .insights :global(.fact-foot a) {
+    color: var(--sl-color-text-accent);
+  }
+  .insights :global(.fact-actions) {
+    display: flex;
+    gap: 0.4rem;
+    margin-left: auto;
   }
 </style>

@@ -8,7 +8,8 @@
     "preview": "astro preview",
     "dev:support": "astro build && npx wrangler pages dev dist",
     "db:migrate": "npx wrangler d1 migrations apply silk-support --remote && npx wrangler d1 migrations apply silk-support-preview --remote -e preview",
-    "deploy:mailer": "npx wrangler deploy --config workers/mailer/wrangler.jsonc"
+    "deploy:mailer": "npx wrangler deploy --config workers/mailer/wrangler.jsonc",
+    "playbook:sync": "node scripts/sync-playbook.mjs"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.32.5",

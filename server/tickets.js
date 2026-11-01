@@ -1,5 +1,6 @@
 /** Tickets: creation, customer replies, reads, and the AI draft. Shared by every route. */
 import { confirmToCustomer, notifyCustomerReply, notifyNewTicket } from './mail.js'
+import { loadExamples, loadFacts, loadPlaybook } from './learning.js'
 import { complete, DEFAULT_DRAFT_MODEL } from './openrouter.js'
 import { draftMessages, splitDraft } from './prompts.js'
 
@@ -100,13 +101,16 @@ export async function generateDraft(env, ticketId, note = '') {
 
   try {
     const ticket = await loadTicket(db, ticketId)
-    const [transcript, thread] = await Promise.all([
+    const [transcript, thread, playbook, facts, examples] = await Promise.all([
       loadTranscript(db, ticket.conversation_id),
       loadThread(db, ticketId),
+      loadPlaybook(db),
+      loadFacts(db),
+      loadExamples(db, ticketId),
     ])
     const result = await complete(env, {
       model: env.DRAFT_MODEL ?? DEFAULT_DRAFT_MODEL,
-      messages: draftMessages({ ticket, transcript, thread, note }),
+      messages: draftMessages({ ticket, transcript, thread, note, playbook, facts, examples }),
       maxTokens: 4000,
     })
     const { draft, notes } = splitDraft(result.text)
@@ -114,10 +118,10 @@ export async function generateDraft(env, ticketId, note = '') {
 
     await db
       .prepare(
-        `UPDATE tickets SET draft = ?, draft_notes = ?, draft_status = 'ready', draft_model = ?, draft_updated_at = ?
-         WHERE id = ?`,
+        `UPDATE tickets SET draft = ?, draft_original = ?, draft_notes = ?, draft_status = 'ready', draft_model = ?,
+         draft_updated_at = ? WHERE id = ?`,
       )
-      .bind(draft, notes, result.model, Date.now(), ticketId)
+      .bind(draft, draft, notes, result.model, Date.now(), ticketId)
       .run()
   } catch (err) {
     console.error('draft failed', ticketId, err)

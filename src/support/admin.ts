@@ -4,6 +4,7 @@
  *   #/t/1001                              one ticket, inside the last list
  *   #/insights                            chat stats and doc gaps
  *   #/articles                            "was this page helpful?" votes and comments
+ *   #/knowledge                           how the AI drafts are doing, and the facts they learn
  */
 import { escapeHtml, renderMarkdown, timeAgo, visibleAnswer } from './render'
 
@@ -418,17 +419,162 @@ export function initAdmin(root: HTMLElement) {
       }`
   }
 
+  // ── Knowledge ────────────────────────────────────────────────────────────
+  type Fact = {
+    id: number
+    fact: string
+    audience: 'internal' | 'public'
+    ticket_id: number | null
+    subject: string | null
+    created_at: number
+  }
+
+  async function loadKnowledge() {
+    insights.innerHTML = '<p class="placeholder">Loading…</p>'
+    const { days, totals, weeks, suggested, approved, playbook } = await api<{
+      days: number
+      totals: Record<string, number | null>
+      weeks: { week: number; sent: number; match: number }[]
+      suggested: Fact[]
+      approved: Fact[]
+      playbook: { updated_at: number; chars: number } | null
+    }>('/knowledge')
+    const n = (k: string) => totals[k] ?? 0
+    const measured = n('used') + n('edited') + n('rewritten')
+    const pct = (k: string) => (measured ? `${Math.round((n(k) / measured) * 100)}%` : '–')
+
+    const audienceSelect = (f?: Fact) => `<select data-audience aria-label="Who may see this fact">
+        <option value="internal" ${f?.audience !== 'public' ? 'selected' : ''}>Ticket drafts only</option>
+        <option value="public" ${f?.audience === 'public' ? 'selected' : ''}>Also the help-site chat</option>
+      </select>`
+    const factCard = (f: Fact, actions: string) => `<div class="fact" data-fact="${f.id}">
+        <textarea data-text aria-label="Fact">${escapeHtml(f.fact)}</textarea>
+        <div class="fact-foot">
+          ${audienceSelect(f)}
+          <span class="hint">${f.ticket_id ? `from <a href="#/t/${f.ticket_id}">${ref(f.ticket_id)}</a>${f.subject ? ` · ${escapeHtml(f.subject)}` : ''}` : 'added by hand'} · ${timeAgo(f.created_at)}</span>
+          <span class="fact-actions">${actions}</span>
+        </div>
+      </div>`
+
+    insights.innerHTML = `
+      <div class="stats">
+        <div class="stat"><b>${n('sent')}</b><span>replies sent, last ${days} days</span></div>
+        <div class="stat"><b>${pct('used')}</b><span>sent the AI draft (nearly) as is</span></div>
+        <div class="stat"><b>${pct('edited')}</b><span>edited the draft</span></div>
+        <div class="stat"><b>${pct('rewritten')}</b><span>rewrote it</span></div>
+      </div>
+      <p class="hint">Measured on replies that had an AI draft, by how much of the draft’s wording survived.
+        ${n('no_draft') ? `${n('no_draft')} more were sent without a draft to compare (including all replies from before this was measured).` : ''}</p>
+      ${
+        weeks.length
+          ? `<h2>Draft kept, by week</h2>${weeks
+              .map(
+                (w) => `<div class="week"><span>${new Date(w.week).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
+                  <span class="meter"><span style="width:${Math.round(w.match * 100)}%"></span></span>
+                  <span class="votes">${Math.round(w.match * 100)}% · ${w.sent} ${w.sent === 1 ? 'reply' : 'replies'}</span></div>`,
+              )
+              .join('')}`
+          : ''
+      }
+
+      <h2>Suggested facts ${suggested.length ? `<span class="pill pending">${suggested.length}</span>` : ''}</h2>
+      <p class="hint">When a reply you send says something the docs and playbook don’t, the AI proposes it here.
+        Approve it and the next draft knows it. Edit the wording first if it’s off.</p>
+      ${
+        suggested.length
+          ? suggested
+              .map((f) =>
+                factCard(
+                  f,
+                  `<button type="button" class="btn primary" data-set="approved">Approve</button>
+                   <button type="button" class="btn" data-set="dismissed">Dismiss</button>`,
+                ),
+              )
+              .join('')
+          : '<p class="placeholder">Nothing to review.</p>'
+      }
+
+      <h2>Approved facts</h2>
+      <p class="hint">Every draft reads these, and the help-site chat reads the ones marked for it.
+        <code>npm run playbook:sync</code> moves them into SUPPORT.md.</p>
+      ${approved
+        .map((f) =>
+          factCard(
+            f,
+            `<button type="button" class="btn" data-set="approved">Save</button>
+             <button type="button" class="btn" data-set="dismissed">Remove</button>`,
+          ),
+        )
+        .join('')}
+      <form class="fact" data-add>
+        <textarea name="fact" placeholder="Add a fact by hand, e.g. “Refund requests go to Ijlal before anyone replies.”" aria-label="New fact"></textarea>
+        <div class="fact-foot">${audienceSelect()}<span class="fact-actions"><button type="submit" class="btn">Add fact</button></span></div>
+      </form>
+
+      <h2>Internal playbook</h2>
+      <p class="hint">${
+        playbook
+          ? `SUPPORT.md, curated, ${Math.round(playbook.chars / 1000)}k characters, synced ${timeAgo(playbook.updated_at)}.`
+          : 'Not synced yet: drafts only know the public docs.'
+      } Run <code>npm run playbook:sync</code> after SUPPORT.md changes.</p>`
+
+    insights.querySelectorAll<HTMLElement>('[data-fact]').forEach((card) => {
+      card.querySelectorAll<HTMLButtonElement>('[data-set]').forEach((button) =>
+        button.addEventListener('click', async () => {
+          button.disabled = true
+          try {
+            await api(`/knowledge/${card.dataset.fact}`, {
+              method: 'PATCH',
+              body: JSON.stringify({
+                status: button.dataset.set,
+                fact: card.querySelector<HTMLTextAreaElement>('[data-text]')!.value,
+                audience: card.querySelector<HTMLSelectElement>('[data-audience]')!.value,
+              }),
+            })
+            toast(button.dataset.set === 'dismissed' ? 'Fact removed' : 'Fact saved')
+            await loadKnowledge()
+          } catch (err) {
+            toast((err as Error).message)
+            button.disabled = false
+          }
+        }),
+      )
+    })
+    const add = insights.querySelector<HTMLFormElement>('[data-add]')!
+    add.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      try {
+        await api('/knowledge', {
+          method: 'POST',
+          body: JSON.stringify({
+            fact: add.querySelector<HTMLTextAreaElement>('[name="fact"]')!.value,
+            audience: add.querySelector<HTMLSelectElement>('[data-audience]')!.value,
+          }),
+        })
+        toast('Fact added')
+        await loadKnowledge()
+      } catch (err) {
+        toast((err as Error).message)
+      }
+    })
+  }
+
   // ── Routing ──────────────────────────────────────────────────────────────
   async function route() {
     clearTimeout(pollTimer)
     const hash = location.hash.replace(/^#\/?/, '') || 'open'
     try {
-      if (hash === 'insights' || hash === 'articles') {
+      const pages: Record<string, () => Promise<void>> = {
+        insights: loadInsights,
+        articles: loadArticles,
+        knowledge: loadKnowledge,
+      }
+      if (pages[hash]) {
         openId = null
         markTab(hash)
         layout.hidden = true
         insights.hidden = false
-        await (hash === 'insights' ? loadInsights() : loadArticles())
+        await pages[hash]()
         return
       }
       layout.hidden = false

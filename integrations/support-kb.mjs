@@ -24,7 +24,7 @@ const OUT_FILE = fileURLToPath(new URL('../server/kb.generated.js', import.meta.
  * are full of them, so content copied from there is checked on every build.
  * A match fails the build, naming the file and the rule.
  */
-const SENSITIVE = [
+export const SENSITIVE = [
   ['an OpenRouter API key', /sk-or-v1-[A-Za-z0-9]{16,}/],
   ['a payment-provider or cloud secret', /\b(?:sk|rk)_(?:live|test)_[A-Za-z0-9]{8,}|\bAKIA[0-9A-Z]{16}\b|\bgh[pousr]_[A-Za-z0-9]{20,}|\bxox[abpr]-[A-Za-z0-9-]{10,}/],
   ['a private key', /-----BEGIN [A-Z ]*PRIVATE KEY-----/],
@@ -35,7 +35,7 @@ const SENSITIVE = [
   ['an internal link or code', /calendly\.com|kvsocial|ijuwebdesk\/learn|OdinExclusive|dfy\?k=/i],
   ['a payment-platform product ID', /\b(?:product|bump|upsell)-\d{2,}\b/],
 ]
-const PUBLIC_EMAILS = new Set(['support@heysilkai.com', 'hello@heysilkai.com'])
+export const PUBLIC_EMAILS = new Set(['support@heysilkai.com', 'hello@heysilkai.com'])
 
 function assertPublishable(file, source) {
   const where = relative(DOCS_DIR, file)

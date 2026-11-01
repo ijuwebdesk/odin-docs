@@ -8,6 +8,7 @@
  * Responds with a text/plain stream and the id in X-Conversation-Id.
  */
 import { error, readJson, text } from '../../server/http.js'
+import { loadFacts } from '../../server/learning.js'
 import { allow, ipHash, verifyTurnstile } from '../../server/limits.js'
 import { DEFAULT_CHAT_MODEL, stream } from '../../server/openrouter.js'
 import { chatMessages, NO_ANSWER_MARKER } from '../../server/prompts.js'
@@ -70,7 +71,7 @@ export async function onRequestPost({ request, env, waitUntil }) {
   try {
     answer = await stream(env, {
       model: env.CHAT_MODEL ?? DEFAULT_CHAT_MODEL,
-      messages: chatMessages(history),
+      messages: chatMessages(history, await loadFacts(db, { publicOnly: true })),
       // Headroom for models that reason before answering; reasoning counts toward the cap.
       maxTokens: 2500,
     })
