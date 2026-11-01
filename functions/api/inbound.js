@@ -7,7 +7,9 @@
  * ticket. Only the Worker can call this: it must present INBOUND_SECRET.
  *
  * Body: { fromName, fromEmail, subject, text, inReplyTo, references, attachments }
+ * `attachments` lists the files the Worker stored in R2: [{ key, filename, contentType, size, inline }].
  */
+import { validAttachments } from '../../server/attachments.js'
 import { error, isEmail, json, readJson, text } from '../../server/http.js'
 import { messageIds, stripQuoted } from '../../server/inbound.js'
 import { allow } from '../../server/limits.js'
@@ -48,10 +50,9 @@ export async function onRequestPost({ request, env, waitUntil }) {
   const fromEmail = text(body.fromEmail, 254).toLowerCase()
   if (!isEmail(fromEmail)) return error(400, 'No usable sender address')
   const subject = text(body.subject, 300)
+  const attachments = validAttachments(body.attachments)
   let message = stripQuoted(text(body.text, 20000))
-  if (body.attachments > 0) {
-    message += `\n\n[${body.attachments} attachment(s) were forwarded to the team's inbox; they aren't stored here.]`
-  }
+  if (!message && attachments.length) message = '(No message text, only attachments.)'
   if (!message) return json({ ok: true, ignored: 'empty message' })
 
   if (!(await allow(env.DB, `inbound:${fromEmail}`, 20, 86400))) {
@@ -65,7 +66,7 @@ export async function onRequestPost({ request, env, waitUntil }) {
     references: text(body.references, 5000),
   })
   if (existing) {
-    await addCustomerReply(env, waitUntil, existing, message)
+    await addCustomerReply(env, waitUntil, existing, message, attachments)
     return json({ ok: true, ticket: existing.id, action: 'reply' })
   }
 
@@ -80,6 +81,7 @@ export async function onRequestPost({ request, env, waitUntil }) {
         .trim()
         .slice(0, 150) || message.split('\n')[0].slice(0, 80),
     question: message,
+    attachments,
   })
   return json({ ok: true, ticket: id, action: 'new' })
 }

@@ -1,4 +1,5 @@
 /** Tickets: creation, customer replies, reads, and the AI draft. Shared by every route. */
+import { attachmentInserts, attachmentParts, loadAttachments } from './attachments.js'
 import { confirmToCustomer, notifyCustomerReply, notifyNewTicket } from './mail.js'
 import { loadExamples, loadFacts, loadPlaybook } from './learning.js'
 import { complete, DEFAULT_DRAFT_MODEL } from './openrouter.js'
@@ -12,7 +13,7 @@ import { draftMessages, splitDraft } from './prompts.js'
 export async function createTicket(
   env,
   waitUntil,
-  { name, email, subject, question, conversationId = null },
+  { name, email, subject, question, conversationId = null, attachments = [] },
   { confirm = true, alert = true } = {},
 ) {
   const db = env.DB
@@ -24,9 +25,11 @@ export async function createTicket(
     )
     .bind(name, email, subject, question, conversationId, now, now)
     .first()
+  const follow = attachmentInserts(db, id, null, attachments)
   if (conversationId) {
-    await db.prepare('UPDATE conversations SET ticket_id = ? WHERE id = ?').bind(id, conversationId).run()
+    follow.push(db.prepare('UPDATE conversations SET ticket_id = ? WHERE id = ?').bind(id, conversationId))
   }
+  if (follow.length) await db.batch(follow)
 
   waitUntil(
     (async () => {
@@ -51,13 +54,18 @@ export async function createTicket(
 }
 
 /** Records a customer's emailed reply, reopens the ticket, alerts the team, and redrafts. */
-export async function addCustomerReply(env, waitUntil, ticket, body) {
+export async function addCustomerReply(env, waitUntil, ticket, body, attachments = []) {
+  const db = env.DB
   const now = Date.now()
-  await env.DB.batch([
-    env.DB.prepare(
-      "INSERT INTO ticket_messages (ticket_id, direction, body, author, created_at) VALUES (?, 'in', ?, ?, ?)",
-    ).bind(ticket.id, body, ticket.email, now),
-    env.DB.prepare("UPDATE tickets SET status = 'open', updated_at = ? WHERE id = ?").bind(now, ticket.id),
+  const { id: messageId } = await db
+    .prepare(
+      "INSERT INTO ticket_messages (ticket_id, direction, body, author, created_at) VALUES (?, 'in', ?, ?, ?) RETURNING id",
+    )
+    .bind(ticket.id, body, ticket.email, now)
+    .first()
+  await db.batch([
+    ...attachmentInserts(db, ticket.id, messageId, attachments),
+    db.prepare("UPDATE tickets SET status = 'open', updated_at = ? WHERE id = ?").bind(now, ticket.id),
   ])
   waitUntil(
     Promise.allSettled([notifyCustomerReply(env, ticket, body), generateDraft(env, ticket.id)]).then((outcomes) => {
@@ -101,20 +109,48 @@ export async function generateDraft(env, ticketId, note = '') {
 
   try {
     const ticket = await loadTicket(db, ticketId)
-    const [transcript, thread, playbook, facts, examples] = await Promise.all([
+    const [transcript, thread, playbook, facts, examples, stored] = await Promise.all([
       loadTranscript(db, ticket.conversation_id),
       loadThread(db, ticketId),
       loadPlaybook(db),
       loadFacts(db),
       loadExamples(db, ticketId),
+      loadAttachments(db, ticketId),
     ])
-    const result = await complete(env, {
-      model: env.DRAFT_MODEL ?? DEFAULT_DRAFT_MODEL,
-      messages: draftMessages({ ticket, transcript, thread, note, playbook, facts, examples }),
-      maxTokens: 4000,
+    // Names only: what the AI is told when it can't be shown the files themselves.
+    const namesOnly = {
+      parts: [],
+      inventory: stored.map((a) => `${a.filename} (could not be shown to you; the agent can open it)`),
+      hasPdf: false,
+    }
+    const draftWith = (attachments) =>
+      complete(env, {
+        model: env.DRAFT_MODEL ?? DEFAULT_DRAFT_MODEL,
+        messages: draftMessages({ ticket, transcript, thread, note, playbook, facts, examples, attachments }),
+        // PDFs are turned into text by OpenRouter before the model sees them.
+        plugins: attachments.hasPdf ? [{ id: 'file-parser', pdf: { engine: 'pdf-text' } }] : undefined,
+        maxTokens: 4000,
+      })
+
+    let result
+    let attachmentProblem = ''
+    const attachments = await attachmentParts(env, stored).catch((err) => {
+      attachmentProblem = String(err?.message ?? err)
+      return namesOnly
     })
-    const { draft, notes } = splitDraft(result.text)
+    try {
+      result = await draftWith(attachments)
+    } catch (err) {
+      // An attachment the provider can't fetch or read shouldn't cost the whole draft.
+      if (!attachments.parts.length) throw err
+      attachmentProblem = String(err?.message ?? err)
+      result = await draftWith(namesOnly)
+    }
+    let { draft, notes } = splitDraft(result.text)
     if (!draft) throw new Error('The model returned an empty draft')
+    if (attachmentProblem) {
+      notes = `- The AI couldn't read the attachments (${attachmentProblem.slice(0, 200)}); open them yourself.\n${notes}`
+    }
 
     await db
       .prepare(

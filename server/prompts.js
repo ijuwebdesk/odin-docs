@@ -91,7 +91,16 @@ export function chatMessages(history, facts = []) {
  * SUPPORT.md), `facts` (approved) and `examples` (recent sent replies) are
  * what the team knows beyond the docs.
  */
-export function draftMessages({ ticket, transcript, thread, note, playbook = '', facts = [], examples = [] }) {
+export function draftMessages({
+  ticket,
+  transcript,
+  thread,
+  note,
+  playbook = '',
+  facts = [],
+  examples = [],
+  attachments = { parts: [], inventory: [] },
+}) {
   const parts = []
   if (facts.length) parts.push(`Confirmed facts (newest knowledge; these override everything else):\n${bullets(facts)}\n`)
   if (examples.length) {
@@ -120,9 +129,18 @@ export function draftMessages({ ticket, transcript, thread, note, playbook = '',
         thread.map((m) => `${m.direction === 'out' ? 'Silk team' : 'Customer'}: ${m.body}`).join('\n\n'),
     )
   }
+  if (attachments.inventory.length) {
+    parts.push(
+      `\nThe customer attached these files. Read the ones attached below closely; screenshots and logs usually show the exact error or screen they mean:\n` +
+        attachments.inventory.map((a) => `- ${a}`).join('\n'),
+    )
+  }
   if (note) parts.push(`\nInstruction from the support agent for this draft: ${note}`)
 
-  return [system(DRAFT_RULES, [{ tag: 'internal_playbook', text: playbook }]), { role: 'user', content: parts.join('\n') }]
+  const content = attachments.parts.length
+    ? [{ type: 'text', text: parts.join('\n') }, ...attachments.parts]
+    : parts.join('\n')
+  return [system(DRAFT_RULES, [{ tag: 'internal_playbook', text: playbook }]), { role: 'user', content }]
 }
 
 /** The prompt for pulling new facts out of a reply the team just sent. */

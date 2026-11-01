@@ -12,11 +12,13 @@
       "allowed_sender_addresses": ["support@heysilkai.com"]
     }
   ],
+  // Inbound attachments, read back by the docs site (same bucket, its own binding).
+  "r2_buckets": [{ "binding": "ATTACHMENTS", "bucket_name": "silk-support-attachments" }],
   "vars": {
     // Inbound mail is handed to this site's /api/inbound (secret: INBOUND_SECRET).
     "SITE_URL": "https://support.heysilkai.com",
     // A verified Email Routing destination: gets the original when the site
-    // can't take a message, or when it has attachments the portal won't store.
+    // can't take a message, or when an attachment couldn't be stored.
     "FALLBACK_FORWARD": "ijuwebdesk@gmail.com"
   },
   "observability": { "enabled": true }

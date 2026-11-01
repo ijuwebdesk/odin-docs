@@ -21,9 +21,9 @@ function request(env, body) {
   })
 }
 
-/** A full completion: `{ text, model, tokensIn, tokensOut }`. */
-export async function complete(env, { model, messages, maxTokens }) {
-  const res = await request(env, { model, messages, max_tokens: maxTokens })
+/** A full completion: `{ text, model, tokensIn, tokensOut }`. `plugins` as OpenRouter takes them. */
+export async function complete(env, { model, messages, maxTokens, plugins }) {
+  const res = await request(env, { model, messages, max_tokens: maxTokens, plugins })
   if (!res.ok) throw new Error(`OpenRouter ${res.status}: ${(await res.text()).slice(0, 300)}`)
   const data = await res.json()
   return {

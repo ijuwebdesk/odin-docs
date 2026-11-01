@@ -6,9 +6,10 @@
  * so the site is the only caller.
  *
  * Inbound: Email Routing delivers mail for support@heysilkai.com to `email()`
- * below, which hands it to the site's /api/inbound to become a ticket or a
- * reply on one. If the site can't take it, the message is forwarded to the
- * team's inbox instead, so nothing sent to support@ is ever lost.
+ * below, which stores its attachments in R2 and hands the message to the
+ * site's /api/inbound to become a ticket or a reply on one. If the site can't
+ * take it, or an attachment couldn't be stored, the original is forwarded to
+ * the team's inbox instead, so nothing sent to support@ is ever lost.
  */
 import PostalMime from 'postal-mime'
 
@@ -24,6 +25,36 @@ function isAutomated(headers, from) {
     headers.has('List-Id') ||
     /^(mailer-daemon|postmaster|no-?reply)@/i.test(from)
   )
+}
+
+/** Larger files are left to the forwarded original; nobody screenshots 20 MB. */
+const MAX_ATTACHMENT = 20 * 1024 * 1024
+
+/**
+ * Stores each attachment under inbound/<uuid>/<name>. Returns what was stored
+ * and whether anything had to be skipped (too big, or the write failed).
+ */
+async function storeAttachments(env, attachments) {
+  const stored = []
+  let skipped = 0
+  for (const a of attachments) {
+    const size = a.content?.byteLength ?? 0
+    if (!size || size > MAX_ATTACHMENT) {
+      skipped++
+      continue
+    }
+    const filename = (a.filename || 'attachment').replace(/[\\/\u0000-\u001f]/g, '_').slice(0, 200)
+    const key = `inbound/${crypto.randomUUID()}/${filename}`
+    const contentType = (a.mimeType || 'application/octet-stream').toLowerCase().slice(0, 100)
+    try {
+      await env.ATTACHMENTS.put(key, a.content, { httpMetadata: { contentType } })
+      stored.push({ key, filename, contentType, size, inline: a.disposition === 'inline' })
+    } catch (err) {
+      console.error('attachment store failed', { filename, error: String(err) })
+      skipped++
+    }
+  }
+  return { stored, skipped }
 }
 
 async function forwardToTeam(message, env, reason) {
@@ -59,7 +90,7 @@ export default {
     // The raw stream can be read once; buffer it for parsing.
     const raw = await new Response(message.raw).arrayBuffer()
     const parsed = await PostalMime.parse(raw)
-    const attachments = parsed.attachments?.length ?? 0
+    const { stored, skipped } = await storeAttachments(env, parsed.attachments ?? [])
 
     let handled = false
     try {
@@ -73,7 +104,7 @@ export default {
           text: parsed.text ?? (parsed.html ?? '').replace(/<[^>]+>/g, ' '),
           inReplyTo: parsed.inReplyTo ?? '',
           references: parsed.references ?? '',
-          attachments,
+          attachments: stored,
         }),
       })
       handled = res.ok
@@ -82,8 +113,8 @@ export default {
       console.error('inbound hand-off failed', String(err))
     }
 
-    // The portal doesn't store attachments, so the team needs the original to see them.
     if (!handled) await forwardToTeam(message, env, 'site did not accept it')
-    else if (attachments) await forwardToTeam(message, env, `${attachments} attachment(s)`)
+    // Only what the portal couldn't keep needs the original.
+    else if (skipped) await forwardToTeam(message, env, `${skipped} attachment(s) not stored`)
   },
 }

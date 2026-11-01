@@ -26,6 +26,12 @@ database_name = "silk-support"
 database_id = "09842da3-c9e5-40d1-a6c0-bb179e2178d1"
 migrations_dir = "migrations"
 
+# Attachments on inbound email, written by the mailer Worker. Preview reads
+# the same bucket: it only ever serves files its own database points at.
+[[r2_buckets]]
+binding = "ATTACHMENTS"
+bucket_name = "silk-support-attachments"
+
 # Email goes out through the silk-support-mailer Worker (workers/mailer),
 # because Pages Functions can't hold a send_email binding themselves.
 [[services]]
@@ -51,6 +57,10 @@ binding = "DB"
 database_name = "silk-support-preview"
 database_id = "154e338e-13fd-44ae-aa73-ade7c8677066"
 migrations_dir = "migrations"
+
+[[env.preview.r2_buckets]]
+binding = "ATTACHMENTS"
+bucket_name = "silk-support-attachments"
 
 [[env.preview.services]]
 binding = "MAILER"

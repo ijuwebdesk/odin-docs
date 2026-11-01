@@ -24,7 +24,41 @@ type Ticket = {
   updated_at: number
 }
 type ChatTurn = { role: 'user' | 'assistant'; content: string }
-type ThreadMessage = { direction: 'in' | 'out'; body: string; author: string | null; created_at: number }
+type ThreadMessage = { id: number; direction: 'in' | 'out'; body: string; author: string | null; created_at: number }
+type Attachment = {
+  id: number
+  message_id: number | null
+  filename: string
+  content_type: string
+  size: number
+  inline: number
+}
+
+const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/gif', 'image/webp']
+/** Inline images this small are signature logos; they're still listed, just not previewed. */
+const LOGO_SIZE = 20 * 1024
+
+function fileSize(bytes: number) {
+  if (bytes < 1024) return `${bytes} B`
+  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`
+  return `${(bytes / 1024 / 1024).toFixed(1)} MB`
+}
+
+/** Thumbnails for screenshots, links for everything else. */
+function renderAttachments(list: Attachment[]) {
+  if (!list.length) return ''
+  return `<div class="attachments">${list
+    .map((a) => {
+      const href = `/api/admin/attachments/${a.id}`
+      const preview = IMAGE_TYPES.includes(a.content_type) && !(a.inline && a.size < LOGO_SIZE)
+      return `<a class="attachment" href="${href}" target="_blank" rel="noopener" title="${escapeHtml(a.filename)}">
+          ${preview ? `<img src="${href}" alt="" loading="lazy" />` : '<span class="file-icon" aria-hidden="true">📎</span>'}
+          <span class="file-name">${escapeHtml(a.filename)}</span>
+          <span class="file-size">${fileSize(a.size)}</span>
+        </a>`
+    })
+    .join('')}</div>`
+}
 
 const ref = (id: number) => `SILK-${id}`
 /** A draft still pending after this long has died with its request; offer to regenerate. */
@@ -113,13 +147,14 @@ export function initAdmin(root: HTMLElement) {
   // ── One ticket ───────────────────────────────────────────────────────────
   async function loadTicket(id: number) {
     clearTimeout(pollTimer)
-    const { ticket, transcript, thread } = await api<{
+    const { ticket, transcript, thread, attachments } = await api<{
       ticket: Ticket
       transcript: ChatTurn[]
       thread: ThreadMessage[]
+      attachments: Attachment[]
     }>(`/tickets/${id}`)
     if (openId !== id) return // the admin moved on while this loaded
-    renderTicket(ticket, transcript, thread)
+    renderTicket(ticket, transcript, thread, attachments)
 
     // A draft is being written in the background; check back until it lands.
     if (ticket.draft_status === 'pending' && !isStale(ticket)) {
@@ -127,7 +162,8 @@ export function initAdmin(root: HTMLElement) {
     }
   }
 
-  function renderTicket(t: Ticket, transcript: ChatTurn[], thread: ThreadMessage[]) {
+  function renderTicket(t: Ticket, transcript: ChatTurn[], thread: ThreadMessage[], attachments: Attachment[]) {
+    const attachedTo = (messageId: number | null) => renderAttachments(attachments.filter((a) => a.message_id === messageId))
     const drafting = t.draft_status === 'pending' && !isStale(t)
     const closed = t.status === 'closed'
 
@@ -147,7 +183,7 @@ export function initAdmin(root: HTMLElement) {
         </div>
       </div>
 
-      <div class="message"><span class="message-label">${escapeHtml(t.name)} wrote</span><div class="text">${escapeHtml(t.question)}</div></div>
+      <div class="message"><span class="message-label">${escapeHtml(t.name)} wrote</span><div class="text">${escapeHtml(t.question)}</div>${attachedTo(null)}</div>
 
       ${
         transcript.length
@@ -170,7 +206,7 @@ export function initAdmin(root: HTMLElement) {
           (m) => `<div class="message ${m.direction}">
             <span class="message-label">${m.direction === 'out' ? `Sent by ${escapeHtml(m.author ?? 'Silk team')}` : escapeHtml(t.name)}
               · ${new Date(m.created_at).toLocaleString()}</span>
-            <div class="text">${escapeHtml(m.body)}</div></div>`,
+            <div class="text">${escapeHtml(m.body)}</div>${attachedTo(m.id)}</div>`,
         )
         .join('')}
 

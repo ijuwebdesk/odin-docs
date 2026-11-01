@@ -1,18 +1,21 @@
 /**
- * GET   /api/admin/tickets/:id — the ticket, its AI chat transcript and email thread.
+ * GET   /api/admin/tickets/:id — the ticket, its AI chat transcript, email thread and attachments.
  * PATCH /api/admin/tickets/:id — { status } to reopen or close, or { draft } to save an edit.
  */
+import { loadAttachments } from '../../../../server/attachments.js'
 import { error, json, readJson, text } from '../../../../server/http.js'
 import { loadThread, loadTicket, loadTranscript } from '../../../../server/tickets.js'
 
 export async function onRequestGet({ env, params }) {
   const ticket = await loadTicket(env.DB, Number(params.id))
   if (!ticket) return error(404, 'No such ticket')
-  const [transcript, thread] = await Promise.all([
+  const [transcript, thread, stored] = await Promise.all([
     loadTranscript(env.DB, ticket.conversation_id),
     loadThread(env.DB, ticket.id),
+    loadAttachments(env.DB, ticket.id),
   ])
-  return json({ ticket, transcript, thread })
+  const attachments = stored.map(({ r2_key, ...a }) => a)
+  return json({ ticket, transcript, thread, attachments })
 }
 
 export async function onRequestPatch({ request, env, params }) {
