@@ -1,14 +1,21 @@
 import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
+import sitemap from '@astrojs/sitemap'
 import supportKnowledgeBundle from './integrations/support-kb.mjs'
 
 export default defineConfig({
+  // Needed for absolute canonical/og:url tags and the sitemap. Without it every
+  // page shipped an empty <link rel="canonical"/> and Search Console flagged
+  // pages as "Duplicate without user-selected canonical" (Nov 2026).
+  site: 'https://support.heysilkai.com',
   // Kept from the Odin naming so existing links and bookmarks survive the rebrand.
   redirects: {
     '/getting-started/what-is-odin/': '/getting-started/what-is-silk/',
     '/getting-started/using-odin-effectively/': '/getting-started/using-silk-effectively/',
   },
   integrations: [
+    // Added here (not left to Starlight) so the admin inbox stays out of it.
+    sitemap({ filter: (page) => !page.includes('/admin') }),
     supportKnowledgeBundle(),
     starlight({
       title: 'Silk Docs',

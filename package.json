@@ -12,6 +12,7 @@
     "playbook:sync": "node scripts/sync-playbook.mjs"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
     "@astrojs/starlight": "^0.32.5",
     "astro": "^5.0.0",
     "dompurify": "^3.4.16",
