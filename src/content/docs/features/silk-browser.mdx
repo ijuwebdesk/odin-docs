@@ -1,0 +1,49 @@
+---
+title: The Silk Browser
+description: The Chrome profile Silk's tasks use for web work, how to sign in to your accounts once, and how Google sign-in works.
+sidebar:
+  order: 5
+---
+
+import { Steps, Aside } from '@astrojs/starlight/components'
+import DemoClip from '../../../components/DemoClip.astro'
+
+When a [background task](/features/background-agents/) needs to use a website, it opens the **Silk Browser**: your installed Google Chrome, running on its own separate **Silk** profile. You can tell it apart by its violet frame and the Silk image on new tabs.
+
+<DemoClip id="1246170903" title="A Silk task working in the Silk Browser" />
+
+Because it's real Chrome, your **saved passwords, password-manager extensions and passkeys** work during tasks. It's completely separate from your everyday Chrome, which Silk never touches.
+
+If Chrome isn't installed, or you turn the Silk Browser off, tasks use Silk's simpler built-in browser instead, where saved passwords and passkeys aren't available.
+
+## One-time setup
+
+<Steps>
+1. Open **Settings → Silk Browser** and click **Set up**. A Chrome window with the violet Silk profile opens.
+2. **Sign in to Google** first if you want Silk to work in Gmail, Calendar, Drive or YouTube (see below).
+3. Sign in to the other sites you want Silk to use (your store, ad accounts, social media), the same way you would in any browser. Add your password manager extension if you use one.
+4. **Close the window** when you're done. Tasks use the Silk Browser once its window is closed.
+</Steps>
+
+The status card in **Settings → Silk Browser** tells you where things stand: **Not set up yet**, **Ready for tasks**, **Open for setup**, **In use by a task**, or **Couldn't start**. Use **Use for tasks** to switch it on or off. Open it any time to add or fix a login.
+
+## Signing in to Google
+
+Google won't let anyone sign in to a Google account in a browser that Silk is controlling. You'd see *"This browser or app may not be secure"*. So Google sign-in has to happen with the Silk Browser open as a normal window:
+
+- Click **Settings → Silk Browser → Sign in to Google**, sign in, and **close the window**. The card then shows **Google account: Signed in ✓**.
+- From Silk 1.1.85, if a task runs into a Google sign-in, Silk closes its own window, opens the Silk Browser at Google's sign-in page for you, and carries on once you've signed in and closed it.
+
+You only need to do this once. Gmail and Calendar tasks then work through the Silk Browser.
+
+## When a site needs you
+
+Some steps only you can do: a password, a two-factor code, a captcha, or a *"verify it's you"* prompt. When a task hits one, Silk brings the Silk Browser to the front with a banner and an **I'm signed in** button. Do the step, click the button, and the task continues. Silk never asks for passwords or codes in chat.
+
+<Aside type="tip">
+Several Silk Browser windows open at once? Each [helper](/features/background-agents/#helpers) on a task gets its own window. They close when the helper finishes.
+</Aside>
+
+## Attaching files on websites
+
+Tasks can upload files from your computer to websites (a product photo to your store, an attachment to a form) without the file picker. Silk only uploads files you asked it to, or files it made for the task.

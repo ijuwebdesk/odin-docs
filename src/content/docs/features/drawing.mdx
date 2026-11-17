@@ -1,0 +1,53 @@
+---
+title: Drawing on Your Screen
+description: Silk can sketch over your screen while it talks, in 2D and in 3D, to explain things visually.
+sidebar:
+  order: 3
+---
+
+import { Aside } from '@astrojs/starlight/components'
+import DemoClip from '../../../components/DemoClip.astro'
+
+When you ask Silk something in Guide mode, it can **draw** its answer over your screen while it talks. Each part of the drawing appears in step with what Silk is saying.
+
+## 2D: marking up your screen
+
+Silk can circle, frame, highlight and point at things on your real screen, and draw paper cards on top of it with notes, step-by-step flows and simple bar charts.
+
+<DemoClip id="1246170853" title="Silk drawing over the screen in 2D" />
+
+Try:
+
+> "Walk me through this dashboard and circle what matters."
+
+> "Sketch how this funnel flows, step by step."
+
+> "Compare these three plans for me."
+
+## 3D: models you can turn
+
+For physical things (an engine, a bridge, the inside of a phone) Silk builds a **3D model** piece by piece while it explains it. It can cut parts away or make shells see-through so you can look inside, and label each part.
+
+<DemoClip id="1246170852" title="Silk drawing a 3D model" />
+
+- **Drag** the model to turn it.
+- **Scroll** to zoom in and out.
+- Click the **close** button when you're done.
+
+Try:
+
+> "Draw me how a car engine works, in 3D."
+
+## When Silk draws
+
+- Ask for it with words like **draw**, **sketch**, **show me** or **in 3D**. In **Auto** mode these requests always go to Guide.
+- Silk also draws without being asked when a picture explains it better, for example a comparison.
+- Physical objects are always drawn in 3D.
+
+## Closing a drawing
+
+A drawing closes when you press **Esc**, when you start talking to Silk again, when you switch to another app (on Mac), or on its own after a while.
+
+<Aside type="note">
+Drawing uses the same AI engine as the rest of Guide, so there is nothing extra to set up. Silk's blue [cursor](/features/cursor-overlay/) follows the pen while it draws.
+</Aside>

@@ -111,7 +111,7 @@ When an update is ready, you'll see:
 
 Restarting takes a few seconds and Silk comes back on its own. **Nothing is lost:** your skills, memory, schedules, license and API key are all kept.
 
-**Not sure if you're up to date?** Open the panel and look at the button in the bottom bar:
+**Not sure if you're up to date?** Open the panel and look at the button in the bottom bar (in the [app window](/features/app-window/), it's at the bottom of the Settings menu):
 
 | It says | What to do |
 |---|---|
@@ -128,7 +128,7 @@ You can also always download the latest version from [download.heysilkai.com](ht
 Silk is still running; its icon is just hidden. A full macOS menu bar (especially on MacBooks with a notch) or a menu-bar manager like Bartender can hide it, and Windows tucks tray icons behind the **^** arrow.
 
 - **Press the panel shortcut:** `⌃⇧Space` (Control+Shift+Space) on Mac or `Ctrl+Shift+Space` on Windows opens Silk from anywhere.
-- **Give Silk its own window:** in **Settings → Window**, turn on **Detached window**. Silk gets a normal Dock or taskbar icon and stops depending on the menu bar.
+- **Give Silk its own window:** in **Settings → Look & feel**, turn on **Detached window**. Silk gets a normal Dock or taskbar icon and stops depending on the menu bar.
 - **On a Mac,** hold `⌘` and drag menu-bar icons to rearrange them, or quit a few other menu-bar apps to make room.
 
 ---
@@ -169,7 +169,40 @@ Act Mode controls your mouse and keyboard in real time. It stops on purpose if y
 
 - Check the Agent Dock: the agent may have hit an error. Expand it to see its last output.
 - Very long tasks can time out. Break them into smaller steps.
-- If it needs to save files, check the destination folder exists. You can choose where agents save their work in **Settings → Background task folder**.
+- If it needs to save files, check the destination folder exists. You can choose where agents save their work in **Settings → Background tasks → Background task folder**.
+- **It stopped and says it reached its spending cap:** reply **continue** to let it carry on, or raise the cap in **Settings → Background tasks → Spending**. See [Spending caps](/features/background-agents/#spending-caps).
+
+**Several browser windows opened at once:** that's [helpers](/features/background-agents/#helpers) working on parts of one task side by side. Each closes when its part is done. To stop this, set **Settings → Background tasks → Helpers per task** to **Off**.
+
+**My plan usage or OpenRouter spend went up fast:** helpers use your AI engine at the same time. Set **Helpers per task** to **2** or **Off**.
+
+---
+
+## Google sign-in keeps looping during a task
+
+Google blocks sign-in in a browser Silk is controlling (*"This browser or app may not be secure"*). Sign in once with **Settings → Silk Browser → Sign in to Google**, then close that window. From Silk 1.1.85 Silk opens this for you when a task needs it. See [The Silk Browser](/features/silk-browser/#signing-in-to-google).
+
+## A task couldn't log in to a website
+
+Open **Settings → Silk Browser**, open the Silk Browser, sign in to that site, and close the window. Tasks then use that login. If a site asks for a code or captcha during a task, Silk brings the browser to the front with an **I'm signed in** button for you.
+
+## Double-tapping Shift doesn't open the type bar
+
+Some security or keyboard tools block it. Silk then switches to a key combination automatically; check **Settings → Hotkeys → Typing** for the current shortcut, or set your own there. You can also choose **Type a Request** from the Silk menu-bar or tray icon. See [Typing to Silk](/features/typing/).
+
+## Too many suggestion cards, or none at all
+
+Click the Silk menu-bar or tray icon → **Suggestions**, and pick **Show cards**, **Only in this menu** or **Off**. Silk shows at most three a day, and none while you're in a full-screen app. See [Suggestion Cards](/features/suggestions/).
+
+## Scheduled task didn't run
+
+- Was the computer on, awake and running Silk at that time? Turn on **Start Silk at login** and **Settings → Background tasks → Stay reachable**. See [Keeping your computer reachable](/features/scheduled-tasks/#keeping-your-computer-reachable).
+- Is the schedule paused? Check it in **Schedules**.
+- On Basic, only one schedule can be active.
+
+## Community perks (premium voices, Connected apps) are missing
+
+Your Skool email may differ from your Silk license email. Open **License** and click **Refresh license**, then restart Silk. Still missing? [Contact support](/support/#human) with both email addresses. See [Silk Community Perks](/features/community/).
 
 ---
 
@@ -177,7 +210,8 @@ Act Mode controls your mouse and keyboard in real time. It stops on purpose if y
 
 - **Check your model first.** The default, `deepseek/deepseek-v4.1-flash`, is the fastest accurate model in [our benchmark](/reference/ai-models/) at about a cent per task. Older or heavier models can be several times slower and pricier.
 - **Start fresh.** Long conversations make every request bigger. Click **Clear context** in the panel when you change topic.
-- **Watch your spend:** Settings shows today's **API spend** for your key.
+- **Watch your spend:** Settings shows today's **API spend** for your key, and **Settings → Background tasks → Spending** caps what each task may spend.
+- **Turn helpers down:** **Settings → Background tasks → Helpers per task** set to 2 or Off.
 
 ---
 

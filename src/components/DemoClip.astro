@@ -1,0 +1,52 @@
+---
+/**
+ * A short, silent demo clip of a Silk feature: plays on a loop with no
+ * controls, like an animated screenshot. The clips are the same Vimeo loops
+ * the heysilkai.com home page uses (team "Content Gorilla"), all 4:3.
+ */
+interface Props {
+  id: string
+  title: string
+  caption?: string
+}
+const { id, title, caption } = Astro.props
+---
+
+<figure class="demo-clip">
+  <div class="demo-clip-frame">
+    <iframe
+      src={`https://player.vimeo.com/video/${id}?background=1&dnt=1`}
+      title={title}
+      loading="lazy"
+      allow="autoplay; fullscreen; picture-in-picture"
+    ></iframe>
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .demo-clip {
+    margin: 1.5rem 0;
+  }
+  .demo-clip-frame {
+    position: relative;
+    padding-bottom: 75%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #0d0d14;
+  }
+  .demo-clip-frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .demo-clip figcaption {
+    margin-top: 0.5rem;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-3);
+    text-align: center;
+  }
+</style>

@@ -1,63 +1,81 @@
 ---
 title: Background Agents
-description: How Silk runs headless agents to complete multi-step tasks.
+description: How Silk runs tasks in the background, how to follow them, and how helpers and spending caps work.
 sidebar:
   order: 4
 ---
 
 import { Aside } from '@astrojs/starlight/components'
+import DemoClip from '../../../components/DemoClip.astro'
 
-Background agents are Silk's way of handling tasks that take more than a quick answer. When you ask Silk to do something that involves multiple steps — writing code, researching a topic, creating files, building a plan — it can spin up a headless agent to work through the task while you continue with whatever you were doing.
+Background agents (background tasks) are Silk's way of handling work that takes more than a quick answer: research, writing documents, organising files, filling in websites, building reports. Silk works through the task on its own while you carry on with whatever you were doing.
 
-## How to trigger an agent
+<DemoClip id="1246170851" title="A background task in Silk" />
 
-There are three ways to launch a background agent:
+## How to start one
 
-- **Type** the task into the panel.
+- **Type** it: in the **What should Silk do?** box on Home or **New background task** on the Tasks page of the [app window](/features/app-window/), in the panel's task box, or in the [type bar](/features/typing/) (double-tap Shift, then press **Tab** until it says Background, or start with `/bg`).
 - **Send it over [Telegram](/features/telegram/)** from your phone.
-- **Speak it** — but say *"start a background agent"* (or *"use the background agent"*) in your request.
+- **Speak it**, and say *"start a background agent"* (or *"in the background"*) in your request.
+- **Accept a [suggestion card](/features/suggestions/)**, or let a [scheduled task](/features/scheduled-tasks/) start it.
 
-> "Research the best Rust web frameworks and save a summary to my desktop."
+You can also attach images and files to the task: paste, drop or use the paperclip. See [Typing to Silk](/features/typing/#attaching-images-and-files).
 
-> "Write a Python script that watches my Downloads folder and moves PDFs to ~/Documents/PDFs."
+> "Research the best project management tools for a 5-person team and save a comparison PDF to my Desktop."
 
-> "Look up the Claude API pricing and compare it to OpenAI."
+> "Go through my Downloads folder and sort the files into folders by type."
 
 <Aside type="caution">
-When you **speak** a task, include the phrase "start a background agent." If you don't, Silk may run it in **[Act mode](/features/act-mode/)** instead — taking control of your mouse and keyboard so you can't use your computer while it works. Typed tasks always run in the background.
+When you **speak** a task, include "start a background agent". Otherwise Silk may do it in **[Act mode](/features/act-mode/)**, taking over your mouse and keyboard while it works. Typed tasks always run in the background unless you pick another mode.
 </Aside>
 
-When Silk launches an agent, it responds with a short spoken acknowledgement ("on it", "kicking that off", "got it") and the agent appears in the **Agent Dock** — a vertical stack of orbs on the right edge of your screen.
+## Following a task
 
-<Aside>
-Silk's spoken response when launching an agent is intentionally brief. The agent's progress is visible in the dock — Silk won't narrate the steps it's taking.
+- **Tasks page** (app window): every task with live progress. Open one to see its plan, each step it took, what it has spent, the files it made (with **Open** and **Show in Finder** buttons) and its result.
+- **Agent Dock**: a stack of orbs on the edge of your screen, one per running task. Click an orb to see the task's card. You can **drag the dock** anywhere by its orbs (double-click to put it back), and with two or more tasks a toggle under the stack collapses it to the most urgent one.
+
+If Silk needs an answer from you, the task waits and shows its question on the card and under **Waiting for you** on Home. Reply there, or from Telegram.
+
+## What tasks can do
+
+- Read, write and organise **files** on your computer, and make PDFs, spreadsheets and documents.
+- **Search the web** and read pages.
+- Work in websites with the **[Silk Browser](/features/silk-browser/)**, using the logins you've saved there.
+- Run **commands and scripts**.
+- Use your **[skills](/features/skills/)**, **[connected apps](/features/community/#connected-apps)** and **[MCP servers](/features/mcp-servers/)**.
+- Read and add to your **[memory](/features/memory/)**.
+
+Before anything risky, like deleting files, Silk asks you first.
+
+## Helpers
+
+On a task with separate parts (research five companies, check four websites, draft six emails), Silk can hand each part to a **helper** and run them side by side, so the task finishes sooner. Each helper is its own agent with its own Silk Browser window.
+
+The task's card shows a **Helpers** list: one row per part, with its current step and cost. Open a row to see that helper's steps and result. If a helper needs you, its name appears on the card ("Acme is asking") and on the sign-in banner.
+
+Silk only splits tasks that really have independent parts; most tasks never use helpers.
+
+**Settings → Background tasks → Helpers per task**: **Off**, **2** or **3** (the default). This is how many run at once; a task can hand out up to six parts, and the rest wait their turn. Helpers are on all paid plans, not on Basic, and never on scheduled tasks.
+
+<Aside type="tip">
+Helpers use your AI engine at the same time, so usage climbs faster. If you're hitting your ChatGPT or Claude plan limits, or spending more on OpenRouter than you'd like, set Helpers to 2 or Off.
 </Aside>
 
-## The Agent Dock
+## Spending caps
 
-The Agent Dock is displayed as an overlay on the right edge of your screen. Each running agent shows:
+If you use OpenRouter, **Settings → Background tasks → Spending** sets how much a single task may spend:
 
-- The task description
-- Live output as the agent works
-- Status (running / complete / failed)
-- Cost
+| Cap | Choices |
+|---|---|
+| **Each task** | 0.50, 1, 2, 5 dollars, or None |
+| **Scheduled tasks** | 0.10, 0.25, 0.50, 1 dollar, or None (lower, because nobody is watching) |
 
-You can open multiple agents simultaneously. They run in parallel.
+When a task reaches its cap it stops; reply **continue** to keep going. A budget you give in the request (*"keep it under 50 cents"*) lowers the cap for that task. The cap covers the task's helpers too. Each task can also make up to **25 web searches**.
 
-## What agents can do
+## Stopping a task
 
-Background agents have access to the same tools as Silk's main process:
+Click **Stop** on the task's card or Tasks page. Work already done, like files created, stays.
 
-- **File system** — read, write, and create files
-- **Web search** — look things up
-- **Code execution** — run shell commands, scripts
-- **MCP tools** — any MCP servers you've connected
-- **Memory** — read and write to Silk's memory store
+## Where results go
 
-## Stopping an agent
-
-Click the stop button next to a running agent in the dock to cancel it. Partial work may have already been done (e.g., files created).
-
-## Agent history
-
-Completed agents and their outputs are accessible in the conversation history. Agents that produce files will show the file path in their output.
+Files are saved to your **Background task folder** (Settings → Background tasks) unless you name a place in the request. Every task is kept in [History](/features/history-projects/), where you can open it again or continue it with a follow-up.

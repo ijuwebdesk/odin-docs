@@ -19,7 +19,7 @@ It works on macOS and Windows from **Silk 1.1.81**. If you don't see the option,
 ## Set it up
 
 <Steps>
-1. Open the Silk panel and click the **gear icon** to open **Settings & tools**.
+1. Open Settings: click the **gear icon** in the Silk panel, or **Settings** in the [app window](/features/app-window/). Go to **AI engine**.
 2. Under **Power Silk with**, click **Claude**.
 3. If it says **Not installed**, click **Install Claude Code**. Silk downloads Anthropic's official installer from claude.ai and runs it for you. It needs no admin password and usually takes under a minute.
 4. Click **Sign in with Claude**. Your browser opens Anthropic's sign-in page. Sign in and approve.
@@ -50,6 +50,24 @@ Silk always uses Anthropic's latest version of each model, so new Claude release
 - **There's no API spend panel.** It only shows when you use an OpenRouter key. You can check your usage in your Claude account's usage settings.
 - **We haven't benchmarked Claude in Silk yet.** Our [model results](/reference/ai-models/) cover OpenRouter and ChatGPT plans. We'll add Claude when we've run the full test.
 - **The setup video still talks about OpenRouter.** At the API key step, Silk shows all three options, and signing in with Claude moves the video on just like saving a key.
+
+## Effort and plan usage
+
+Under the model, **Effort** sets how hard the model thinks on each step. **Default** suits most work. Higher effort thinks longer and uses more of your plan.
+
+Settings also shows how much of your Claude plan's limits you've used, with bars for each limit window, so you can see a limit coming before you hit it.
+
+## Using a second Claude account
+
+If you have two Claude accounts (say, a personal and a work plan), Silk can use either one. When one hits its usage limit, switch to the other and keep going.
+
+1. In **Settings → AI engine**, open the **Account** dropdown and pick **Account 2 · Add an account**.
+2. Sign in with your **other** Claude account. If your browser is already signed in to claude.ai as your first account, switch accounts there first, or open the sign-in page in a private window.
+3. To switch later, pick **Account 1** or **Account 2** in the same dropdown.
+
+Silk doesn't switch accounts on its own. Your memory, history, projects and skills are the same whichever account you use; only the plan and its limits change.
+
+If Silk says **Both accounts are signed in as** the same email, sign out of account 2 and sign in again from a private browser window.
 
 ## Switching to ChatGPT or OpenRouter
 
@@ -87,7 +105,8 @@ Your Claude plan's allowance has run out. This isn't a Silk bug or a Silk charge
 
 - wait for the reset,
 - switch to a lighter model (Sonnet or Haiku) if you were on Opus,
-- upgrade your Claude plan, or
+- upgrade your Claude plan,
+- switch to your [second Claude account](#using-a-second-claude-account) if you have one, or
 - switch Silk to ChatGPT or an OpenRouter key in Settings to keep going now.
 
 ### "Your Claude sign-in has expired"

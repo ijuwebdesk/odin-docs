@@ -1,0 +1,62 @@
+---
+title: The Silk App Window
+description: Use Silk as a full desktop app with Home, Tasks, History, Projects, Schedules, Library and Settings in one window.
+sidebar:
+  order: 0
+---
+
+import { Steps, Aside } from '@astrojs/starlight/components'
+import DemoClip from '../../../components/DemoClip.astro'
+import YouTube from '../../../components/YouTube.astro'
+
+From Silk 1.1.84, Silk can run as a **full desktop app** in its own window, not only as the small panel under the menu-bar or tray icon. It's the easiest way to use Silk if you prefer typing, or if you like to watch your tasks while they work.
+
+<DemoClip id="1246170877" title="The Silk app window" />
+
+## Switching between the window and the menu bar
+
+<Steps>
+1. Open Settings and go to **Look & feel**.
+2. Turn on **Detached window**. Silk opens in its own movable window with a Dock (Mac) or taskbar (Windows) icon.
+3. To go back to the small panel, click **Dock to menu bar** at the top right of the window, or turn **Detached window** off again.
+</Steps>
+
+Everything you set up (skills, memory, schedules, projects, your license and your AI engine) is the same in both. Only the layout changes.
+
+## What's in the window
+
+The bar across the top takes you to each part of Silk:
+
+| Page | What it's for |
+|---|---|
+| **Home** | A **What should Silk do?** box to type or speak a request, with Auto, Guide, Act or Background, a project picker and a mic. Below it: **Running now**, **Waiting for you**, **Pick up where you left off** and **Coming up** (your next schedules). |
+| **Tasks** | Every background task, with live progress. Pick one to see each step it took, its plan, the files it made and its result. Start a new one with **New background task**. |
+| **History** | All your past conversations. See [History & Projects](/features/history-projects/). |
+| **Projects** | Group related work, with instructions and its own memory. See [History & Projects](/features/history-projects/#projects). |
+| **Schedules** | Create and manage [scheduled tasks](/features/scheduled-tasks/). |
+| **Library** | **Skills** (things Silk knows how to do), **Memory** (what Silk remembers about you) and **Connections** (apps and MCP servers Silk can use). |
+| **Settings** | All of Silk's settings in one place. See [Settings](/reference/settings/). |
+
+When you talk to Silk with push-to-talk, or type in the window, the conversation appears in a chat view, including Act Mode's live steps and any question Silk needs you to answer. Click **Stop** to end a task.
+
+## Live task progress
+
+A background task shows what it's doing while it works: its plan, the step it's on, how much it has spent, and any files it has produced. Files have **Open** and **Show in Finder** (or File Explorer) buttons. If Silk needs an answer from you, the task waits under **Waiting for you** on Home until you reply.
+
+## Version, updates and support code
+
+At the bottom of the Settings menu you'll find:
+
+- **Silk vX.Y.Z**: click it to copy your version and **support code**. Paste both into a support request so we can look into your issue faster.
+- **Check for updates** (or **Restart to update** when a new version has downloaded).
+- **Quit Silk**.
+
+## Watch the full walkthrough
+
+The Silk 1.1.84 walkthrough covers the app window and everything that came with it. This link starts at the app window chapter.
+
+<YouTube id="XPVzynPKdtA" start={128} title="Silk 1.1.84: Silk Is Now a Full Desktop App" />
+
+<Aside type="tip">
+Closing the window doesn't quit Silk. It keeps running in the menu bar or tray so push-to-talk, the type bar, Telegram and your schedules keep working. Use **Quit Silk** in Settings, or the menu-bar icon's menu, to quit.
+</Aside>

@@ -1,0 +1,65 @@
+---
+title: Typing to Silk
+description: Double-tap Shift to type a request to Silk from any app, and paste or drop images and files into any chat box.
+sidebar:
+  order: 2
+---
+
+import { Aside } from '@astrojs/starlight/components'
+import DemoClip from '../../../components/DemoClip.astro'
+import YouTube from '../../../components/YouTube.astro'
+
+You don't have to talk to Silk. From Silk 1.1.84 you can **type** to it from any app, and attach images and files to anything you send.
+
+## The type bar: double-tap Shift
+
+**Double-tap the Shift key** anywhere on your computer. A small box opens over whatever you're working on. Type your request and press **Enter**.
+
+<DemoClip id="1246271061" title="Double-tap Shift to type to Silk" />
+
+Silk sees your screen just as it does when you speak, so you can type *"what does this error mean?"* or *"fill in this form for me"* and it knows what you're looking at. The box itself never shows up in what Silk sees.
+
+| In the type bar | What it does |
+|---|---|
+| **Enter** | Send |
+| **Shift+Enter** | New line |
+| **Tab** | Switch between Guide, Act and Background for this request |
+| `/guide`, `/act`, `/bg` | The same, typed at the start of your request |
+| **Up / Down** | Bring back one of your last 20 requests |
+| **Esc** | Close the box |
+
+Picking a mode in the type bar only applies to that one request. Your saved mode (usually **Auto**) stays as it is.
+
+When Act Mode asks you a question mid-task, double-tap Shift and type your answer.
+
+### Changing the shortcut
+
+Go to **Settings → Hotkeys → Typing**, click the button, then double-tap a key (Shift, Ctrl, Option or Cmd on Mac, Alt or Win on Windows) or press a key combination. You can also open the box from the Silk menu-bar or tray icon: choose **Type a Request**.
+
+<Aside type="note">
+If the double-tap can't work on your computer (some security tools block it), Silk switches to a key combination instead. The current shortcut is always shown in **Settings → Hotkeys**.
+</Aside>
+
+### Spoken or silent replies
+
+Typed requests get **text replies only**, so Silk stays quiet when you're typing. To hear the answer as well, turn on **Settings → Hotkeys → Speak typed replies**.
+
+## Typing in the app window and panel
+
+You can also type in:
+
+- the **What should Silk do?** box on Home in the [app window](/features/app-window/),
+- the **New background task** box on the Tasks page, or the task box in the menu-bar panel,
+- the reply box under any task, and the **Continue** box in [History](/features/history-projects/).
+
+## Attaching images and files
+
+**Paste, drop or attach** images and files into any of those boxes. Use the paperclip button, drag files in, or paste with `⌘V` / `Ctrl+V`. In the type bar you can paste. Attached files show as chips on your message.
+
+<DemoClip id="1246271111" title="Pasting an image into Silk" />
+
+Silk reads what you attach: it can look at screenshots and photos, read documents and spreadsheets, and work on files in a background task. For example, paste a screenshot of a chart and ask *"turn this into a table in a Google Sheet"*.
+
+## Watch it
+
+<YouTube id="XPVzynPKdtA" start={586} title="Double-tap Shift to type to Silk" />

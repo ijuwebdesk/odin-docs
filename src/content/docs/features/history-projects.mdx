@@ -1,0 +1,85 @@
+---
+title: History & Projects
+description: Find any past conversation, pick up where you left off, and group related work into projects with their own instructions and memory.
+sidebar:
+  order: 3
+---
+
+import { Steps, Aside } from '@astrojs/starlight/components'
+import DemoClip from '../../../components/DemoClip.astro'
+
+Silk keeps every conversation you have with it, in Guide, Act and Background, so you can find old work, carry on with it, and keep related tasks together in **projects**.
+
+<DemoClip id="1246170899" title="History and Projects in Silk" />
+
+## History
+
+Open **History** from the top bar of the [app window](/features/app-window/), or from the menu in the menu-bar panel.
+
+- Conversations are **grouped by day**, newest first.
+- **Search** finds a conversation by what was said in it, and you can **filter by mode** (Guide, Act or Background).
+- Open a conversation to see the whole exchange, including every step a task took and the files it made. Files have **Open** and **Show in Finder** (or File Explorer) buttons.
+- You can select and copy any part of a message, and links are clickable.
+- The **Copy** button copies the whole conversation, steps included. Paste it into a support request if something went wrong.
+
+### Picking up where you left off
+
+Type or speak a follow-up in the box at the bottom of any conversation and press **Continue**. Silk carries on with everything it already knows about that conversation, even after a restart. The follow-up runs as a background task, so you can keep working while it does.
+
+The **Pick up where you left off** list on Home (and in the panel) opens your three most recent conversations.
+
+### How long history is kept
+
+| Conversation | Kept for |
+|---|---|
+| Not in a project | 7 days on Basic, 30 days on paid plans |
+| In a project, or **pinned** | Until you delete it |
+
+**Clear unsorted history** only removes conversations that aren't in a project.
+
+## Projects
+
+A project groups related work: a client, a product launch, your newsletter. Each project has:
+
+- a **name and colour**, and a short **description**,
+- **instructions** that Silk follows on every task in the project (for example *"Files for this client go in ~/Clients/Acme. Write in British English."*),
+- an optional **working folder**,
+- **Keep this project's memory separate** (on by default), so what Silk learns while working on this project stays in it.
+
+### Creating a project
+
+<Steps>
+1. Open **Projects** (in the app window) or **History** (in the panel) and click **New project**.
+2. Give it a name and colour, and write its instructions. You can click the mic button to speak them instead.
+3. Click **Create**.
+</Steps>
+
+Not sure where to start? Click **Suggest from memory**. Silk reads what it already remembers about you and suggests a few projects with instructions filled in. Untick any you don't want and click **Create**.
+
+### Working in a project
+
+New tasks go into the **project you picked last**. Pick one with the project chip next to the task box (Home, Tasks or the panel), from the project's own task box, or from Telegram with `/project`. Pick **No project** to work outside them.
+
+Every task in a project gets the project's instructions and that project's recent history, so you don't have to repeat yourself. Schedules you create while a project is active run in that project too, and show its tag in [Scheduled Tasks](/features/scheduled-tasks/).
+
+To move an existing conversation into a project, open it in History and choose the project.
+
+### Project memory
+
+With **Keep this project's memory separate** on, things Silk learns inside the project stay with that project. Your general memory still applies everywhere. If you turn the switch off, or delete the project, its notes move into your general memory, so nothing is lost. In [Memory](/features/memory/), open a note and use **Belongs to** to move it between projects.
+
+### From Telegram
+
+| Command | What it does |
+|---|---|
+| `/project` | List your projects |
+| `/project 2` or `/project Acme` | Switch to that project |
+| `/project none` | Work outside projects |
+
+## Plan limits
+
+Basic includes **2 projects**. Every paid plan has unlimited projects.
+
+<Aside type="tip">
+"Where did my old task go?" If it wasn't in a project, it may have passed the history window for your plan. Put work you want to keep in a project, or pin it.
+</Aside>

@@ -6,17 +6,20 @@ sidebar:
 ---
 
 import { Steps, Aside } from '@astrojs/starlight/components'
+import DemoClip from '../../../components/DemoClip.astro'
 
 Scheduled tasks let Silk do recurring work on its own: a morning digest, a weekly report, a monthly invoice run. Each one runs as a [background agent](/features/background-agents/) at the time you choose.
 
 <Aside type="caution">
-**Scheduled tasks only run while Silk is open.** If your computer is off or Silk isn't running at the scheduled time, that run is skipped. Turn on **Start Silk at login** (in the Scheduled Tasks window) so Silk is always running when it should be.
+**Scheduled tasks only run while Silk is open and your computer is awake.** If your computer is off or asleep, or Silk isn't running at the scheduled time, that run is skipped. Turn on **Start Silk at login** (in the Scheduled Tasks window) so Silk is always running, and see [Keeping your computer reachable](#keeping-your-computer-reachable) below.
 </Aside>
+
+<DemoClip id="1246170889" title="Scheduling a task in Silk" />
 
 ## Creating a schedule
 
 <Steps>
-1. Open the Silk panel and choose **Scheduled tasks** from the menu.
+1. Open **Schedules** in the [app window](/features/app-window/), or choose **Scheduled tasks** from the panel menu.
 2. Click **New schedule**.
 3. Under **When**, describe the timing in plain words, for example *"every weekday at 9am"* or *"on the 1st of each month at 9am"*. Silk fills in the timing for you, or you can set it by hand.
 4. Under **What Silk should do**, write the task as if you were asking a person who wasn't there when you set it up: *"Summarise yesterday's orders and email them to me."*
@@ -44,6 +47,17 @@ In the Scheduled Tasks window, each schedule has buttons to:
 - **Pause / Resume**: stop it temporarily without deleting it.
 - **Edit** or **Delete**.
 
+## Keeping your computer reachable
+
+A sleeping computer can't run a schedule. Turn on **Settings → Background tasks → Stay reachable → Keep this computer awake when plugged in**:
+
+- While it's **plugged in**, Silk stops the computer going to sleep, so schedules run on time and tasks you send from Telegram reach it. The screen can still turn off. On battery it sleeps as usual.
+- **Windows**: Silk also wakes the PC a couple of minutes before a scheduled task. If Silk says wake timers are off, open your power plan's advanced settings and, under **Sleep**, set **Allow wake timers** to **Enable** for Plugged in.
+- **MacBook**: closing the lid still puts it to sleep unless an external display is connected. Leave the lid open to stay reachable.
+- **Windows laptop with the lid closed**: in Power Options, set **When I close the lid** to **Do nothing** for Plugged in.
+
+Silk also keeps the computer awake on its own while any task is running, so a task that has started won't be cut off by sleep.
+
 ## Scheduling from Telegram
 
 If you've connected the [Telegram Bridge](/features/telegram/), you can manage schedules from your phone:
@@ -56,6 +70,12 @@ If you've connected the [Telegram Bridge](/features/telegram/), you can manage s
 | `/unschedule 1` | Delete schedule number 1 |
 | `/startup on` | Start Silk at login, so schedules always fire |
 
+## Schedules and projects
+
+A schedule created while a [project](/features/history-projects/) is active runs in that project, using its instructions and memory. The project's tag shows on the schedule.
+
+You can also say yes to a **Schedule it** [suggestion card](/features/suggestions/) when Silk notices you asking for the same thing on several days.
+
 ## Plan limits
 
 The Basic plan includes **one active schedule** at a time. Higher plans have no limit.
@@ -64,4 +84,5 @@ The Basic plan includes **one active schedule** at a time. Higher plans have no 
 
 - **Write instructions that stand on their own.** A scheduled run doesn't see your earlier conversation, so include everything it needs: which inbox, which folder, where to send the result.
 - **Test with Run now** before relying on a new schedule.
+- Scheduled runs have their own, lower [spending cap](/features/background-agents/#spending-caps) if you use OpenRouter.
 - **Unattended jobs suit careful models.** If accuracy matters more than speed, see [Choosing an AI Model](/reference/ai-models/).

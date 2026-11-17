@@ -74,21 +74,28 @@ export default defineConfig({
         {
           label: 'Core Features',
           items: [
+            { label: 'The Silk App Window', slug: 'features/app-window', badge: { text: 'New', variant: 'success' } },
             { label: 'Push-to-Talk', slug: 'features/push-to-talk' },
+            { label: 'Typing to Silk', slug: 'features/typing', badge: { text: 'New', variant: 'success' } },
             { label: 'Screen Capture & Analysis', slug: 'features/screen-capture' },
+            { label: 'Drawing on Your Screen', slug: 'features/drawing', badge: { text: 'New', variant: 'success' } },
             { label: 'Cursor Overlay', slug: 'features/cursor-overlay' },
             { label: 'Background Agents', slug: 'features/background-agents' },
+            { label: 'History & Projects', slug: 'features/history-projects', badge: { text: 'New', variant: 'success' } },
             { label: 'Scheduled Tasks', slug: 'features/scheduled-tasks' },
+            { label: 'Suggestion Cards', slug: 'features/suggestions', badge: { text: 'New', variant: 'success' } },
           ],
         },
         {
           label: 'Advanced Features',
           items: [
             { label: 'Act Mode', slug: 'features/act-mode' },
+            { label: 'The Silk Browser', slug: 'features/silk-browser', badge: { text: 'New', variant: 'success' } },
             { label: 'Memory', slug: 'features/memory' },
             { label: 'Skills', slug: 'features/skills' },
             { label: 'MCP Servers', slug: 'features/mcp-servers' },
             { label: 'Telegram Bridge', slug: 'features/telegram' },
+            { label: 'Silk Community Perks', slug: 'features/community', badge: { text: 'New', variant: 'success' } },
             { label: 'Agency Dashboard', slug: 'features/agency' },
           ],
         },
@@ -101,6 +108,7 @@ export default defineConfig({
         {
           label: 'Reference',
           items: [
+            { label: "What's New", slug: 'reference/whats-new' },
             { label: 'Settings', slug: 'reference/settings' },
             { label: 'Keyboard Shortcuts', slug: 'reference/shortcuts' },
             { label: 'Troubleshooting', slug: 'reference/troubleshooting' },

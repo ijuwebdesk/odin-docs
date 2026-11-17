@@ -1,0 +1,45 @@
+---
+title: Suggestion Cards
+description: Small cards that offer one useful task for the app or site you're working in, and how to turn them down or off.
+sidebar:
+  order: 6
+---
+
+import { Aside } from '@astrojs/starlight/components'
+
+When you settle into an app or website Silk can help with, such as Gmail, Google Docs or Sheets, Shopify, Ads Manager or your Downloads folder, a small card can appear in the corner of your screen offering **one concrete task**. For example: *"Summarise the unread emails in this inbox"* or *"Tidy up your Downloads folder"*.
+
+- Click the main button (for example **Do it**) and Silk starts it as a [background task](/features/background-agents/). You keep working; the result shows up in the dock.
+- Click **Not now** or the **✕** to dismiss it.
+- The **⋯** menu has **Edit before running** (change the request first), **Don't suggest this again** and **Turn off suggestions**.
+
+Some cards help you set Silk up instead, for example offering to **Connect** an app you use, or to **Sign in** to Google in the [Silk Browser](/features/silk-browser/) before a Gmail task.
+
+## Suggestions from your own work
+
+Silk also learns from the tasks you've run. Back on a site where you've had it do something before, a card can offer:
+
+- **Run again** for a task you did there in the last few weeks.
+- **Schedule it** (for example *"Run it every weekday at 9am?"*) when you've asked for the same thing on three or more different days. Accepting creates a [scheduled task](/features/scheduled-tasks/) for you (your plan's schedule limit applies).
+
+## What suggestions never do
+
+- They **only read or draft**. A suggestion never sends, posts, buys or spends anything for you.
+- They don't appear while you're in a full-screen app, while you're typing, or while Silk is busy with something you asked for.
+- At most **three a day**, and each one at most once a day. If you dismiss three in a row, Silk stops showing cards and keeps its ideas in the menu instead.
+- Silk looks only at which app, window title and web address is in front. Nothing about this leaves your computer except an anonymous count of shown and accepted cards.
+
+## Turning them down or off
+
+Click the Silk icon in the menu bar (or the tray on Windows) and open **Suggestions**:
+
+| Option | What it does |
+|---|---|
+| **Show cards** | The default. Cards appear as described above. |
+| **Only in this menu** | No cards. Ideas wait under **Ideas for what you're doing** in the same menu, and the icon gets a small dot when there's one. |
+| **Off** | No suggestions at all. |
+| **Bring back hidden suggestions** | Shows suggestions you'd told Silk to stop showing. |
+
+<Aside type="note">
+**Announcements** are different: occasional cards from the Silk team about live trainings, the community and new features. Turn them off in **Settings → Advanced → Tips, events & community news**. Important notices (like a fix you need) still show.
+</Aside>
