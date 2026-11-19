@@ -1,12 +1,13 @@
 /**
- * GET  /api/admin/tickets?status=open|answered|closed|all — the inbox, plus counts for the tabs.
+ * GET  /api/admin/tickets?status=open|answered|closed|outreach|all — the inbox, plus counts for the tabs.
+ *      "all" leaves out outreach, which has its own folder.
  * POST /api/admin/tickets — { name, email, subject, question, confirm } opens a ticket on a
  *      customer's behalf, e.g. for a request that came in by phone or social media.
  */
 import { error, isEmail, json, readJson, text } from '../../../../server/http.js'
 import { createTicket } from '../../../../server/tickets.js'
 
-const STATUSES = ['open', 'answered', 'closed']
+const STATUSES = ['open', 'answered', 'closed', 'outreach']
 
 export async function onRequestGet({ request, env, data }) {
   const status = new URL(request.url).searchParams.get('status') ?? 'open'
@@ -14,7 +15,7 @@ export async function onRequestGet({ request, env, data }) {
 
   const list = env.DB.prepare(
     `SELECT id, name, email, subject, status, draft_status, created_at, updated_at
-     FROM tickets ${filter ? 'WHERE status = ?' : ''}
+     FROM tickets ${filter ? 'WHERE status = ?' : "WHERE status != 'outreach'"}
      ORDER BY ${filter === 'open' ? 'created_at ASC' : 'updated_at DESC'} LIMIT 200`,
   )
   const [{ results: tickets }, { results: counts }] = await env.DB.batch([
@@ -46,7 +47,7 @@ export async function onRequestPost({ request, env, waitUntil }) {
     env,
     waitUntil,
     { name, email, subject, question },
-    { confirm: body.confirm !== false, alert: false },
+    { confirm: body.confirm !== false, alert: false, sort: false },
   )
   return json({ id }, { status: 201 })
 }

@@ -21,9 +21,13 @@ function request(env, body) {
   })
 }
 
-/** A full completion: `{ text, model, tokensIn, tokensOut }`. `plugins` as OpenRouter takes them. */
-export async function complete(env, { model, messages, maxTokens, plugins }) {
-  const res = await request(env, { model, messages, max_tokens: maxTokens, plugins })
+/**
+ * A full completion: `{ text, model, tokensIn, tokensOut }`. `plugins` and
+ * `reasoning` as OpenRouter takes them; `{ enabled: false }` stops a reasoning
+ * model spending a small token budget on thinking and answering nothing.
+ */
+export async function complete(env, { model, messages, maxTokens, plugins, reasoning }) {
+  const res = await request(env, { model, messages, max_tokens: maxTokens, plugins, reasoning })
   if (!res.ok) throw new Error(`OpenRouter ${res.status}: ${(await res.text()).slice(0, 300)}`)
   const data = await res.json()
   return {

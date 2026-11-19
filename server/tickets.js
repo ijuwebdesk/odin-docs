@@ -4,17 +4,22 @@ import { confirmToCustomer, notifyCustomerReply, notifyNewTicket } from './mail.
 import { loadExamples, loadFacts, loadPlaybook } from './learning.js'
 import { complete, DEFAULT_DRAFT_MODEL } from './openrouter.js'
 import { draftMessages, splitDraft } from './prompts.js'
+import { triage } from './triage.js'
 
 /**
  * Opens a ticket from the web form, an email, or the admin, then in the
  * background confirms to the customer, alerts the team, and drafts a reply.
  * The admin skips the alert (they made the ticket) and may skip the confirmation.
+ *
+ * Tickets from outside are triaged first (server/triage.js). Outreach is
+ * filed in its own folder and none of the rest happens: no confirmation, no
+ * alert, no draft.
  */
 export async function createTicket(
   env,
   waitUntil,
   { name, email, subject, question, conversationId = null, attachments = [] },
-  { confirm = true, alert = true } = {},
+  { confirm = true, alert = true, sort = true } = {},
 ) {
   const db = env.DB
   const now = Date.now()
@@ -34,6 +39,13 @@ export async function createTicket(
   waitUntil(
     (async () => {
       const ticket = await loadTicket(db, id)
+      if (sort) {
+        const { outreach, reason } = await triage(env, ticket)
+        if (outreach) {
+          await fileAsOutreach(db, id, reason)
+          return
+        }
+      }
       // Emails first: they matter more than the draft and finish quickly.
       const outcomes = await Promise.allSettled([
         confirm ? confirmToCustomer(env, ticket) : null,
@@ -53,7 +65,27 @@ export async function createTicket(
   return id
 }
 
-/** Records a customer's emailed reply, reopens the ticket, alerts the team, and redrafts. */
+/** Moves a ticket to the Outreach folder, with no draft, saying why on the ticket. */
+export function fileAsOutreach(db, id, reason = '') {
+  const why = reason ? ` (${reason.replace(/\.$/, '')})` : ''
+  return db
+    .prepare(
+      `UPDATE tickets SET status = 'outreach', draft = NULL, draft_original = NULL, draft_status = 'skipped',
+       draft_notes = ?, draft_updated_at = ?, updated_at = ? WHERE id = ?`,
+    )
+    .bind(
+      `Filed as outreach${why}. No AI draft was written. If this is a real customer, click "Not outreach".`,
+      Date.now(),
+      Date.now(),
+      id,
+    )
+    .run()
+}
+
+/**
+ * Records a customer's emailed reply, reopens the ticket, alerts the team, and redrafts.
+ * A reply to outreach is only recorded: it stays in the Outreach folder, unannounced.
+ */
 export async function addCustomerReply(env, waitUntil, ticket, body, attachments = []) {
   const db = env.DB
   const now = Date.now()
@@ -63,10 +95,14 @@ export async function addCustomerReply(env, waitUntil, ticket, body, attachments
     )
     .bind(ticket.id, body, ticket.email, now)
     .first()
+  const outreach = ticket.status === 'outreach'
   await db.batch([
     ...attachmentInserts(db, ticket.id, messageId, attachments),
-    db.prepare("UPDATE tickets SET status = 'open', updated_at = ? WHERE id = ?").bind(now, ticket.id),
+    db
+      .prepare('UPDATE tickets SET status = ?, updated_at = ? WHERE id = ?')
+      .bind(outreach ? 'outreach' : 'open', now, ticket.id),
   ])
+  if (outreach) return
   waitUntil(
     Promise.allSettled([notifyCustomerReply(env, ticket, body), generateDraft(env, ticket.id)]).then((outcomes) => {
       for (const o of outcomes) if (o.status === 'rejected') console.error('reply handling failed', ticket.id, o.reason)

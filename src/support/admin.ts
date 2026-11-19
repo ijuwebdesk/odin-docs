@@ -1,6 +1,7 @@
 /**
  * The support inbox at /admin. Hash routes:
  *   #/open  #/answered  #/closed  #/all   ticket lists
+ *   #/outreach                            sales pitches and other unsolicited mail, never drafted
  *   #/t/1001                              one ticket, inside the last list
  *   #/insights                            chat stats and doc gaps
  *   #/articles                            "was this page helpful?" votes and comments
@@ -14,10 +15,10 @@ type Ticket = {
   email: string
   subject: string
   question: string
-  status: 'open' | 'answered' | 'closed'
+  status: 'open' | 'answered' | 'closed' | 'outreach'
   draft: string | null
   draft_notes: string | null
-  draft_status: 'pending' | 'ready' | 'failed'
+  draft_status: 'pending' | 'ready' | 'failed' | 'skipped'
   draft_model: string | null
   draft_updated_at: number | null
   created_at: number
@@ -130,7 +131,13 @@ export function initAdmin(root: HTMLElement) {
             </a>`,
           )
           .join('')
-      : `<p class="empty">${tab === 'open' ? 'Inbox zero. Nothing waiting on you.' : 'No tickets here.'}</p>`
+      : `<p class="empty">${
+          tab === 'open'
+            ? 'Inbox zero. Nothing waiting on you.'
+            : tab === 'outreach'
+              ? 'No outreach. Sales pitches and other unsolicited mail land here, without an AI draft or an alert.'
+              : 'No tickets here.'
+        }</p>`
   }
 
   function draftPill(t: Pick<Ticket, 'status' | 'draft_status' | 'draft' | 'draft_updated_at'>) {
@@ -166,6 +173,7 @@ export function initAdmin(root: HTMLElement) {
     const attachedTo = (messageId: number | null) => renderAttachments(attachments.filter((a) => a.message_id === messageId))
     const drafting = t.draft_status === 'pending' && !isStale(t)
     const closed = t.status === 'closed'
+    const outreach = t.status === 'outreach'
 
     detail.innerHTML = `
       <a class="back" href="#/${tab}">← All tickets</a>
@@ -178,8 +186,15 @@ export function initAdmin(root: HTMLElement) {
         </div>
         <div class="actions" style="margin:0">
           <span class="pill">${t.status}</span>
-          <button type="button" class="btn" data-status="${closed ? 'open' : 'closed'}">
-            ${closed ? 'Reopen' : 'Close'}</button>
+          ${
+            outreach
+              ? `<button type="button" class="btn" data-status="open"
+                  title="Move it to the inbox and draft a reply">Not outreach</button>`
+              : `${closed ? '' : `<button type="button" class="btn" data-status="outreach"
+                  title="No draft or alert, now or for later mail from this sender">Mark as outreach</button>`}
+                <button type="button" class="btn" data-status="${closed ? 'open' : 'closed'}">
+                  ${closed ? 'Reopen' : 'Close'}</button>`
+          }
         </div>
       </div>
 
@@ -218,7 +233,7 @@ export function initAdmin(root: HTMLElement) {
         </div>
         ${
           t.draft_notes
-            ? `<div class="notes"><b>${t.draft_status === 'failed' ? 'Problem' : 'Notes from the AI'}:</b>\n${escapeHtml(t.draft_notes)}</div>`
+            ? `<div class="notes"><b>${t.draft_status === 'failed' ? 'Problem' : outreach ? 'Outreach' : 'Notes from the AI'}:</b>\n${escapeHtml(t.draft_notes)}</div>`
             : ''
         }
         <textarea data-draft aria-label="Reply to ${escapeHtml(t.name)}" ${drafting ? 'disabled' : ''}
@@ -288,12 +303,28 @@ export function initAdmin(root: HTMLElement) {
       }
     })
 
-    detail.querySelector<HTMLButtonElement>('[data-status]')!.addEventListener('click', async (e) => {
-      const status = (e.currentTarget as HTMLButtonElement).dataset.status
-      await api(`/tickets/${t.id}`, { method: 'PATCH', body: JSON.stringify({ status }) })
-      toast(status === 'closed' ? 'Ticket closed' : 'Ticket reopened')
-      await Promise.all([loadList(), loadTicket(t.id)])
-    })
+    detail.querySelectorAll<HTMLButtonElement>('[data-status]').forEach((button) =>
+      button.addEventListener('click', async () => {
+        const status = button.dataset.status
+        button.disabled = true
+        try {
+          await api(`/tickets/${t.id}`, { method: 'PATCH', body: JSON.stringify({ status }) })
+          toast(
+            status === 'outreach'
+              ? 'Moved to Outreach. Later mail from this sender will go there too.'
+              : outreach
+                ? 'Moved to the inbox. Drafting a reply…'
+                : status === 'closed'
+                  ? 'Ticket closed'
+                  : 'Ticket reopened',
+          )
+          await Promise.all([loadList(), loadTicket(t.id)])
+        } catch (err) {
+          toast((err as Error).message)
+          button.disabled = false
+        }
+      }),
+    )
   }
 
   // ── New ticket, on a customer's behalf ───────────────────────────────────
@@ -625,7 +656,7 @@ export function initAdmin(root: HTMLElement) {
         layout.setAttribute('data-open', '')
         renderNewTicket()
       } else {
-        tab = ['open', 'answered', 'closed', 'all'].includes(hash) ? hash : 'open'
+        tab = ['open', 'answered', 'closed', 'all', 'outreach'].includes(hash) ? hash : 'open'
         openId = null
         layout.removeAttribute('data-open')
         detail.innerHTML = '<p class="placeholder">Select a ticket.</p>'
