@@ -117,7 +117,7 @@ Your requests go from your computer to the AI model you chose, through your own 
 
 ### Does Silk collect data about me?
 
-Silk sends **anonymous usage data** (counts and timings, never your screen, recordings, prompts or files) to help us improve it. You can turn it off in **Settings → Privacy**.
+Silk sends **usage data** (counts and timings, never your screen, recordings, prompts or files). It's linked to your licence email so we can spot when setup gets stuck and send help that fits. You can turn it off in **Settings → Privacy**.
 
 ## Help and training
 

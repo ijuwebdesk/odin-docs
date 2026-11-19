@@ -72,7 +72,7 @@ The Chrome profile your tasks use to sign in to websites: its status, **Set up**
 |---|---|
 | **High-accuracy pointing** | Off by default. Turn it on if you work in design or custom-drawn apps (Photoshop, Figma and similar) where the [cursor overlay](/features/cursor-overlay/) doesn't land exactly on the right element. It uses a more powerful model only when needed, so it costs a little more. |
 | **Tips, events & community news** | Occasional cards about live trainings, the community and new features. Turn off to hide them; important notices still show. |
-| **Share anonymous usage** | On by default. Sends anonymous counts and timings (never your screen, recordings, prompts or files) to help us improve Silk. |
+| **Share usage stats** | On by default. Sends counts and timings, linked to your licence email so we can help when setup gets stuck. Never your screen, recordings, prompts or files. Turn it off to stop sending. |
 
 ## Permissions and License
 
